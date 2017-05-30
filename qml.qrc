@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>main.qml</file>
+        <file>MainForm.ui.qml</file>
+        <file>Components/BasicButton.qml</file>
+        <file>Layers/First.qml</file>
+        <file>Function/GlobalVars.qml</file>
+        <file>Layers/Fourth.qml</file>
+        <file>Layers/Second.qml</file>
+        <file>Layers/Third.qml</file>
+        <file>Typefaces/Instruction Bold.otf</file>
+        <file>Typefaces/Instruction.otf</file>
+        <file>Typefaces/BebasNeue.otf</file>
+    </qresource>
+</RCC>
