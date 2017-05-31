@@ -39,14 +39,14 @@ Window {
         first_main.nextLayer.connect(slot_switchLayer)
         second_main.nextLayer.connect(slot_switchLayer)
         scan_page.nextLayer.connect(slot_switchLayer)
-        fourth_main.nextLayer.connect(slot_switchLayer)
+        login_page.nextLayer.connect(slot_switchLayer)
     }
 
     /*LAYER DECL*/
     First{id: first_main; x:10; y:10}
     Second{id: second_main; x:10; y:10}
-    Third{id: scan_page; x:10; y:10}
-    Fourth{id: fourth_main; x:10; y:10}
+    ScanPage{id: scan_page; x:0; y:0}
+    LoginPage{id: login_page; x:0; y:0}
 
     /*COMPONENT DECL*/
     GlobalVars{id: global_vars}
@@ -75,6 +75,31 @@ Window {
             }
         ]
 
+        Item {
+            id: barcode
+            focus: true
+            Keys.onPressed: {
+                //console.log('userpass_creation: ', global_vars.userpass_creation)
+                //console.log("global_vars.username: ", global_vars.username)
+                //console.log("event.key: ", event.key)
+                //console.log("to match: ", '16777251')
+                //console.log("event.text: ", event.text)
+                //console.log("event.modifier: ", event.modifier)
+                //global_vars.tempLetter = read_namepass(event.key)
+                //global_vars.tempLetter = String.fromCharCode(event.text)
+                // '16777251'
+                if ( (String(event.key) != '16777251') && (String(event.key) != '16777248') ) {
+                    //console.log('added')
+                    global_vars.userpass_creation = global_vars.userpass_creation + event.text
+                }
+                if (String(event.key) == '16777220') {
+                    //console.log('reset')
+                    userpass(global_vars.userpass_creation)
+                    global_vars.userpass_creation = ''
+                }
+            }
+        }
+
         Text {
             id: title_text
             anchors.top: parent.top
@@ -84,13 +109,12 @@ Window {
             font.family: "Typo Graphica"
             color: "Black"
             font.pointSize: 250
-
         }
 
         BottomTab {
             anchors.bottom: parent.bottom
             anchors.right: parent.right
-            anchors.rightMargin: 130
+            anchors.rightMargin: global_vars.tabRightMargin
             id: right_tab
             label.text: "Power"
             onClicked: {
@@ -102,7 +126,7 @@ Window {
         BottomTab {
             anchors.bottom: parent.bottom
             anchors.right: right_tab.left
-            anchors.rightMargin: 30
+            anchors.rightMargin: global_vars.tabSpace
             id: middle_tab
             label.text: "Back"
             onClicked: {
@@ -197,7 +221,7 @@ Window {
                 login_button.state = "unpressed"
             }
             onClicked: {
-                slot_switchLayer("scan_page")
+                slot_switchLayer("login_page")
                 object_holder.state = "hidden"
             }
 
@@ -256,6 +280,15 @@ Window {
         }
     }
 
+    function userpass(userpass) {
+        console.log('userpass: ', userpass)
+        userpass = userpass.split(':')
+        global_vars.username = userpass[0]
+        global_vars.password = userpass[1]
+        console.log("username: ", global_vars.username)
+        console.log("password: ", global_vars.password)
+    }
+
     function slot_switchLayer(nextLayer) {
         console.log(nextLayer)
         active_layer = nextLayer
@@ -276,8 +309,8 @@ Window {
                 scan_page.state = "visible"
                 break;
             }
-            case "fourth_main": {
-                fourth_main.state = "visible"
+            case "login_page": {
+                login_page.state = "visible"
                 break;
             }
         }

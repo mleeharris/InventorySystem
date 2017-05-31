@@ -5,14 +5,14 @@
         <file>Components/BasicButton.qml</file>
         <file>Layers/First.qml</file>
         <file>Function/GlobalVars.qml</file>
-        <file>Layers/Fourth.qml</file>
         <file>Layers/Second.qml</file>
-        <file>Layers/Third.qml</file>
         <file>Typefaces/Instruction Bold.otf</file>
         <file>Typefaces/Instruction.otf</file>
         <file>Typefaces/BebasNeue.otf</file>
         <file>Components/BottomTab.qml</file>
         <file>Images/background_opening_3.jpg</file>
         <file>Typefaces/TypoGraphica.otf</file>
+        <file>Layers/ScanPage.qml</file>
+        <file>Layers/LoginPage.qml</file>
     </qresource>
 </RCC>
