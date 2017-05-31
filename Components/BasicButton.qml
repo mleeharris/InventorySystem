@@ -14,11 +14,11 @@ Rectangle  {
 
     height: global_vars.buttonHeight
     width: global_vars.buttonWidth
-    radius: height/2
+    radius: height/4
     border.width: 4
     border.color: "black"
 
-    color: buttonColor
+    color: "black"
 
     FontLoader{
         id: default_font
@@ -36,7 +36,7 @@ Rectangle  {
         text: ""
         font.pointSize: global_vars.buttonSize
         smooth: true
-        color: "black"
+        color: global_vars.grayColor
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
@@ -46,16 +46,10 @@ Rectangle  {
         anchors.fill: root
         onPressed: {
             root.pressed()
-            root.color = "black"
-            button_txt.color = buttonColor
         }
-
         onReleased: {
             root.released()
-            root.color = buttonColor
-            button_txt.color = "black"
         }
-
         onClicked: {
             root.clicked()
         }

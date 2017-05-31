@@ -11,5 +11,8 @@
         <file>Typefaces/Instruction Bold.otf</file>
         <file>Typefaces/Instruction.otf</file>
         <file>Typefaces/BebasNeue.otf</file>
+        <file>Components/BottomTab.qml</file>
+        <file>Images/background_opening_3.jpg</file>
+        <file>Typefaces/TypoGraphica.otf</file>
     </qresource>
 </RCC>

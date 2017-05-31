@@ -5,9 +5,9 @@ import "qrc:/Components"
 Rectangle {
     id: root
     visible: true
-    width: 834
-    height: 460
-    objectName: "third"
+    width: 1920
+    height: 1080
+    objectName: "scan_page"
 
     signal nextLayer(string nextLayer)
 
