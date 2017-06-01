@@ -16,6 +16,9 @@ Window {
     height: 1080
     objectName: "MainWindow"
 
+    signal tabOperationScanPage(string tabnum, string state)
+    signal tabOperationLoggedIn(string tabnum, string state)
+    signal tabOperationLoginPage(string tabnum, string state)
     property string active_layer: ""
 
     FontLoader {
@@ -36,10 +39,18 @@ Window {
     }
 
     Component.onCompleted: {
+        right_tab.state = "Up"
+        middle_tab.state = "Down"
+
         first_main.nextLayer.connect(slot_switchLayer)
         second_main.nextLayer.connect(slot_switchLayer)
         scan_page.nextLayer.connect(slot_switchLayer)
         login_page.nextLayer.connect(slot_switchLayer)
+        logged_in.nextLayer.connect(slot_switchLayer)
+
+        scan_page.tabOperationMain.connect(tabOperationMain)
+        logged_in.tabOperationMain.connect(tabOperationMain)
+        login_page.tabOperationMain.connect(tabOperationMain)
     }
 
     /*LAYER DECL*/
@@ -47,9 +58,28 @@ Window {
     Second{id: second_main; x:10; y:10}
     ScanPage{id: scan_page; x:0; y:0}
     LoginPage{id: login_page; x:0; y:0}
+    LoggedIn{id: logged_in; x:0; y:0}
 
     /*COMPONENT DECL*/
     GlobalVars{id: global_vars}
+
+//    Rectangle {
+//        x: 0
+//        y: 0
+//        width: 100
+//        height: 100
+//        color: "red"
+
+//        MouseArea {
+//            anchors.fill: parent
+//            onPressed: {
+//                right_tab.state = "Down"
+//            }
+//            onReleased: {
+//                right_tab.state = "Up"
+//            }
+//        }
+//    }
 
     Rectangle {
         anchors.fill: parent
@@ -79,15 +109,6 @@ Window {
             id: barcode
             focus: true
             Keys.onPressed: {
-                //console.log('userpass_creation: ', global_vars.userpass_creation)
-                //console.log("global_vars.username: ", global_vars.username)
-                //console.log("event.key: ", event.key)
-                //console.log("to match: ", '16777251')
-                //console.log("event.text: ", event.text)
-                //console.log("event.modifier: ", event.modifier)
-                //global_vars.tempLetter = read_namepass(event.key)
-                //global_vars.tempLetter = String.fromCharCode(event.text)
-                // '16777251'
                 if ( (String(event.key) != '16777251') && (String(event.key) != '16777248') ) {
                     //console.log('added')
                     global_vars.userpass_creation = global_vars.userpass_creation + event.text
@@ -118,7 +139,7 @@ Window {
             id: right_tab
             label.text: "Power"
             onClicked: {
-                slot_switchLayer("first_main")
+                Qt.quit()
                 object_holder.state = "hidden"
             }
         }
@@ -136,7 +157,7 @@ Window {
         }
 
         BasicButton {
-            anchors.left: parent.left
+            anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.verticalCenter
             id: scan_button
             label.text: "Scan"
@@ -149,6 +170,8 @@ Window {
                 scan_button.state = "unpressed"
             }
             onClicked: {
+                tabOperationScanPage("middle", "Up")
+                tabOperationLoggedIn("middle", "Up")
                 slot_switchLayer("scan_page")
                 object_holder.state = "hidden"
             }
@@ -208,7 +231,7 @@ Window {
         }
 
         BasicButton {
-            anchors.left: parent.left
+            anchors.horizontalCenter: parent.horizontalCenter
             anchors.top: parent.verticalCenter
             id: login_button
             label.text: "Login"
@@ -221,6 +244,8 @@ Window {
                 login_button.state = "unpressed"
             }
             onClicked: {
+                tabOperationLoginPage("middle", "Up")
+                tabOperationLoggedIn("middle", "Up")
                 slot_switchLayer("login_page")
                 object_holder.state = "hidden"
             }
@@ -281,12 +306,21 @@ Window {
     }
 
     function userpass(userpass) {
-        console.log('userpass: ', userpass)
         userpass = userpass.split(':')
         global_vars.username = userpass[0]
         global_vars.password = userpass[1]
+
         console.log("username: ", global_vars.username)
         console.log("password: ", global_vars.password)
+
+        console.log("MAINNNNN")
+        tabOperationLoggedIn("middle", "Up")
+        object_holder.state = "hidden"
+        first_main.state = "hidden"
+        second_main.state = "hidden"
+        scan_page.state = "hidden"
+        login_page.state = "hidden"
+        slot_switchLayer("logged_in")
     }
 
     function slot_switchLayer(nextLayer) {
@@ -312,6 +346,23 @@ Window {
             case "login_page": {
                 login_page.state = "visible"
                 break;
+            }
+            case "logged_in": {
+                logged_in.state = "visible"
+                break;
+            }
+        }
+    }
+
+    function tabOperationMain(tabnum, state) {
+        if (tabnum === "middle") {
+            if (state === "Up") {
+                console.log('middle up')
+                middle_tab.state = "Up"
+            }
+            if (state === "Down") {
+                console.log('middle down')
+                middle_tab.state = "Down"
             }
         }
     }

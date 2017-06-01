@@ -14,5 +14,6 @@
         <file>Typefaces/TypoGraphica.otf</file>
         <file>Layers/ScanPage.qml</file>
         <file>Layers/LoginPage.qml</file>
+        <file>Layers/LoggedIn.qml</file>
     </qresource>
 </RCC>

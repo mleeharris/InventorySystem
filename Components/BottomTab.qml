@@ -11,9 +11,104 @@ Rectangle  {
     signal released()
     signal clicked()
 
+    color: global_vars.grayColor
     height: global_vars.tabHeightUnpressed
     width: global_vars.tabWidth
     radius: height/8
+
+    transitions:[
+        Transition {
+            from: "Up"; to: "Down"; reversible: true
+            NumberAnimation {
+                target: black_background
+                property: "height"
+                duration: 200
+                //easing.type: Easing.InOutQuad
+            }
+            NumberAnimation {
+                target: tab_txt
+                property: "opacity"
+                duration: 200
+            }
+            NumberAnimation {
+                target: root
+                property: "height"
+                duration: 200
+            }
+            NumberAnimation {
+                target: root
+                property: "anchors.topMargin"
+                duration: 200
+            }
+            NumberAnimation {
+                target: btn_ma
+                property: "width"
+                duration: 200
+            }
+            NumberAnimation {
+                target: btn_ma
+                property: "height"
+                duration: 200
+            }
+            NumberAnimation {
+                target: black_background
+                property: "radius"
+                duration: 200
+            }
+            NumberAnimation {
+                target: root
+                property: "radius"
+                duration: 200
+            }
+        }
+    ]
+
+    states:[
+        State {
+            name: "Up";
+            PropertyChanges {
+                target: black_background
+                height: global_vars.tabHeightUnpressed
+            }
+            PropertyChanges {
+                target: tab_txt
+                opacity: 100
+            }
+            PropertyChanges {
+                target: root
+                height: global_vars.tabHeightUnpressed
+                anchors.topMargin: 0
+            }
+            PropertyChanges {
+                target: btn_ma
+                width: root_top.width
+                height: root_top.height
+            }
+        },
+        State {
+            name: "Down";
+            PropertyChanges {
+                target: black_background
+                height: 100
+                radius: 50
+            }
+            PropertyChanges {
+                target: tab_txt
+                opacity: 0
+            }
+            PropertyChanges {
+                target: root
+                height: 100
+                radius: 50
+                anchors.topMargin: 330
+            }
+            PropertyChanges {
+                target: btn_ma
+                width: 0
+                height: 0
+            }
+        }
+    ]
 
     FontLoader {
         id: default_font
@@ -71,7 +166,8 @@ Rectangle  {
 
     MouseArea {
         id: btn_ma
-        anchors.fill: root_top
+        width: root_top.width
+        height: root_top.height
         onPressed: {
             root_top.pressed()
             root.color = global_vars.tabColorPressed

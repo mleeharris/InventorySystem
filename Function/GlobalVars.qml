@@ -16,7 +16,7 @@ Item {
 
     /*Button Characteristics*/
     property int buttonHeight: 170
-    property int buttonWidth: buttonHeight*3
+    property int buttonWidth: buttonHeight*4
     property int buttonSize: 70
 
     /*Tab Characteristics*/
@@ -28,7 +28,7 @@ Item {
     property string tabColorPressed: "#8AC6CE"
 
     property int tabRightMargin: 130
-    property int tabSpace: 50
+    property int tabSpace: 870
 
     /*DropShadow Characteristics*/
     property int dropShadowVertOffset: 10
