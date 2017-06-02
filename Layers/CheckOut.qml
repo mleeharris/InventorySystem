@@ -7,6 +7,7 @@ import QtGraphicalEffects 1.0
 import "qrc:/JavaScript"
 import "qrc:/Components"
 import "qrc:/JavaScript/componentCreation.js" as Creation
+import "qrc:/JavaScript/globalVars.js" as GlobVars
 
 Rectangle {
     id: root
@@ -23,7 +24,6 @@ Rectangle {
         right_tab.state = "Up"
 
         items.state = "off"
-        //items.state = "on"
 
         check.tabOperationCheckOut.connect(tabOperationCheckOut)
     }
@@ -166,17 +166,18 @@ Rectangle {
 
     function itemScan(item) {
         console.log(item)
+        GlobVars.itemList.push(item.slice(0,-1))
+        console.log("GlobVars: ", GlobVars.itemList)
 
         Creation.createScannedItemObjects()
+        //console.log("NewObject: ", NewObject)
         //var NewObject = Qt.createComponent("qrc:/Components/ScannedItem.qml")
         //console.log("NewObject.errorString(): ", NewObject.errorString())
-        //if (NewObject.status === Component.Ready) {
-//            console.log("NewObject.created: ", NewObject.created)
-//            console.log("NewObject.color: ", NewObject.color4)
-//            NewObject.created = true
-//            NewObject.x = 0
-//            NewObject.y = 0
-//        }
+//        console.log("NewObject.created: ", NewObject.created)
+//        console.log("NewObject.color: ", NewObject.color4)
+//        NewObject.created = true
+//        NewObject.x = 0
+//        NewObject.y = 0
 
         //Creation.createScannedItemObjects();
     }

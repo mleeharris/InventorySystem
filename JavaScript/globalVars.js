@@ -1,0 +1,2 @@
+var itemList = [];
+var objectList = [];

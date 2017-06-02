@@ -17,8 +17,8 @@ Rectangle {
     signal tabOperationCheckOut(string tabnum, string state)
 
     Component.onCompleted: {
-        //root.state = "hidden"
-        root.state = "visible"
+        root.state = "hidden"
+        //root.state = "visible"
 
         check_out.tabOperationCheck.connect(tabOperationCheck)
     }

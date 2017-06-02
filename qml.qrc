@@ -19,5 +19,6 @@
         <file>Images/x.png</file>
         <file>Images/x_gray.png</file>
         <file>JavaScript/componentCreation.js</file>
+        <file>JavaScript/globalVars.js</file>
     </qresource>
 </RCC>
