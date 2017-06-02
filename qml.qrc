@@ -3,9 +3,7 @@
         <file>main.qml</file>
         <file>MainForm.ui.qml</file>
         <file>Components/BasicButton.qml</file>
-        <file>Layers/First.qml</file>
         <file>Function/GlobalVars.qml</file>
-        <file>Layers/Second.qml</file>
         <file>Typefaces/Instruction Bold.otf</file>
         <file>Typefaces/Instruction.otf</file>
         <file>Typefaces/BebasNeue.otf</file>
@@ -15,5 +13,11 @@
         <file>Layers/ScanPage.qml</file>
         <file>Layers/LoginPage.qml</file>
         <file>Layers/LoggedIn.qml</file>
+        <file>Layers/Check.qml</file>
+        <file>Layers/CheckOut.qml</file>
+        <file>Components/ScannedItem.qml</file>
+        <file>Images/x.png</file>
+        <file>Images/x_gray.png</file>
+        <file>JavaScript/componentCreation.js</file>
     </qresource>
 </RCC>

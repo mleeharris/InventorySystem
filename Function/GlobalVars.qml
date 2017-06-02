@@ -15,8 +15,8 @@ Item {
     property string darkGrayColor: "#C8C8C8"
 
     /*Button Characteristics*/
-    property int buttonHeight: 170
-    property int buttonWidth: buttonHeight*4
+    property int buttonHeight: 150
+    property int buttonWidth: buttonHeight*4+50
     property int buttonSize: 70
 
     /*Tab Characteristics*/
@@ -37,4 +37,14 @@ Item {
     /*Welcome Page*/
     property int buttonTopMargin: 10
     property int buttonLeftMargin: 240
+
+    /*Scanned Item*/
+    property int itemHeight: 80
+    property int itemWidth: 1100
+    property int itemFontsize: 50
+
+    property int scrollWidth: 1230
+
+    property string currentItem: ''
+    property int numItems: 0
 }

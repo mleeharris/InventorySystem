@@ -1,5 +1,9 @@
 import QtQuick 2.6
 import QtQuick.Window 2.2
+import QtQml 2.2
+import QtQuick.Dialogs 1.1
+import QtQuick.Controls 1.1
+import QtGraphicalEffects 1.0
 import "qrc:/Components"
 
 Rectangle {
@@ -7,16 +11,16 @@ Rectangle {
     visible: true
     width: 1920
     height: 1080
-    objectName: "login_page"
+    objectName: "logged_in"
 
     signal nextLayer(string nextLayer)
-    signal tabOperationMain(string tabnum, string state)
+    signal tabOperationCheckOut(string tabnum, string state)
 
     Component.onCompleted: {
-        root.state = "hidden"
+        //root.state = "hidden"
+        root.state = "visible"
 
-        middle_tab.state = "Down"
-        main_window.tabOperationLoginPage.connect(tabOperationLoginPage)
+        check_out.tabOperationCheck.connect(tabOperationCheck)
     }
 
     states: [
@@ -38,35 +42,47 @@ Rectangle {
         }
     ]
 
-    Item {
-        id: barcode
-        Keys.onPressed: {
-            if ( (String(event.key) != '16777251') && (String(event.key) != '16777248') ) {
-                //console.log('added')
-                global_vars.userpass_creation = global_vars.userpass_creation + event.text
-            }
-            if (String(event.key) == '16777220') {
-                //console.log('reset')
-                userpass(global_vars.userpass_creation)
-                global_vars.userpass_creation = ''
-            }
-        }
-    }
-
     Image {
         id: background_image
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
     Text {
-        id: please_scan
+        id: title_text
         anchors.top: parent.top
-        anchors.topMargin: 150
+        anchors.topMargin: 180
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Type  In  Info?"
-        font.family: "Typo Graphica"
+        text: "Select An Option"
+        font.family: "Bebas Neue"
         color: "Black"
         font.pointSize: 200
+    }
+
+    BasicButton {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: check_out_button.top
+        anchors.bottomMargin: 30
+        id: check_in_button
+        label.text: "Check In"
+
+        onClicked: {
+            //slot_switchLayer("check_in")
+            root.state = "hidden"
+        }
+    }
+
+    BasicButton {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 200
+        id: check_out_button
+        label.text: "Check Out"
+
+        onClicked: {
+            tabOperationCheckOut("right", "Down")
+            slot_switchLayer("check_out")
+            root.state = "hidden"
+        }
     }
 
     BottomTab {
@@ -88,34 +104,20 @@ Rectangle {
         id: middle_tab
         label.text: "Back"
         onClicked: {
-            tabOperationLoginPage("middle", "Down")
             slot_switchLayer("main")
             root.state = "hidden"
         }
     }
 
-    function tabOperationLoginPage(tabnum, state) {
-        if (tabnum === "middle") {
+    function tabOperationCheck(tabnum, state) {
+        if (tabnum === "right") {
             if (state === "Up") {
-                middle_tab.state = "Up"
-                tabOperationMain("middle", "Up")
+                right_tab.state = "Up"
             }
             if (state === "Down") {
-                middle_tab.state = "Down"
-                tabOperationMain("middle", "Down")
+                right_tab.state = "Down"
             }
         }
-    }
-
-    function userpass(userpass) {
-        console.log('userpass: ', userpass)
-        userpass = userpass.split(':')
-        global_vars.username = userpass[0]
-        global_vars.password = userpass[1]
-        console.log("username: ", global_vars.username)
-        console.log("password: ", global_vars.password)
-        root.state = "hidden"
-        nextLayer("logged_in")
     }
 }
 

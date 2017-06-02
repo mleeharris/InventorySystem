@@ -42,8 +42,14 @@ Window {
         right_tab.state = "Up"
         middle_tab.state = "Down"
 
-        first_main.nextLayer.connect(slot_switchLayer)
-        second_main.nextLayer.connect(slot_switchLayer)
+        barcode.state = "off"
+        //barcode.state = "on"
+
+        object_holder.state = "hidden"
+        //object_holder.state = "visible"
+
+        check.nextLayer.connect(slot_switchLayer)
+        check_out.nextLayer.connect(slot_switchLayer)
         scan_page.nextLayer.connect(slot_switchLayer)
         login_page.nextLayer.connect(slot_switchLayer)
         logged_in.nextLayer.connect(slot_switchLayer)
@@ -54,32 +60,14 @@ Window {
     }
 
     /*LAYER DECL*/
-    First{id: first_main; x:10; y:10}
-    Second{id: second_main; x:10; y:10}
+    Check{id: check; x:0; y:0}
     ScanPage{id: scan_page; x:0; y:0}
     LoginPage{id: login_page; x:0; y:0}
     LoggedIn{id: logged_in; x:0; y:0}
+    CheckOut{id: check_out; x:0; y: 0}
 
     /*COMPONENT DECL*/
     GlobalVars{id: global_vars}
-
-//    Rectangle {
-//        x: 0
-//        y: 0
-//        width: 100
-//        height: 100
-//        color: "red"
-
-//        MouseArea {
-//            anchors.fill: parent
-//            onPressed: {
-//                right_tab.state = "Down"
-//            }
-//            onReleased: {
-//                right_tab.state = "Up"
-//            }
-//        }
-//    }
 
     Rectangle {
         anchors.fill: parent
@@ -119,6 +107,23 @@ Window {
                     global_vars.userpass_creation = ''
                 }
             }
+
+            states:[
+                State {
+                    name: "on";
+                    PropertyChanges {
+                        target: barcode
+                        enabled: true
+                    }
+                },
+                State {
+                    name: "off";
+                    PropertyChanges {
+                        target: barcode
+                        enabled: false;
+                    }
+                }
+            ]
         }
 
         Text {
@@ -151,157 +156,36 @@ Window {
             id: middle_tab
             label.text: "Back"
             onClicked: {
-                slot_switchLayer("second_main")
                 object_holder.state = "hidden"
             }
         }
 
         BasicButton {
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.verticalCenter
+            anchors.bottom: login_button.top
+            anchors.bottomMargin: 30
             id: scan_button
             label.text: "Scan"
-            onPressed: {
-                button_shadow_1.state = "hidden"
-                scan_button.state = "pressed"
-            }
-            onReleased: {
-                button_shadow_1.state = "visible"
-                scan_button.state = "unpressed"
-            }
             onClicked: {
                 tabOperationScanPage("middle", "Up")
                 tabOperationLoggedIn("middle", "Up")
                 slot_switchLayer("scan_page")
                 object_holder.state = "hidden"
             }
-
-            state: "unpressed"
-            states:[
-                State {
-                    name: "unpressed";
-                    PropertyChanges {
-                        target: scan_button;
-                        anchors.topMargin: global_vars.buttonTopMargin
-                        anchors.leftMargin: global_vars.buttonLeftMargin
-                    }
-                },
-                State {
-                    name: "pressed";
-                    PropertyChanges {
-                        target: scan_button;
-                        anchors.topMargin: global_vars.buttonTopMargin + global_vars.dropShadowVertOffset
-                        anchors.leftMargin: global_vars.buttonLeftMargin + global_vars.dropShadowHorizOffset
-                    }
-                }
-            ]
-        }
-
-        DropShadow {
-            id: button_shadow_1
-            anchors.fill: scan_button
-            horizontalOffset: global_vars.dropShadowHorizOffset
-            verticalOffset: global_vars.dropShadowVertOffset
-            radius: 8
-            samples: radius*2+1
-            color: "#80000000"
-            source: scan_button
-            transparentBorder: true
-            cached: true
-
-            state: "visible"
-            states:[
-                State {
-                    name: "visible";
-                    PropertyChanges {
-                        target: button_shadow_1;
-                        visible: true;
-                        opacity: 1
-                    }
-                },
-                State {
-                    name: "hidden";
-                    PropertyChanges {
-                        target: button_shadow_1;
-                        visible: false;
-                        opacity: 0
-                    }
-                }
-            ]
         }
 
         BasicButton {
             anchors.horizontalCenter: parent.horizontalCenter
-            anchors.top: parent.verticalCenter
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 200
             id: login_button
             label.text: "Login"
-            onPressed: {
-                button_shadow_2.state = "hidden"
-                login_button.state = "pressed"
-            }
-            onReleased: {
-                button_shadow_2.state = "visible"
-                login_button.state = "unpressed"
-            }
             onClicked: {
                 tabOperationLoginPage("middle", "Up")
                 tabOperationLoggedIn("middle", "Up")
                 slot_switchLayer("login_page")
                 object_holder.state = "hidden"
             }
-
-            state: "unpressed"
-            states:[
-                State {
-                    name: "unpressed";
-                    PropertyChanges {
-                        target: login_button;
-                        anchors.topMargin: global_vars.buttonTopMargin + 200
-                        anchors.leftMargin: global_vars.buttonLeftMargin
-                    }
-                },
-                State {
-                    name: "pressed";
-                    PropertyChanges {
-                        target: login_button;
-                        anchors.topMargin: global_vars.buttonTopMargin + global_vars.dropShadowVertOffset + 200
-                        anchors.leftMargin: global_vars.buttonLeftMargin + global_vars.dropShadowHorizOffset
-                    }
-                }
-            ]
-        }
-
-        DropShadow {
-            id: button_shadow_2
-            anchors.fill: login_button
-            horizontalOffset: global_vars.dropShadowHorizOffset
-            verticalOffset: global_vars.dropShadowVertOffset
-            radius: 8
-            samples: radius*2+1
-            color: "#80000000"
-            source: login_button
-            transparentBorder: true
-            cached: true
-
-            state: "visible"
-            states:[
-                State {
-                    name: "visible";
-                    PropertyChanges {
-                        target: button_shadow_2;
-                        visible: true;
-                        opacity: 1
-                    }
-                },
-                State {
-                    name: "hidden";
-                    PropertyChanges {
-                        target: button_shadow_2;
-                        visible: false;
-                        opacity: 0
-                    }
-                }
-            ]
         }
     }
 
@@ -313,11 +197,9 @@ Window {
         console.log("username: ", global_vars.username)
         console.log("password: ", global_vars.password)
 
-        console.log("MAINNNNN")
         tabOperationLoggedIn("middle", "Up")
         object_holder.state = "hidden"
-        first_main.state = "hidden"
-        second_main.state = "hidden"
+        check_out.state = "hidden"
         scan_page.state = "hidden"
         login_page.state = "hidden"
         slot_switchLayer("logged_in")
@@ -331,12 +213,13 @@ Window {
                 object_holder.state = "visible"
                 break;
             }
-            case "first_main": {
-                first_main.state = "visible"
+            case "check": {
+                check.state = "visible"
                 break;
             }
-            case "second_main": {
-                second_main.state = "visible"
+            case "check_out": {
+                check_out.state = "visible"
+                barcode.state = "off"
                 break;
             }
             case "scan_page": {

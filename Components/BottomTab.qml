@@ -23,7 +23,6 @@ Rectangle  {
                 target: black_background
                 property: "height"
                 duration: 200
-                //easing.type: Easing.InOutQuad
             }
             NumberAnimation {
                 target: tab_txt

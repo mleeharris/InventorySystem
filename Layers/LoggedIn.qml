@@ -1,5 +1,9 @@
 import QtQuick 2.6
 import QtQuick.Window 2.2
+import QtQml 2.2
+import QtQuick.Dialogs 1.1
+import QtQuick.Controls 1.1
+import QtGraphicalEffects 1.0
 import "qrc:/Components"
 
 Rectangle {
@@ -43,18 +47,18 @@ Rectangle {
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
-    Text {
-        id: logged_in_text
+    BasicButton {
+        anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 200
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: "Login"
-        font.family: "Typo Graphica"
-        color: "Black"
-        font.pointSize: 60
+        id: login_button
+        label.text: "Login"
+
+        onClicked: {
+            slot_switchLayer("check")
+            root.state = "hidden"
+        }
     }
-
-
 
     property int wrapperHeight: 800
     property int wrapperWidth: 1700
