@@ -47,4 +47,5 @@ Item {
 
     property string currentItem: ''
     property int numItems: 0
+    property int itemDownShift: 100
 }

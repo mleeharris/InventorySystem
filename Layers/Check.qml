@@ -11,14 +11,14 @@ Rectangle {
     visible: true
     width: 1920
     height: 1080
-    objectName: "logged_in"
+    objectName: "check"
 
     signal nextLayer(string nextLayer)
     signal tabOperationCheckOut(string tabnum, string state)
 
     Component.onCompleted: {
-        root.state = "hidden"
-        //root.state = "visible"
+        //root.state = "hidden"
+        root.state = "visible"
 
         check_out.tabOperationCheck.connect(tabOperationCheck)
     }

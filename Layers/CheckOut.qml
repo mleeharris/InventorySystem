@@ -14,7 +14,7 @@ Rectangle {
     visible: true
     width: 1920
     height: 1080
-    objectName: "logged_in"
+    objectName: "check_out"
 
     signal nextLayer(string nextLayer)
     signal tabOperationCheck(string tabnum, string state)
@@ -25,7 +25,35 @@ Rectangle {
 
         items.state = "off"
 
+        //object deletion handling
+        scanned_item.deletionHandling.connect(deletionHandlingCheckOut)
+
+        //tab operation
         check.tabOperationCheckOut.connect(tabOperationCheckOut)
+    }
+
+    ScannedItem{id: scanned_item}
+
+    Rectangle {
+        width: 1000
+        height: 1000
+
+        ListModel {
+            id: itemModel
+        }
+
+        Component {
+            id: itemDelegate
+            Column {
+                spacing: 10
+            }
+        }
+
+        ListView {
+            anchors.fill: parent
+            model: itemModel
+            delegate: itemDelegate
+        }
     }
 
     states: [
@@ -152,17 +180,17 @@ Rectangle {
         opacity: 0.2
     }
 
-    ScannedItem {
-        id: item1
-        anchors.top: temp_background.top
-        anchors.topMargin: 20
-        anchors.left: temp_background.left
-        anchors.leftMargin: 20
-        item_id.text: "Hammer"
-        onClicked: {
-            itemHandling("item1")
-        }
-    }
+//    ScannedItem {
+//        id: item1
+//        anchors.top: temp_background.top
+//        anchors.topMargin: 20
+//        anchors.left: temp_background.left
+//        anchors.leftMargin: 20
+//        item_id.text: "Hammer"
+//        onClicked: {
+//            itemHandling("item1")
+//        }
+//    }
 
     function itemScan(item) {
         console.log(item)
@@ -182,8 +210,42 @@ Rectangle {
         //Creation.createScannedItemObjects();
     }
 
-    function itemHandling(item) {
-        item1.visible = false
+//    function itemHandling(item) {
+//        item1.visible = false
+//    }
+
+    function deletionHandlingCheckOut(itemID) {
+        console.log("itemID: ", itemID)
+        console.log("GlobVars.itemList: ", GlobVars.itemList)
+        var i = 0
+        while (i < GlobVars.itemList.length) {
+            if (itemID === "ID: " + GlobVars.itemList[i]) {
+                global_vars.numItems--
+                if (GlobVars.itemList.length == 1) {
+                    GlobVars.itemList = []
+                    GlobVars.objectList = []
+                }
+                else {
+                    GlobVars.itemList.splice(i, 1)
+                    GlobVars.objectList.splice(i, 1)
+                    //console.log("GlobVars.itemList.splice(i, i): ", GlobVars.itemList.splice(i, i))
+                }
+                shiftUp(i)
+                console.log("GlobVars.itemList: ", GlobVars.itemList)
+                break;
+            }
+            i += 1
+        }
+    }
+
+    function shiftUp(increment) {
+        var i = increment
+        var ObjectFocus
+        while (i < GlobVars.objectList.length) {
+            ObjectFocus = GlobVars.objectList[i]
+            ObjectFocus.y -= global_vars.itemDownShift
+            i += 1
+        }
     }
 
     function tabOperationCheckOut(tabnum, state) {

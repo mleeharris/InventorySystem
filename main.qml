@@ -42,11 +42,11 @@ Window {
         right_tab.state = "Up"
         middle_tab.state = "Down"
 
-        //barcode.state = "off"
-        barcode.state = "on"
+        barcode.state = "off"
+        //barcode.state = "on"
 
-        //object_holder.state = "hidden"
-        object_holder.state = "visible"
+        object_holder.state = "hidden"
+        //object_holder.state = "visible"
 
         check.nextLayer.connect(slot_switchLayer)
         check_out.nextLayer.connect(slot_switchLayer)

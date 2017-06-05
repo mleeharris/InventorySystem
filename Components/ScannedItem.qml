@@ -1,6 +1,7 @@
 import QtQuick 2.2
 import QtGraphicalEffects 1.0
 import "qrc:/Components/"
+import "qrc:/JavaScript/globalVars.js" as GlobVars
 
 Rectangle  {
     id: root
@@ -10,14 +11,27 @@ Rectangle  {
     signal released()
     signal clicked()
 
-    property bool created: false
+    signal deletionHandling(string itemID)
 
-    onCreatedChanged: {
-        console.log("created")
-        if (created) {
-            global_vars.numItems++
+    state: "visible"
+    states:[
+        State {
+            name: "visible";
+            PropertyChanges {
+                target: root;
+                visible: true;
+                opacity: 1
+            }
+        },
+        State {
+            name: "hidden";
+            PropertyChanges {
+                target: root;
+                visible: false;
+                opacity: 0
+            }
         }
-    }
+    ]
 
     color: "#00000000"
     height: global_vars.itemHeight
@@ -33,6 +47,7 @@ Rectangle  {
     Text {
         id: item_txt
         anchors.left: root.left
+        anchors.leftMargin: 30
         anchors.top: root.top
         anchors.right: root.right
         anchors.bottom: root.bottom
@@ -41,13 +56,16 @@ Rectangle  {
         font.pointSize: global_vars.itemFontsize
         smooth: true
         color: global_vars.darkGrayColor
-        horizontalAlignment: Text.AlignHCenter
+        //horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
     }
 
     Rectangle {
         id: x_holder
+
         color: "#00000000"
+        //color: "white"
+
         anchors.right: root.right
         anchors.top: root.top
         height: root.height
@@ -71,6 +89,8 @@ Rectangle  {
                 root.released()
             }
             onClicked: {
+                deletionHandlingCheckOut(item_txt.text)
+                root.state = "hidden"
                 root.clicked()
             }
         }
