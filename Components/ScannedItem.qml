@@ -7,11 +7,12 @@ Rectangle  {
     id: root
     objectName: "button"
     property alias item_id: item_txt
+    property bool checked: false
     signal pressed()
     signal released()
     signal clicked()
 
-    signal deletionHandling(string itemID)
+    //signal deletionHandling(string itemID)
 
     state: "visible"
     states:[
@@ -89,8 +90,9 @@ Rectangle  {
                 root.released()
             }
             onClicked: {
-                deletionHandlingCheckOut(item_txt.text)
-                root.state = "hidden"
+                console.log("yo")
+                //deletionHandlingCheckOut(item_txt.text)
+                //root.state = "hidden"
                 root.clicked()
             }
         }

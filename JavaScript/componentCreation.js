@@ -16,7 +16,7 @@ function finishCreation() {
 //        console.log("GlobVars.itemList: ", GlobVars.itemList)
 //        console.log("global_vars.numItems: ", global_vars.numItems)
 //        console.log("GlobVars.itemList[global_vars.numItems]: ", (GlobVars.itemList)[global_vars.numItems])
-        var NewObject = component.createObject(root, {"x": 615, "y": (global_vars.numItems)*(global_vars.itemDownShift)+30, "item_id.text": "ID: " + (GlobVars.itemList)[global_vars.numItems-1]});
+        //var NewObject = component.createObject(root, {"x": 615, "y": (global_vars.numItems)*(global_vars.itemDownShift)+30, "item_id.text": (GlobVars.itemList)[global_vars.numItems-1]});
         GlobVars.objectList.push(NewObject)
         //item_listmodel.append(NewObject)
         //console.log("GlobVars.objectList: ", GlobVars.objectList)

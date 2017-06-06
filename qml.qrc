@@ -20,5 +20,9 @@
         <file>Images/x_gray.png</file>
         <file>JavaScript/componentCreation.js</file>
         <file>JavaScript/globalVars.js</file>
+        <file>Layers/EndPage.qml</file>
+        <file>Layers/CheckIn.qml</file>
+        <file>Images/power_darkgray.png</file>
+        <file>Images/power_gray.png</file>
     </qresource>
 </RCC>

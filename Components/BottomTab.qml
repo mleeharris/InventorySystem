@@ -6,6 +6,7 @@ Rectangle  {
     id: root_top
     objectName: "button"
     property alias label: tab_txt
+    property alias location: power.source
     clip: false
     signal pressed()
     signal released()
@@ -59,6 +60,11 @@ Rectangle  {
                 property: "radius"
                 duration: 200
             }
+            PropertyAnimation {
+                target: power
+                property: "opacity"
+                duration: 200
+            }
         }
     ]
 
@@ -83,6 +89,10 @@ Rectangle  {
                 width: root_top.width
                 height: root_top.height
             }
+            PropertyChanges {
+                target: power
+                opacity: 1
+            }
         },
         State {
             name: "Down";
@@ -105,6 +115,10 @@ Rectangle  {
                 target: btn_ma
                 width: 0
                 height: 0
+            }
+            PropertyChanges {
+                target: power
+                opacity: 0
             }
         }
     ]
@@ -160,6 +174,26 @@ Rectangle  {
         color: global_vars.grayColor
         horizontalAlignment: Text.AlignHCenter
         verticalAlignment: Text.AlignVCenter
+        z: 4
+    }
+
+    Image {
+        id: power
+        anchors.left: root.left
+        anchors.leftMargin: 80
+        anchors.top: root.top
+        anchors.right: root.right
+        anchors.rightMargin: 80
+        anchors.bottom: root.bottom
+
+        smooth: true
+        opacity: 1
+        horizontalAlignment: Image.AlignHCenter
+        verticalAlignment: Image.AlignVCenter
+        fillMode: Image.PreserveAspectFit
+        width: 10
+        height: 10
+        source: ''
         z: 4
     }
 

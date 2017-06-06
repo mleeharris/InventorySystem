@@ -55,6 +55,7 @@ Rectangle {
         label.text: "Login"
 
         onClicked: {
+            tabOperationLoggedIn("middle","Up")
             slot_switchLayer("check")
             root.state = "hidden"
         }
@@ -192,7 +193,14 @@ Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: global_vars.tabRightMargin
         id: right_tab
-        label.text: "Power"
+        //label.text: "Power"
+        location: "qrc:/Images/power_gray.png"
+        onPressed: {
+            location = "qrc:/Images/power_darkgray.png"
+        }
+        onReleased: {
+            location = "qrc:/Images/power_gray.png"
+        }
         onClicked: {
             Qt.quit()
             root.state = "hidden"

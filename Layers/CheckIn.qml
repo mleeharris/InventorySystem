@@ -14,11 +14,11 @@ Rectangle {
     visible: true
     width: 1920
     height: 1080
-    objectName: "check_out"
+    objectName: "check_in"
 
     signal nextLayer(string nextLayer)
     signal tabOperationCheck(string tabnum, string state)
-    signal tabOperationFromCheckOut(string tabnum, string state)
+    signal tabOperationFromCheckIn(string tabnum, string state)
 
     Component.onCompleted: {
         root.state = "hidden"
@@ -30,9 +30,9 @@ Rectangle {
         //scanned_item.deletionHandling.connect(deletionHandlingCheckOut)
 
         //tab operation
-        check.tabOperationCheckOut.connect(tabOperationCheckOut)
-        end_page.tabOperationFromEnd.connect(tabOperationCheckOut)
-        main_window.itemScan.connect(itemScan)
+        check.tabOperationFromCheck.connect(tabOperationCheckIn)
+        end_page.tabOperationFromEnd.connect(tabOperationCheckIn)
+        main_window.itemScanIn.connect(itemScan)
     }
 
     ScannedItem{id: scanned_item}
@@ -96,20 +96,19 @@ Rectangle {
         model: item_model
         spacing: 12
         z: 4
-        clip: true
     }
 
     Text {
-        text: "Check Out"
+        text: "Check In"
         anchors.top: parent.top
-        anchors.topMargin: 100
+        anchors.topMargin: 90
         anchors.left: parent.left
         anchors.leftMargin: 87
         height: clear_button.height
         width: clear_button.width
         font.family: "TypoGraphica"
-        font.pixelSize: 102
-        id: check_out
+        font.pixelSize: 130
+        id: check_in
     }
 
     Text {
@@ -128,15 +127,15 @@ Rectangle {
         anchors.left: clear_button.left
         height: clear_button.height
         width: clear_button.width
-        id: check_out_button
-        label.text: "Check Out"
+        id: check_in_button
+        label.text: "Check In"
 
         onClicked: {
-            tabOperationFromCheckOut("right", "Up")
-            tabOperationFromCheckOut("middle","Down")
+            tabOperationFromCheckIn("right", "Up")
+            tabOperationFromCheckIn("middle","Down")
 
             //send list to API here
-            console.log("GlobVars.itemList: ", GlobVars.itemList)
+            console.log("GlobVars.itemListIn: ", GlobVars.itemListIn)
             //
 
             deletionAll()
@@ -164,7 +163,14 @@ Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: global_vars.tabRightMargin
         id: right_tab
-        label.text: "Power"
+        //label.text: "Power"
+        location: "qrc:/Images/power_gray.png"
+        onPressed: {
+            location = "qrc:/Images/power_darkgray.png"
+        }
+        onReleased: {
+            location = "qrc:/Images/power_gray.png"
+        }
         onClicked: {
             Qt.quit()
             root.state = "hidden"
@@ -179,7 +185,8 @@ Rectangle {
         label.text: "Back"
         onClicked: {
             slot_switchLayer("check")
-            tabOperationCheckOut("right", "Up")
+            tabOperationFromCheckIn("right", "Up")
+            tabOperationCheckIn("right", "Up")
             root.state = "hidden"
         }
     }
@@ -198,36 +205,39 @@ Rectangle {
     }
 
     function deletionAll() {
-        var index = GlobVars.itemList.length
+        var index = GlobVars.itemListIn.length
         console.log("index: ", index)
         var i = 0
         while (i < index) {
             item_model.remove(0)
             i += 1
         }
-        GlobVars.itemList = []
+        GlobVars.itemListIn = []
         item_counter.text = "Items: 0"
+
     }
 
     function itemScan(item) {
         console.log(item)
-        GlobVars.itemList.push(item.slice(0,-1))
-        console.log("GlobVars: ", GlobVars.itemList)
+        GlobVars.itemListIn.push(item.slice(0,-1))
+        console.log("GlobVars: ", GlobVars.itemListIn)
 
         item_model.insert(item_listview.currentIndex + 1, {
                               "itemText": "ID: " + item
                           })
         item_listview.currentIndex = item_listview.currentIndex + 1
-        item_counter.text = "Items: " + GlobVars.itemList.length
+        item_counter.text = "Items: " + GlobVars.itemListIn.length
+
     }
 
 
     function deletionHandlingCheckOut() {
         item_model.remove(item_listview.currentIndex)
         console.log("item_listview.currentIndex: ", item_listview.currentIndex)
-        GlobVars.itemList.splice(item_listview.currentIndex, 1)
-        console.log("GLobVars.itemList: ", GlobVars.itemList)
-        item_counter.text = "Items: " + GlobVars.itemList.length
+        GlobVars.itemListIn.splice(item_listview.currentIndex, 1)
+        console.log("GLobVars.itemListIn: ", GlobVars.itemListIn)
+        item_counter.text = "Items: " + GlobVars.itemListIn.length
+
 //        console.log("itemID: ", itemID)
 //        console.log("GlobVars.itemList: ", GlobVars.itemList)
 //        var i = 0
@@ -264,7 +274,7 @@ Rectangle {
 //        }
 //    }
 
-    function tabOperationCheckOut(tabnum, state) {
+    function tabOperationCheckIn(tabnum, state) {
         if (tabnum === "right") {
             if (state === "Up") {
                 tabOperationCheck("right", "Up")
@@ -273,6 +283,16 @@ Rectangle {
             if (state === "Down") {
                 tabOperationCheck("right", "Down")
                 right_tab.state = "Down"
+            }
+        }
+        if (tabnum === "middle") {
+            if (state === "Up") {
+                tabOperationCheck("right", "Up")
+                middle_tab.state = "Up"
+            }
+            if (state === "Down") {
+                tabOperationCheck("right", "Down")
+                middle_tab.state = "Down"
             }
         }
     }

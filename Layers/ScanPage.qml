@@ -38,21 +38,6 @@ Rectangle {
         }
     ]
 
-    Item {
-        id: barcode
-        Keys.onPressed: {
-            if ( (String(event.key) != '16777251') && (String(event.key) != '16777248') ) {
-                //console.log('added')
-                global_vars.userpass_creation = global_vars.userpass_creation + event.text
-            }
-            if (String(event.key) == '16777220') {
-                //console.log('reset')
-                userpass(global_vars.userpass_creation)
-                global_vars.userpass_creation = ''
-            }
-        }
-    }
-
     Image {
         id: background_image
         source: "qrc:/Images/background_opening_3.jpg"
@@ -74,7 +59,14 @@ Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: global_vars.tabRightMargin
         id: right_tab
-        label.text: "Power"
+        //label.text: "Power"
+        location: "qrc:/Images/power_gray.png"
+        onPressed: {
+            location = "qrc:/Images/power_darkgray.png"
+        }
+        onReleased: {
+            location = "qrc:/Images/power_gray.png"
+        }
         onClicked: {
             Qt.quit()
             root.state = "hidden"

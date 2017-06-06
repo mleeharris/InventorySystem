@@ -4,27 +4,36 @@ import QtQml 2.2
 import QtQuick.Dialogs 1.1
 import QtQuick.Controls 1.1
 import QtGraphicalEffects 1.0
+import "qrc:/JavaScript"
 import "qrc:/Components"
+import "qrc:/JavaScript/componentCreation.js" as Creation
+import "qrc:/JavaScript/globalVars.js" as GlobVars
 
 Rectangle {
     id: root
     visible: true
     width: 1920
     height: 1080
-    objectName: "check"
+    objectName: "end_page"
 
     signal nextLayer(string nextLayer)
-    signal tabOperationCheckOut(string tabnum, string state)
-    signal tabOperationFromCheck(string tabnum, string state)
+    signal tabOperationFromEnd(string tabnum, string state)
+    signal itemFromEnd()
 
     Component.onCompleted: {
         root.state = "hidden"
-        //root.state = "visible"
+        middle_tab.state = "Up"
+        right_tab.state = "Down"
 
-        check_out.tabOperationCheck.connect(tabOperationCheck)
-        check_in.tabOperationCheck.connect(tabOperationCheck)
-        check_in.tabOperationFromCheckIn.connect(tabOperationCheck)
+        //object deletion handling
+        //scanned_item.deletionHandling.connect(deletionHandlingCheckOut)
+
+        //tab operation
+        check_in.tabOperationFromCheckIn.connect(tabOperationEndPage)
+        check_out.tabOperationFromCheckOut.connect(tabOperationEndPage)
     }
+
+    ScannedItem{id: scanned_item}
 
     states: [
         State {
@@ -55,22 +64,27 @@ Rectangle {
         anchors.top: parent.top
         anchors.topMargin: 180
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Select An Option"
+        text: "Action Completed"
         font.family: "Bebas Neue"
         color: "Black"
         font.pointSize: 200
     }
 
     BasicButton {
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: check_out_button.top
-        anchors.bottomMargin: 30
+        anchors.top: check_out_button.bottom
+        anchors.topMargin: 20
+        anchors.left: check_out_button.left
+        height: check_out_button.height
+        width: check_out_button.width
         id: check_in_button
         label.text: "Check In"
 
         onClicked: {
-            tabOperationFromCheck("right", "Down")
-            slot_switchLayer("check_in")
+            tabOperationFromEnd("right", "Down")
+            tabOperationFromEnd("middle","Up")
+            tabOperationEndPage("right", "Down")
+            tabOperationEndPage("middle","Up")
+            nextLayer("check_in")
             root.state = "hidden"
         }
     }
@@ -78,14 +92,36 @@ Rectangle {
     BasicButton {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 200
+        anchors.bottomMargin: 400
+        height: 100
+        width: global_vars.buttonHeight*3
         id: check_out_button
         label.text: "Check Out"
 
         onClicked: {
-            tabOperationCheckOut("right", "Down")
-            slot_switchLayer("check_out")
+            tabOperationFromEnd("right", "Down")
+            tabOperationFromEnd("middle","Up")
+            tabOperationEndPage("right", "Down")
+            tabOperationEndPage("middle", "Up")
+            nextLayer("check_out")
             root.state = "hidden"
+        }
+    }
+
+    BasicButton {
+        anchors.top: check_in_button.bottom
+        anchors.topMargin: 20
+        anchors.left: check_out_button.left
+        height: check_out_button.height
+        width: check_out_button.width
+        id: start_over_button
+        label.text: "Start Over"
+
+        onClicked: {
+            itemFromEnd()
+            tabOperationFromEnd("middle","Down")
+            root.state = "hidden"
+            nextLayer("main")
         }
     }
 
@@ -104,7 +140,6 @@ Rectangle {
         }
         onClicked: {
             Qt.quit()
-            root.state = "hidden"
         }
     }
 
@@ -115,22 +150,32 @@ Rectangle {
         id: middle_tab
         label.text: "Back"
         onClicked: {
-            tabOperationFromCheck("middle","Down")
-            slot_switchLayer("main")
+            slot_switchLayer("check_out")
+            tabOperationFromEnd("right", "Down")
             root.state = "hidden"
         }
     }
 
-    function tabOperationCheck(tabnum, state) {
+    function tabOperationEndPage(tabnum, state) {
         if (tabnum === "right") {
             if (state === "Up") {
+                tabOperationFromEnd("right", "Up")
                 right_tab.state = "Up"
             }
             if (state === "Down") {
+                tabOperationFromEnd("right", "Down")
                 right_tab.state = "Down"
+            }
+        }
+        if (tabnum === "middle") {
+            if (state === "Up") {
+                tabOperationFromEnd("middle", "Up")
+                middle_tab.state = "Up"
+            }
+            if (state === "Down") {
+                tabOperationFromEnd("middle", "Down")
+                middle_tab.state = "Down"
             }
         }
     }
 }
-
-
