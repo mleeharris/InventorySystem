@@ -16,23 +16,20 @@ Rectangle {
     height: 1080
     objectName: "check_in"
 
-    signal nextLayer(string nextLayer)
-    signal tabOperationCheck(string tabnum, string state)
-    signal tabOperationFromCheckIn(string tabnum, string state)
+    signal nextLayer(string currentLayer, string nextLayer)
 
     Component.onCompleted: {
         root.state = "hidden"
-        right_tab.state = "Up"
 
-        items.state = "off"
+        middle_tab.state = "Up"
+        right_tab.state = "Up"
 
         //object deletion handling
         //scanned_item.deletionHandling.connect(deletionHandlingCheckOut)
 
         //tab operation
-        check.tabOperationFromCheck.connect(tabOperationCheckIn)
-        end_page.tabOperationFromEnd.connect(tabOperationCheckIn)
         main_window.itemScanIn.connect(itemScan)
+        main_window.tabOperationForCheckIn.connect(tabOperationCheckIn)
     }
 
     ScannedItem{id: scanned_item}
@@ -96,6 +93,7 @@ Rectangle {
         model: item_model
         spacing: 12
         z: 4
+        clip: true
     }
 
     Text {
@@ -128,18 +126,19 @@ Rectangle {
         height: clear_button.height
         width: clear_button.width
         id: check_in_button
-        label.text: "Check In"
+        label.text: "Done"
+
+        location: "qrc:/Images/check_in_button.png"
+        iconHeight: global_vars.check_in_height
+        iconAnchors.verticalCenterOffset: global_vars.check_in_offset
 
         onClicked: {
-            tabOperationFromCheckIn("right", "Up")
-            tabOperationFromCheckIn("middle","Down")
-
             //send list to API here
             console.log("GlobVars.itemListIn: ", GlobVars.itemListIn)
             //
 
             deletionAll()
-            nextLayer("end_page")
+            nextLayer(root.objectName, "end_page")
             root.state = "hidden"
         }
     }
@@ -153,6 +152,10 @@ Rectangle {
         id: clear_button
         label.text: "Clear"
 
+        location: "qrc:/Images/recycling_bin.png"
+        iconHeight: global_vars.clear_height
+        iconAnchors.verticalCenterOffset: global_vars.clear_offset
+
         onClicked: {
             deletionAll()
         }
@@ -164,12 +167,13 @@ Rectangle {
         anchors.rightMargin: global_vars.tabRightMargin
         id: right_tab
         //label.text: "Power"
-        location: "qrc:/Images/power_gray.png"
+        z: 4
+        location: "qrc:/Images/power.png"
         onPressed: {
-            location = "qrc:/Images/power_darkgray.png"
+            location = "qrc:/Images/power_dark.png"
         }
         onReleased: {
-            location = "qrc:/Images/power_gray.png"
+            location = "qrc:/Images/power.png"
         }
         onClicked: {
             Qt.quit()
@@ -182,11 +186,16 @@ Rectangle {
         anchors.right: right_tab.left
         anchors.rightMargin: global_vars.tabSpace
         id: middle_tab
-        label.text: "Back"
+        //label.text: "Back"
+        location: "qrc:/Images/back.png"
+        onPressed: {
+            location = "qrc:/Images/back_dark.png"
+        }
+        onReleased: {
+            location = "qrc:/Images/back.png"
+        }
         onClicked: {
-            slot_switchLayer("check")
-            tabOperationFromCheckIn("right", "Up")
-            tabOperationCheckIn("right", "Up")
+            nextLayer(root.objectName, "check")
             root.state = "hidden"
         }
     }
@@ -202,6 +211,7 @@ Rectangle {
         anchors.topMargin: 100
         radius: 40
         opacity: 0.2
+        z: 3
     }
 
     function deletionAll() {
@@ -275,24 +285,20 @@ Rectangle {
 //    }
 
     function tabOperationCheckIn(tabnum, state) {
-        if (tabnum === "right") {
-            if (state === "Up") {
-                tabOperationCheck("right", "Up")
-                right_tab.state = "Up"
-            }
-            if (state === "Down") {
-                tabOperationCheck("right", "Down")
-                right_tab.state = "Down"
-            }
-        }
         if (tabnum === "middle") {
             if (state === "Up") {
-                tabOperationCheck("right", "Up")
                 middle_tab.state = "Up"
             }
             if (state === "Down") {
-                tabOperationCheck("right", "Down")
                 middle_tab.state = "Down"
+            }
+        }
+        if (tabnum === "right") {
+            if (state === "Up") {
+                right_tab.state = "Up"
+            }
+            if (state === "Down") {
+                right_tab.state = "Down"
             }
         }
     }

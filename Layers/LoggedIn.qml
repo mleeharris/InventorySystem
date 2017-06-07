@@ -13,14 +13,15 @@ Rectangle {
     height: 1080
     objectName: "logged_in"
 
-    signal nextLayer(string nextLayer)
-    signal tabOperationMain(string tabnum, string state)
+    signal nextLayer(string currentLayer, string nextLayer)
 
     Component.onCompleted: {
         root.state = "hidden"
 
         middle_tab.state = "Down"
-        main_window.tabOperationLoggedIn.connect(tabOperationLoggedIn)
+        right_tab.state = "Up"
+
+        main_window.tabOperationForLoggedIn.connect(tabOperationLoggedIn)
     }
 
     states: [
@@ -54,9 +55,12 @@ Rectangle {
         id: login_button
         label.text: "Login"
 
+        location: "qrc:/Images/user.png"
+        iconHeight: global_vars.login_height
+        iconAnchors.verticalCenterOffset: global_vars.login_offset
         onClicked: {
             tabOperationLoggedIn("middle","Up")
-            slot_switchLayer("check")
+            nextLayer(root.objectName, "check")
             root.state = "hidden"
         }
     }
@@ -194,12 +198,12 @@ Rectangle {
         anchors.rightMargin: global_vars.tabRightMargin
         id: right_tab
         //label.text: "Power"
-        location: "qrc:/Images/power_gray.png"
+        location: "qrc:/Images/power.png"
         onPressed: {
-            location = "qrc:/Images/power_darkgray.png"
+            location = "qrc:/Images/power_dark.png"
         }
         onReleased: {
-            location = "qrc:/Images/power_gray.png"
+            location = "qrc:/Images/power.png"
         }
         onClicked: {
             Qt.quit()
@@ -212,10 +216,16 @@ Rectangle {
         anchors.right: right_tab.left
         anchors.rightMargin: global_vars.tabSpace
         id: middle_tab
-        label.text: "Back"
+        //label.text: "Back"
+        location: "qrc:/Images/back.png"
+        onPressed: {
+            location = "qrc:/Images/back_dark.png"
+        }
+        onReleased: {
+            location = "qrc:/Images/back.png"
+        }
         onClicked: {
-            tabOperationLoggedIn("middle", "Down")
-            slot_switchLayer("main")
+            nextLayer(root.objectName, "main")
             root.state = "hidden"
         }
     }
@@ -223,12 +233,18 @@ Rectangle {
     function tabOperationLoggedIn(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {
-                  middle_tab.state = "Up"
-                  tabOperationMain("middle", "Up")
+                middle_tab.state = "Up"
             }
             if (state === "Down") {
                 middle_tab.state = "Down"
-                tabOperationMain("middle", "Down")
+            }
+        }
+        if (tabnum === "right") {
+            if (state === "Up") {
+                right_tab.state = "Up"
+            }
+            if (state === "Down") {
+                right_tab.state = "Down"
             }
         }
     }

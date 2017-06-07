@@ -7,7 +7,11 @@ Rectangle  {
     objectName: "button"
     property alias label: button_txt
     property color buttonColor
-    clip:false
+    property alias location: icon.source
+    property alias iconHeight: icon.height
+    property alias iconAnchors: icon.anchors
+
+    clip: false
     signal pressed()
     signal released()
     signal clicked()
@@ -53,20 +57,53 @@ Rectangle  {
             }
         ]
 
-        Text {
-            id: button_txt
-            anchors.left: black_part.left
-            anchors.top: black_part.top
-            anchors.right: black_part.right
-            anchors.bottom: black_part.bottom
-            font.family: "BebasNeue"
-            text: ""
-            font.pointSize: global_vars.buttonSize
-            smooth: true
-            color: global_vars.grayColor
-            horizontalAlignment: Text.AlignHCenter
-            verticalAlignment: Text.AlignVCenter
+        Rectangle {
+            id: holder
+            anchors.fill: parent
+            anchors.horizontalCenter: parent.horizontalCenter
+            anchors.verticalCenter: parent.verticalCenter
+            color: "#00000000"
+
+            Text {
+                id: button_txt
+                anchors.horizontalCenter: parent.horizontalCenter
+                anchors.horizontalCenterOffset: -icon.width/2
+                anchors.verticalCenter: parent.verticalCenter
+                font.family: "BebasNeue"
+                text: ""
+                font.pointSize: global_vars.buttonSize
+                smooth: true
+                color: global_vars.grayColor
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+            }
+
+            Image {
+                id: icon
+                anchors.left: button_txt.right
+                anchors.leftMargin: 25
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.verticalCenterOffset: 0
+                height: button_txt.height - button_txt.height/3
+                width: icon.height
+                source: ''
+            }
         }
+
+//        Text {
+//            id: button_txt
+//            anchors.left: black_part.left
+//            anchors.top: black_part.top
+//            anchors.right: black_part.right
+//            anchors.bottom: black_part.bottom
+//            font.family: "BebasNeue"
+//            text: ""
+//            font.pointSize: global_vars.buttonSize
+//            smooth: true
+//            color: global_vars.grayColor
+//            horizontalAlignment: Text.AlignHCenter
+//            verticalAlignment: Text.AlignVCenter
+//        }
 
         MouseArea {
             id: btn_ma

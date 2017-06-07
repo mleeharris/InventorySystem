@@ -16,23 +16,20 @@ Rectangle {
     height: 1080
     objectName: "check_out"
 
-    signal nextLayer(string nextLayer)
-    signal tabOperationCheck(string tabnum, string state)
-    signal tabOperationFromCheckOut(string tabnum, string state)
+    signal nextLayer(string currentLayer, string nextLayer)
 
     Component.onCompleted: {
         root.state = "hidden"
-        right_tab.state = "Up"
 
-        items.state = "off"
+        middle_tab.state = "Up"
+        right_tab.state = "Up"
 
         //object deletion handling
         //scanned_item.deletionHandling.connect(deletionHandlingCheckOut)
 
         //tab operation
-        check.tabOperationCheckOut.connect(tabOperationCheckOut)
-        end_page.tabOperationFromEnd.connect(tabOperationCheckOut)
         main_window.itemScan.connect(itemScan)
+        main_window.tabOperationForCheckOut.connect(tabOperationCheckOut)
     }
 
     ScannedItem{id: scanned_item}
@@ -129,18 +126,19 @@ Rectangle {
         height: clear_button.height
         width: clear_button.width
         id: check_out_button
-        label.text: "Check Out"
+        label.text: "Done"
+
+        location: "qrc:/Images/logout_sign_flipped.png"
+        iconHeight: global_vars.check_out_height
+        iconAnchors.verticalCenterOffset: global_vars.check_out_offset
 
         onClicked: {
-            tabOperationFromCheckOut("right", "Up")
-            tabOperationFromCheckOut("middle","Down")
-
             //send list to API here
             console.log("GlobVars.itemList: ", GlobVars.itemList)
             //
 
             deletionAll()
-            nextLayer("end_page")
+            nextLayer(root.objectName, "end_page")
             root.state = "hidden"
         }
     }
@@ -154,6 +152,10 @@ Rectangle {
         id: clear_button
         label.text: "Clear"
 
+        location: "qrc:/Images/recycling_bin.png"
+        iconHeight: global_vars.clear_height
+        iconAnchors.verticalCenterOffset: global_vars.clear_offset
+
         onClicked: {
             deletionAll()
         }
@@ -164,7 +166,15 @@ Rectangle {
         anchors.right: parent.right
         anchors.rightMargin: global_vars.tabRightMargin
         id: right_tab
-        label.text: "Power"
+        z: 3
+        //label.text: "Power"
+        location: "qrc:/Images/power.png"
+        onPressed: {
+            location = "qrc:/Images/power_dark.png"
+        }
+        onReleased: {
+            location = "qrc:/Images/power.png"
+        }
         onClicked: {
             Qt.quit()
             root.state = "hidden"
@@ -176,10 +186,16 @@ Rectangle {
         anchors.right: right_tab.left
         anchors.rightMargin: global_vars.tabSpace
         id: middle_tab
-        label.text: "Back"
+        //label.text: "Back"
+        location: "qrc:/Images/back.png"
+        onPressed: {
+            location = "qrc:/Images/back_dark.png"
+        }
+        onReleased: {
+            location = "qrc:/Images/back.png"
+        }
         onClicked: {
-            slot_switchLayer("check")
-            tabOperationCheckOut("right", "Up")
+            nextLayer(root.objectName, "check")
             root.state = "hidden"
         }
     }
@@ -195,6 +211,7 @@ Rectangle {
         anchors.topMargin: 100
         radius: 40
         opacity: 0.2
+        z: 3
     }
 
     function deletionAll() {
@@ -265,13 +282,19 @@ Rectangle {
 //    }
 
     function tabOperationCheckOut(tabnum, state) {
+        if (tabnum === "middle") {
+            if (state === "Up") {
+                middle_tab.state = "Up"
+            }
+            if (state === "Down") {
+                middle_tab.state = "Down"
+            }
+        }
         if (tabnum === "right") {
             if (state === "Up") {
-                tabOperationCheck("right", "Up")
                 right_tab.state = "Up"
             }
             if (state === "Down") {
-                tabOperationCheck("right", "Down")
                 right_tab.state = "Down"
             }
         }

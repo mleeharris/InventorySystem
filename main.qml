@@ -8,6 +8,7 @@ import "qrc:/Components"
 import "qrc:/Layers"
 import "qrc:/Function"
 import "qrc:/Images"
+import "qrc:/JavaScript/globalVars.js" as GlobVars
 
 Window {
     id: main_window
@@ -16,12 +17,15 @@ Window {
     height: 1080
     objectName: "MainWindow"
 
-    signal tabOperationScanPage(string tabnum, string state)
-    signal tabOperationLoggedIn(string tabnum, string state)
-    signal tabOperationLoginPage(string tabnum, string state)
+    signal tabOperationForScanPage(string tabnum, string state)
+    signal tabOperationForLoggedIn(string tabnum, string state)
+    signal tabOperationForLoginPage(string tabnum, string state)
+    signal tabOperationForCheck(string tabnum, string state)
+    signal tabOperationForCheckIn(string tabnum, string state)
+    signal tabOperationForCheckOut(string tabnum, string state)
+    signal tabOperationForEndPage(string tabnum, string state)
     signal itemScan(string item)
     signal itemScanIn(string item)
-    property string active_layer: ""
 
     FontLoader {
         id: opening_font
@@ -46,6 +50,8 @@ Window {
 
         //barcode.state = "off"
         barcode.state = "on"
+        items.state = "off"
+        items_in.state = "off"
 
         //object_holder.state = "hidden"
         object_holder.state = "visible"
@@ -57,12 +63,6 @@ Window {
         logged_in.nextLayer.connect(slot_switchLayer)
         end_page.nextLayer.connect(slot_switchLayer)
         check_in.nextLayer.connect(slot_switchLayer)
-
-        scan_page.tabOperationMain.connect(tabOperationMain)
-        logged_in.tabOperationMain.connect(tabOperationMain)
-        login_page.tabOperationMain.connect(tabOperationMain)
-        check.tabOperationFromCheck.connect(tabOperationMain)
-        end_page.tabOperationFromEnd.connect(tabOperationMain)
     }
 
     /*LAYER DECL*/
@@ -224,16 +224,15 @@ Window {
             anchors.rightMargin: global_vars.tabRightMargin
             id: right_tab
             //label.text: "Power"
-            location: "qrc:/Images/power_gray.png"
+            location: "qrc:/Images/power.png"
             onPressed: {
-                location = "qrc:/Images/power_darkgray.png"
+                location = "qrc:/Images/power_dark.png"
             }
             onReleased: {
-                location = "qrc:/Images/power_gray.png"
+                location = "qrc:/Images/power.png"
             }
             onClicked: {
                 Qt.quit()
-                object_holder.state = "hidden"
             }
         }
 
@@ -242,7 +241,14 @@ Window {
             anchors.right: right_tab.left
             anchors.rightMargin: global_vars.tabSpace
             id: middle_tab
-            label.text: "Back"
+            //label.text: "Back"
+            location: "qrc:/Images/back.png"
+            onPressed: {
+                location = "qrc:/Images/back_dark.png"
+            }
+            onReleased: {
+                location = "qrc:/Images/back.png"
+            }
             onClicked: {
                 object_holder.state = "hidden"
             }
@@ -254,10 +260,13 @@ Window {
             anchors.bottomMargin: 30
             id: scan_button
             label.text: "Scan"
+
+            location: "qrc:/Images/rfid_chip.png"
+            iconHeight: 62
+            iconAnchors.verticalCenterOffset: -5
+
             onClicked: {
-                tabOperationScanPage("middle", "Up")
-                tabOperationLoggedIn("middle", "Up")
-                slot_switchLayer("scan_page")
+                slot_switchLayer("main", "scan_page")
                 object_holder.state = "hidden"
             }
         }
@@ -267,11 +276,14 @@ Window {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: 200
             id: login_button
-            label.text: "Login"
+            label.text: "How To"
+
+            location: "qrc:/Images/question.png"
+            iconHeight: 65
+            iconAnchors.verticalCenterOffset: -5
+
             onClicked: {
-                tabOperationLoginPage("middle", "Up")
-                tabOperationLoggedIn("middle", "Up")
-                slot_switchLayer("login_page")
+                slot_switchLayer("main", "login_page")
                 object_holder.state = "hidden"
             }
         }
@@ -280,79 +292,180 @@ Window {
     function userpass(userpass) {
         userpass = userpass.split(':')
         global_vars.username = userpass[0]
-        global_vars.password = userpass[1]
+        global_vars.realpass = userpass[1]
+
+        var star = '*'
+        global_vars.password = ''
+        var lengtherino = global_vars.realpass.length
+        var i = 0
+        while (i < lengtherino - 1) {
+            global_vars.password = global_vars.password + star
+            i += 1
+        }
 
         console.log("username: ", global_vars.username)
         console.log("password: ", global_vars.password)
 
-        tabOperationLoggedIn("middle", "Up")
         object_holder.state = "hidden"
         check_out.state = "hidden"
         scan_page.state = "hidden"
         login_page.state = "hidden"
-        slot_switchLayer("logged_in")
+        slot_switchLayer("main", "logged_in")
     }
 
-    function slot_switchLayer(nextLayer) {
-        console.log(nextLayer)
-        active_layer = nextLayer
-        switch(nextLayer) {
-            case "main": {
-                object_holder.state = "visible"
-                barcode.state = "on"
-                items.state = "off"
-                items_in.state = "off"
-                console.log("barcode.state: ", barcode.state)
-                break;
-            }
-            case "check": {
-                check.state = "visible"
-                barcode.state = "on"
-                items.state = "off"
-                items_in.state = "off"
-                break;
-            }
-            case "check_out": {
-                check_out.state = "visible"
-                barcode.state = "off"
-                items.state = "on"
-                items_in.state = "off"
-                break;
-            }
-            case "scan_page": {
+    function slot_switchLayer(currentLayer, nextLayer) {
+        //console.log("currentLayer: ", currentLayer)
+        console.log("nextLayer: ", nextLayer)
+
+        if (currentLayer === "main") {
+            if (nextLayer === "scan_page") {
                 scan_page.state = "visible"
-                barcode.state = "on"
-                items.state = "off"
-                items_in.state = "off"
-                break;
+                tabOperationForLoggedIn("middle","Up")
+                tabOperationForScanPage("middle","Up")
+                tabOperationMain("middle","Up")
             }
-            case "login_page": {
+            if (nextLayer === "login_page") {
                 login_page.state = "visible"
-                barcode.state = "on"
-                items.state = "off"
-                items_in.state = "off"
-                break;
+                tabOperationForLoggedIn("middle","Up")
+                tabOperationForLoginPage("middle","Up")
+                tabOperationMain("middle","Up")
             }
-            case "logged_in": {
+            if (nextLayer === "logged_in") {
                 logged_in.state = "visible"
-                barcode.state = "on"
-                items.state = "off"
-                items_in.state = "off"
-                break;
+                tabOperationForLoggedIn("middle","Up")
+                tabOperationMain("middle","Up")
             }
-            case "end_page": {
-                end_page.state = "visible"
-                barcode.state = "on"
-                items.state = "off"
-                items_in.state = "off"
-                break;
+        }
+        if (currentLayer === "scan_page") {
+            if (nextLayer === "main") {
+                console.log("boi")
+                object_holder.state = "visible"
+                tabOperationForLoggedIn("middle","Down")
+                tabOperationMain("middle", "Down")
+                tabOperationForScanPage("middle","Down")
             }
-            case "check_in": {
-                check_in.state = "visible"
+            if (nextLayer === "logged_in") {
+                logged_in.state = "visible"
+            }
+        }
+        if (currentLayer === "login_page") {
+            if (nextLayer === "main") {
+                object_holder.state = "visible"
+                tabOperationForLoggedIn("middle","Down")
+                tabOperationMain("middle", "Down")
+                tabOperationForScanPage("middle","Down")
+            }
+            if (nextLayer === "logged_in") {
+                logged_in.state = "visible"
+            }
+        }
+        if (currentLayer === "logged_in") {
+            if (nextLayer === "main") {
+                object_holder.state = "visible"
+                tabOperationMain("middle", "Down")
+                tabOperationForScanPage("middle","Down")
+            }
+            if (nextLayer === "check") {
                 barcode.state = "off"
-                items.state = "off"
+                check.state = "visible"
+            }
+        }
+        if (currentLayer === "check") {
+            if (nextLayer === "check_in") {
                 items_in.state = "on"
-                break;
+                check_in.state = "visible"
+                tabOperationForCheckIn("right","Down")
+                tabOperationForCheck("right", "Down")
+                tabOperationForCheckOut("right","Down")
+            }
+            if (nextLayer === "check_out") {
+                items.state = "on"
+                check_out.state = "visible"
+                tabOperationForCheckOut("right","Down")
+                tabOperationForCheck("right", "Down")
+                tabOperationForCheckIn("right","Down")
+            }
+            if (nextLayer === "logged_in") {
+                barcode.state = "on"
+                logged_in.state = "visible"
+            }
+        }
+        if (currentLayer === "check_in") {
+            if (nextLayer === "check") {
+                check.state = "visible"
+                items_in.state = "off"
+                tabOperationForCheckIn("right","Up")
+                tabOperationForCheck("right", "Up")
+                tabOperationForCheckIn("middle","Up")
+                tabOperationForCheckOut("middle","Up")
+            }
+            if (nextLayer === "end_page") {
+                items_in.state = "off"
+                end_page.state = "visible"
+                tabOperationMain("middle","Down")
+                tabOperationForCheckIn("right","Up")
+                tabOperationForEndPage("right","Up")
+                tabOperationForCheckIn("middle","Down")
+                tabOperationForEndPage("middle","Down")
+                tabOperationForCheckOut("right","Up")
+                tabOperationForCheckOut("middle","Down")
+            }
+        }
+        if (currentLayer === "check_out") {
+            if (nextLayer === "check") {
+                check.state = "visible"
+                items.state = "off"
+                tabOperationForCheckOut("right","Up")
+                tabOperationForCheck("right", "Up")
+                tabOperationForCheckIn("middle","Up")
+                tabOperationForCheckOut("middle","Up")
+            }
+            if (nextLayer === "end_page") {
+                items.state = "off"
+                end_page.state = "visible"
+                tabOperationMain("middle","Down")
+                tabOperationForCheckOut("right","Up")
+                tabOperationForEndPage("right","Up")
+                tabOperationForCheckOut("middle","Down")
+                tabOperationForEndPage("middle","Down")
+                tabOperationForCheckIn("right","Up")
+                tabOperationForCheckIn("middle","Down")
+            }
+        }
+        if (currentLayer === "end_page") {
+            if (nextLayer === "check_in") {
+                check_in.state = "visible"
+                items_in.state = "on"
+                tabOperationForCheckIn("right","Down")
+                tabOperationForEndPage("right","Down")
+                tabOperationForCheckIn("middle","Up")
+                tabOperationForEndPage("middle","Up")
+            }
+            if (nextLayer === "check_out") {
+                check_out.state = "visible"
+                items.state = "on"
+                tabOperationForCheckOut("right","Down")
+                tabOperationForEndPage("right","Down")
+                tabOperationForCheckOut("middle","Up")
+                tabOperationForEndPage("middle","Up")
+            }
+            if (nextLayer === "main") {
+                barcode.state = "on"
+                tabOperationForScanPage("middle","Down")
+                tabOperationForScanPage("right","Up")
+                tabOperationForLoginPage("middle","Down")
+                tabOperationForLoginPage("right","Up")
+                tabOperationForLoggedIn("middle","Down")
+                tabOperationForLoggedIn("right","Up")
+                tabOperationForCheck("middle","Up")
+                tabOperationForCheck("right","Up")
+                tabOperationForCheckIn("middle","Up")
+                tabOperationForCheckIn("right","Up")
+                tabOperationForCheckOut("middle","Up")
+                tabOperationForCheckOut("right","Up")
+                tabOperationForEndPage("middle","Up")
+                tabOperationForEndPage("right","Down")
+                object_holder.state = "visible"
             }
         }
     }
@@ -360,12 +473,18 @@ Window {
     function tabOperationMain(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {
-                console.log('middle up')
                 middle_tab.state = "Up"
             }
             if (state === "Down") {
-                console.log('middle down')
                 middle_tab.state = "Down"
+            }
+        }
+        if (tabnum === "right") {
+            if (state === "Up") {
+                right_tab.state = "Up"
+            }
+            if (state === "Down") {
+                right_tab.state = "Down"
             }
         }
     }

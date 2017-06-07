@@ -12,7 +12,7 @@ Rectangle  {
     signal released()
     signal clicked()
 
-    color: global_vars.grayColor
+    color: "#00000000"
     height: global_vars.tabHeightUnpressed
     width: global_vars.tabWidth
     radius: height/8
@@ -180,11 +180,12 @@ Rectangle  {
     Image {
         id: power
         anchors.left: root.left
-        anchors.leftMargin: 80
+        anchors.leftMargin: 100
         anchors.top: root.top
         anchors.right: root.right
-        anchors.rightMargin: 80
+        anchors.rightMargin: 100
         anchors.bottom: root.bottom
+        anchors.bottomMargin: 40
 
         smooth: true
         opacity: 1

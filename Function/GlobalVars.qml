@@ -9,6 +9,7 @@ Item {
     property string userpass_creation: ''
     property string password: ''
     property string tempLetter: ''
+    property string realpass: ''
 
     /*Background*/
     property string grayColor: "#DCDCDC"
@@ -48,4 +49,16 @@ Item {
     property string currentItem: ''
     property int numItems: 0
     property int itemDownShift: 100
+
+    /*Icons*/
+    property int login_height: 63
+    property int login_offset: -4
+    property int check_in_height: 80
+    property int check_out_height: 87
+    property int check_in_offset: -5
+    property int check_out_offset: -3
+    property int clear_height: 62
+    property int clear_offset: -4
+    property int startover_height: 65
+    property int startover_offset: -4
 }

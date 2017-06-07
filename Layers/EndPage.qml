@@ -16,12 +16,12 @@ Rectangle {
     height: 1080
     objectName: "end_page"
 
-    signal nextLayer(string nextLayer)
-    signal tabOperationFromEnd(string tabnum, string state)
+    signal nextLayer(string currentLayer, string nextLayer)
     signal itemFromEnd()
 
     Component.onCompleted: {
         root.state = "hidden"
+
         middle_tab.state = "Up"
         right_tab.state = "Down"
 
@@ -29,8 +29,7 @@ Rectangle {
         //scanned_item.deletionHandling.connect(deletionHandlingCheckOut)
 
         //tab operation
-        check_in.tabOperationFromCheckIn.connect(tabOperationEndPage)
-        check_out.tabOperationFromCheckOut.connect(tabOperationEndPage)
+        main_window.tabOperationForEndPage.connect(tabOperationEndPage)
     }
 
     ScannedItem{id: scanned_item}
@@ -71,39 +70,21 @@ Rectangle {
     }
 
     BasicButton {
-        anchors.top: check_out_button.bottom
-        anchors.topMargin: 20
-        anchors.left: check_out_button.left
-        height: check_out_button.height
-        width: check_out_button.width
-        id: check_in_button
-        label.text: "Check In"
-
-        onClicked: {
-            tabOperationFromEnd("right", "Down")
-            tabOperationFromEnd("middle","Up")
-            tabOperationEndPage("right", "Down")
-            tabOperationEndPage("middle","Up")
-            nextLayer("check_in")
-            root.state = "hidden"
-        }
-    }
-
-    BasicButton {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 400
         height: 100
-        width: global_vars.buttonHeight*3
-        id: check_out_button
-        label.text: "Check Out"
+        width: global_vars.buttonHeight*4
+
+        id: check_in_button
+        label.text: "Check In"
+
+        location: "qrc:/Images/check_in_button.png"
+        iconHeight: global_vars.check_in_height
+        iconAnchors.verticalCenterOffset: global_vars.check_in_offset
 
         onClicked: {
-            tabOperationFromEnd("right", "Down")
-            tabOperationFromEnd("middle","Up")
-            tabOperationEndPage("right", "Down")
-            tabOperationEndPage("middle", "Up")
-            nextLayer("check_out")
+            nextLayer(root.objectName, "check_in")
             root.state = "hidden"
         }
     }
@@ -111,17 +92,39 @@ Rectangle {
     BasicButton {
         anchors.top: check_in_button.bottom
         anchors.topMargin: 20
+        anchors.left: check_in_button.left
+        height: check_in_button.height
+        width: check_in_button.width
+        id: check_out_button
+        label.text: "Check Out"
+
+        location: "qrc:/Images/logout_sign_flipped.png"
+        iconHeight: global_vars.check_out_height
+        iconAnchors.verticalCenterOffset: global_vars.check_out_offset
+
+        onClicked: {
+            nextLayer(root.objectName, "check_out")
+            root.state = "hidden"
+        }
+    }
+
+    BasicButton {
+        anchors.top: check_out_button.bottom
+        anchors.topMargin: 20
         anchors.left: check_out_button.left
         height: check_out_button.height
         width: check_out_button.width
         id: start_over_button
         label.text: "Start Over"
 
+        location: "qrc:/Images/update_arrow.png"
+        iconHeight: global_vars.startover_height
+        iconAnchors.verticalCenterOffset: global_vars.startover_offset
+
         onClicked: {
             itemFromEnd()
-            tabOperationFromEnd("middle","Down")
             root.state = "hidden"
-            nextLayer("main")
+            nextLayer(root.objectName, "main")
         }
     }
 
@@ -131,12 +134,12 @@ Rectangle {
         anchors.rightMargin: global_vars.tabRightMargin
         id: right_tab
         //label.text: "Power"
-        location: "qrc:/Images/power_gray.png"
+        location: "qrc:/Images/power.png"
         onPressed: {
-            location = "qrc:/Images/power_darkgray.png"
+            location = "qrc:/Images/power_dark.png"
         }
         onReleased: {
-            location = "qrc:/Images/power_gray.png"
+            location = "qrc:/Images/power.png"
         }
         onClicked: {
             Qt.quit()
@@ -148,33 +151,35 @@ Rectangle {
         anchors.right: right_tab.left
         anchors.rightMargin: global_vars.tabSpace
         id: middle_tab
-        label.text: "Back"
+        //label.text: "Back"
+        location: "qrc:/Images/back.png"
+        onPressed: {
+            location = "qrc:/Images/back_dark.png"
+        }
+        onReleased: {
+            location = "qrc:/Images/back.png"
+        }
         onClicked: {
-            slot_switchLayer("check_out")
-            tabOperationFromEnd("right", "Down")
+            nextLayer(root.objectName, "check_out")
             root.state = "hidden"
         }
     }
 
     function tabOperationEndPage(tabnum, state) {
-        if (tabnum === "right") {
-            if (state === "Up") {
-                tabOperationFromEnd("right", "Up")
-                right_tab.state = "Up"
-            }
-            if (state === "Down") {
-                tabOperationFromEnd("right", "Down")
-                right_tab.state = "Down"
-            }
-        }
         if (tabnum === "middle") {
             if (state === "Up") {
-                tabOperationFromEnd("middle", "Up")
                 middle_tab.state = "Up"
             }
             if (state === "Down") {
-                tabOperationFromEnd("middle", "Down")
                 middle_tab.state = "Down"
+            }
+        }
+        if (tabnum === "right") {
+            if (state === "Up") {
+                right_tab.state = "Up"
+            }
+            if (state === "Down") {
+                right_tab.state = "Down"
             }
         }
     }

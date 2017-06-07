@@ -13,17 +13,16 @@ Rectangle {
     height: 1080
     objectName: "check"
 
-    signal nextLayer(string nextLayer)
-    signal tabOperationCheckOut(string tabnum, string state)
-    signal tabOperationFromCheck(string tabnum, string state)
+    signal nextLayer(string currentLayer, string nextLayer)
 
     Component.onCompleted: {
         root.state = "hidden"
         //root.state = "visible"
 
-        check_out.tabOperationCheck.connect(tabOperationCheck)
-        check_in.tabOperationCheck.connect(tabOperationCheck)
-        check_in.tabOperationFromCheckIn.connect(tabOperationCheck)
+        middle_tab.state = "Up"
+        right_tab.state = "Up"
+
+        main_window.tabOperationForCheck.connect(tabOperationCheck)
     }
 
     states: [
@@ -68,9 +67,12 @@ Rectangle {
         id: check_in_button
         label.text: "Check In"
 
+        location: "qrc:/Images/check_in_button.png"
+        iconHeight: global_vars.check_in_height
+        iconAnchors.verticalCenterOffset: global_vars.check_in_offset
+
         onClicked: {
-            tabOperationFromCheck("right", "Down")
-            slot_switchLayer("check_in")
+            nextLayer(root.objectName, "check_in")
             root.state = "hidden"
         }
     }
@@ -82,9 +84,12 @@ Rectangle {
         id: check_out_button
         label.text: "Check Out"
 
+        location: "qrc:/Images/logout_sign_flipped.png"
+        iconHeight: global_vars.check_out_height
+        iconAnchors.verticalCenterOffset: global_vars.check_out_offset
+
         onClicked: {
-            tabOperationCheckOut("right", "Down")
-            slot_switchLayer("check_out")
+            nextLayer(root.objectName, "check_out")
             root.state = "hidden"
         }
     }
@@ -95,12 +100,12 @@ Rectangle {
         anchors.rightMargin: global_vars.tabRightMargin
         id: right_tab
         //label.text: "Power"
-        location: "qrc:/Images/power_gray.png"
+        location: "qrc:/Images/power.png"
         onPressed: {
-            location = "qrc:/Images/power_darkgray.png"
+            location = "qrc:/Images/power_dark.png"
         }
         onReleased: {
-            location = "qrc:/Images/power_gray.png"
+            location = "qrc:/Images/power.png"
         }
         onClicked: {
             Qt.quit()
@@ -113,15 +118,29 @@ Rectangle {
         anchors.right: right_tab.left
         anchors.rightMargin: global_vars.tabSpace
         id: middle_tab
-        label.text: "Back"
+        //label.text: "Back"
+        location: "qrc:/Images/back.png"
+        onPressed: {
+            location = "qrc:/Images/back_dark.png"
+        }
+        onReleased: {
+            location = "qrc:/Images/back.png"
+        }
         onClicked: {
-            tabOperationFromCheck("middle","Down")
-            slot_switchLayer("main")
+            nextLayer(root.objectName, "logged_in")
             root.state = "hidden"
         }
     }
 
     function tabOperationCheck(tabnum, state) {
+        if (tabnum === "middle") {
+            if (state === "Up") {
+                middle_tab.state = "Up"
+            }
+            if (state === "Down") {
+                middle_tab.state = "Down"
+            }
+        }
         if (tabnum === "right") {
             if (state === "Up") {
                 right_tab.state = "Up"

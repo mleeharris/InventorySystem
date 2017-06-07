@@ -24,5 +24,19 @@
         <file>Layers/CheckIn.qml</file>
         <file>Images/power_darkgray.png</file>
         <file>Images/power_gray.png</file>
+        <file>Images/check_in.png</file>
+        <file>Images/check_in_button.png</file>
+        <file>Images/check_out_button.png</file>
+        <file>Images/recycling_bin.png</file>
+        <file>Images/rfid_chip.png</file>
+        <file>Images/update_arrow.png</file>
+        <file>Images/user.png</file>
+        <file>Images/logout_sign_flipped.png</file>
+        <file>Images/back_dark.png</file>
+        <file>Images/power.png</file>
+        <file>Images/power_dark.png</file>
+        <file>Images/back.png</file>
+        <file>Images/question-mark.png</file>
+        <file>Images/question.png</file>
     </qresource>
 </RCC>
