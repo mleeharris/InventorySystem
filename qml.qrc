@@ -38,5 +38,8 @@
         <file>Images/back.png</file>
         <file>Images/question-mark.png</file>
         <file>Images/question.png</file>
+        <file>Layers/Lookup.qml</file>
+        <file>Images/magnifier.png</file>
+        <file>Components/Scanner.qml</file>
     </qresource>
 </RCC>

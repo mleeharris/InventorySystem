@@ -1,24 +1,38 @@
 import QtQuick 2.6
 import QtQuick.Window 2.2
+import QtQml 2.2
+import QtQuick.Dialogs 1.1
+import QtQuick.Controls 1.1
+import QtGraphicalEffects 1.0
+import "qrc:/JavaScript"
 import "qrc:/Components"
+import "qrc:/JavaScript/componentCreation.js" as Creation
+import "qrc:/JavaScript/globalVars.js" as GlobVars
 
 Rectangle {
     id: root
     visible: true
     width: 1920
     height: 1080
-    objectName: "login_page"
+    objectName: "lookup"
 
     signal nextLayer(string currentLayer, string nextLayer)
 
     Component.onCompleted: {
         root.state = "hidden"
 
-        middle_tab.state = "Down"
+        middle_tab.state = "Up"
         right_tab.state = "Up"
 
-        main_window.tabOperationForLoginPage.connect(tabOperationLoginPage)
+        //object deletion handling
+        //scanned_item.deletionHandling.connect(deletionHandlingCheckOut)
+
+        //tab operation
+        main_window.tabOperationForLookup.connect(tabOperationLookup)
+        main_window.itemLookup.connect(itemScan)
     }
+
+    ScannedItem{id: scanned_item}
 
     states: [
         State {
@@ -45,14 +59,24 @@ Rectangle {
     }
 
     Text {
-        id: please_scan
+        text: "Lookup"
         anchors.top: parent.top
-        anchors.topMargin: 150
-        anchors.horizontalCenter: parent.horizontalCenter
-        text: "How  To???"
-        font.family: "Typo Graphica"
-        color: "Black"
-        font.pointSize: 200
+        anchors.topMargin: 90
+        anchors.left: parent.left
+        anchors.leftMargin: 87
+        font.family: "TypoGraphica"
+        font.pixelSize: 145
+        id: look_up
+    }
+
+    Text {
+        id: item_display
+        text: "Item: Please Scan"
+        anchors.bottom: middle_tab.top
+        anchors.bottomMargin: 30
+        anchors.horizontalCenter: middle_tab.horizontalCenter
+        font.family: "Bebas Neue"
+        font.pixelSize: 64
     }
 
     BottomTab {
@@ -61,6 +85,7 @@ Rectangle {
         anchors.rightMargin: global_vars.tabRightMargin
         id: right_tab
         //label.text: "Power"
+        z: 4
         location: "qrc:/Images/power.png"
         onPressed: {
             location = "qrc:/Images/power_dark.png"
@@ -88,13 +113,44 @@ Rectangle {
             location = "qrc:/Images/back.png"
         }
         onClicked: {
-            tabOperationLoginPage("middle", "Down")
-            nextLayer(root.objectName, "main")
+            nextLayer(root.objectName, "check")
             root.state = "hidden"
         }
     }
 
-    function tabOperationLoginPage(tabnum, state) {
+    Rectangle {
+        color: "black"
+        id: temp_background
+        height: 870
+        width: global_vars.scrollWidth
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.rightMargin: 100
+        anchors.topMargin: 100
+        radius: 40
+        opacity: 0.2
+        z: 3
+    }
+
+    Text {
+        id: info_text
+        anchors.top: temp_background.top
+        anchors.left: temp_background.left
+        anchors.topMargin: 40
+        anchors.leftMargin: 40
+        width: temp_background.width-(40*2)
+        height: temp_background.height-(40*2)
+        font.pointSize: 20
+        wrapMode: Text.Wrap
+    }
+
+    function itemScan(item) {
+        console.log(item)
+        item_display.text = "Item: " + item
+        info_text.text = item + item + item + item + item + item + item + item + item + item + item
+    }
+
+    function tabOperationLookup(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {
                 middle_tab.state = "Up"
@@ -113,5 +169,3 @@ Rectangle {
         }
     }
 }
-
-

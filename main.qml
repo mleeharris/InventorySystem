@@ -1,3 +1,9 @@
+//Shane O'Brien
+//Summer 2017
+//Inventory GUI
+
+//All icons were downloaded from www.flaticon.com
+
 import QtQuick 2.6
 import QtQuick.Window 2.2
 import QtQml 2.2
@@ -24,8 +30,10 @@ Window {
     signal tabOperationForCheckIn(string tabnum, string state)
     signal tabOperationForCheckOut(string tabnum, string state)
     signal tabOperationForEndPage(string tabnum, string state)
+    signal tabOperationForLookup(string tabnum, string state)
     signal itemScan(string item)
     signal itemScanIn(string item)
+    signal itemLookup(string item)
 
     FontLoader {
         id: opening_font
@@ -63,6 +71,7 @@ Window {
         logged_in.nextLayer.connect(slot_switchLayer)
         end_page.nextLayer.connect(slot_switchLayer)
         check_in.nextLayer.connect(slot_switchLayer)
+        lookup.nextLayer.connect(slot_switchLayer)
     }
 
     /*LAYER DECL*/
@@ -73,6 +82,7 @@ Window {
     CheckOut{id: check_out; x:0; y: 0}
     EndPage{id: end_page; x:0; y: 0}
     CheckIn{id: check_in; x:0; y: 0}
+    Lookup{id: lookup; x:0; y: 0}
 
     /*COMPONENT DECL*/
     GlobalVars{id: global_vars}
@@ -207,6 +217,41 @@ Window {
             ]
         }
 
+        Item {
+            id: item_lookup
+            Keys.onPressed: {
+                //console.log("event.key: ", event.key)
+                //console.log("event.text: ", event.text)
+                if ( (String(event.key) != '16777251') && (String(event.key) != '16777248') ) {
+                    global_vars.currentItem = global_vars.currentItem + event.text
+                }
+                if (String(event.key) == '16777220') {
+                    console.log("global_vars.currentItem: ", global_vars.currentItem)
+                    itemLookup(global_vars.currentItem)
+                    global_vars.currentItem = ''
+                }
+            }
+
+            states:[
+                State {
+                    name: "on";
+                    PropertyChanges {
+                        target: item_lookup
+                        enabled: true
+                        focus: true;
+                    }
+                },
+                State {
+                    name: "off";
+                    PropertyChanges {
+                        target: item_lookup
+                        enabled: false
+                        focus: false;
+                    }
+                }
+            ]
+        }
+
         Text {
             id: title_text
             anchors.top: parent.top
@@ -262,7 +307,7 @@ Window {
             label.text: "Scan"
 
             location: "qrc:/Images/rfid_chip.png"
-            iconHeight: 62
+            iconHeight: 92
             iconAnchors.verticalCenterOffset: -5
 
             onClicked: {
@@ -279,7 +324,7 @@ Window {
             label.text: "How To"
 
             location: "qrc:/Images/question.png"
-            iconHeight: 65
+            iconHeight: 95
             iconAnchors.verticalCenterOffset: -5
 
             onClicked: {
@@ -371,6 +416,13 @@ Window {
             }
         }
         if (currentLayer === "check") {
+            if (nextLayer === "lookup") {
+                item_lookup.state = "on"
+                lookup.state = "visible"
+                tabOperationForLookup("right","Down")
+                tabOperationForCheck("right","Down")
+            }
+
             if (nextLayer === "check_in") {
                 items_in.state = "on"
                 check_in.state = "visible"
@@ -466,6 +518,14 @@ Window {
                 tabOperationForEndPage("middle","Up")
                 tabOperationForEndPage("right","Down")
                 object_holder.state = "visible"
+            }
+        }
+        if (currentLayer === "lookup") {
+            if (nextLayer === "check") {
+                item_lookup.state = "Off"
+                check.state = "visible"
+                tabOperationForLookup("right","Up")
+                tabOperationForCheck("right","Up")
             }
         }
     }

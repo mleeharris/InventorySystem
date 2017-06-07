@@ -129,7 +129,7 @@ Rectangle {
         label.text: "Done"
 
         location: "qrc:/Images/check_in_button.png"
-        iconHeight: global_vars.check_in_height
+        iconHeight: global_vars.check_in_height-30
         iconAnchors.verticalCenterOffset: global_vars.check_in_offset
 
         onClicked: {
@@ -153,7 +153,7 @@ Rectangle {
         label.text: "Clear"
 
         location: "qrc:/Images/recycling_bin.png"
-        iconHeight: global_vars.clear_height
+        iconHeight: global_vars.clear_height-30
         iconAnchors.verticalCenterOffset: global_vars.clear_offset
 
         onClicked: {

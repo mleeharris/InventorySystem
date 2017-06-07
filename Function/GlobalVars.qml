@@ -51,14 +51,15 @@ Item {
     property int itemDownShift: 100
 
     /*Icons*/
-    property int login_height: 63
+    property int iconDefaultHeight: 95
+    property int login_height: 93
     property int login_offset: -4
-    property int check_in_height: 80
-    property int check_out_height: 87
+    property int check_in_height: 110
+    property int check_out_height: 117
     property int check_in_offset: -5
     property int check_out_offset: -3
-    property int clear_height: 62
+    property int clear_height: 92
     property int clear_offset: -4
-    property int startover_height: 65
+    property int startover_height: 95
     property int startover_offset: -4
 }

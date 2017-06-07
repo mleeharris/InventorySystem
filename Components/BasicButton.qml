@@ -67,7 +67,7 @@ Rectangle  {
             Text {
                 id: button_txt
                 anchors.horizontalCenter: parent.horizontalCenter
-                anchors.horizontalCenterOffset: -icon.width/2
+                anchors.horizontalCenterOffset: icon.width/1.5
                 anchors.verticalCenter: parent.verticalCenter
                 font.family: "BebasNeue"
                 text: ""
@@ -80,30 +80,15 @@ Rectangle  {
 
             Image {
                 id: icon
-                anchors.left: button_txt.right
-                anchors.leftMargin: 25
+                anchors.right: button_txt.left
+                anchors.rightMargin: 25
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: 0
-                height: button_txt.height - button_txt.height/3
+                height: global_vars.defaultIconHeight
                 width: icon.height
                 source: ''
             }
         }
-
-//        Text {
-//            id: button_txt
-//            anchors.left: black_part.left
-//            anchors.top: black_part.top
-//            anchors.right: black_part.right
-//            anchors.bottom: black_part.bottom
-//            font.family: "BebasNeue"
-//            text: ""
-//            font.pointSize: global_vars.buttonSize
-//            smooth: true
-//            color: global_vars.grayColor
-//            horizontalAlignment: Text.AlignHCenter
-//            verticalAlignment: Text.AlignVCenter
-//        }
 
         MouseArea {
             id: btn_ma

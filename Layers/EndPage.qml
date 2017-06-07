@@ -61,7 +61,7 @@ Rectangle {
     Text {
         id: title_text
         anchors.top: parent.top
-        anchors.topMargin: 180
+        anchors.topMargin: 160
         anchors.horizontalCenter: parent.horizontalCenter
         text: "Action Completed"
         font.family: "Bebas Neue"
@@ -70,13 +70,13 @@ Rectangle {
     }
 
     BasicButton {
+        id: check_in_button
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 400
-        height: 100
+        anchors.bottomMargin: 475
+        height: global_vars.buttonHeight
         width: global_vars.buttonHeight*4
 
-        id: check_in_button
         label.text: "Check In"
 
         location: "qrc:/Images/check_in_button.png"
@@ -151,6 +151,7 @@ Rectangle {
         anchors.right: right_tab.left
         anchors.rightMargin: global_vars.tabSpace
         id: middle_tab
+        z: 4
         //label.text: "Back"
         location: "qrc:/Images/back.png"
         onPressed: {
@@ -163,6 +164,33 @@ Rectangle {
             nextLayer(root.objectName, "check_out")
             root.state = "hidden"
         }
+    }
+
+    Rectangle {
+        color: "black"
+        id: temp_background
+        height: 450
+        width: 500
+        anchors.left: parent.left
+        anchors.leftMargin: 100
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 130
+        radius: 40
+        opacity: 0.2
+        z: 3
+    }
+
+    Text {
+        id: info_text
+        anchors.top: temp_background.top
+        anchors.left: temp_background.left
+        anchors.topMargin: 40
+        anchors.leftMargin: 40
+        width: temp_background.width-(40*2)
+        height: temp_background.height-(40*2)
+        font.pointSize: 20
+        wrapMode: Text.Wrap
+        text: "boiboiboiboiboiboiboiboiboiboiboiboiboiboiboiboiboiboiboiboiboiboi"
     }
 
     function tabOperationEndPage(tabnum, state) {

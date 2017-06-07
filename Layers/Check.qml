@@ -63,7 +63,8 @@ Rectangle {
     BasicButton {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: check_out_button.top
-        anchors.bottomMargin: 30
+        anchors.bottomMargin: 25
+        height: check_out_button.height
         id: check_in_button
         label.text: "Check In"
 
@@ -80,7 +81,8 @@ Rectangle {
     BasicButton {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 200
+        anchors.bottomMargin: 135
+        height: global_vars.buttonHeight-20
         id: check_out_button
         label.text: "Check Out"
 
@@ -90,6 +92,24 @@ Rectangle {
 
         onClicked: {
             nextLayer(root.objectName, "check_out")
+            root.state = "hidden"
+        }
+    }
+
+    BasicButton {
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: check_in_button.top
+        anchors.bottomMargin: 25
+        height: check_out_button.height
+        id: lookup_button
+        label.text: "Lookup"
+
+        location: "qrc:/Images/magnifier.png"
+        iconHeight: global_vars.check_out_height-30
+        iconAnchors.verticalCenterOffset: global_vars.check_out_offset
+
+        onClicked: {
+            nextLayer(root.objectName, "lookup")
             root.state = "hidden"
         }
     }

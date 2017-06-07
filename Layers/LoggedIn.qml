@@ -51,7 +51,7 @@ Rectangle {
     BasicButton {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 200
+        anchors.bottomMargin: 120
         id: login_button
         label.text: "Login"
 
@@ -63,6 +63,32 @@ Rectangle {
             nextLayer(root.objectName, "check")
             root.state = "hidden"
         }
+    }
+
+    Rectangle {
+        color: "black"
+        id: temp_background
+        height: 150
+        width: login_button.width
+        anchors.left: login_button.left
+        anchors.bottom: login_button.top
+        anchors.bottomMargin: 20
+        radius: 40
+        opacity: 0.2
+        z: 3
+    }
+
+    Text {
+        id: info_text
+        anchors.top: temp_background.top
+        anchors.left: temp_background.left
+        anchors.topMargin: 40
+        anchors.leftMargin: 40
+        width: temp_background.width-(40*2)
+        height: temp_background.height-(40*2)
+        font.pointSize: 20
+        wrapMode: Text.Wrap
+        text: "Yoooooooooooooo"
     }
 
     property int wrapperHeight: 800
