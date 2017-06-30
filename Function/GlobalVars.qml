@@ -11,6 +11,8 @@ Item {
     property string tempLetter: ''
     property string realpass: ''
 
+    property string userpass
+
     /*Background*/
     property string grayColor: "#DCDCDC"
     property string darkGrayColor: "#C8C8C8"

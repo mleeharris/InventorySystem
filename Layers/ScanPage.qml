@@ -1,6 +1,7 @@
 import QtQuick 2.6
 import QtQuick.Window 2.2
 import "qrc:/Components"
+import "qrc:/JavaScript/globalVars.js" as GlobVars
 
 Rectangle {
     id: root
@@ -10,6 +11,8 @@ Rectangle {
     objectName: "scan_page"
 
     signal nextLayer(string currentLayer, string nextLayer)
+
+
 
     Component.onCompleted: {
         root.state = "hidden"
@@ -49,10 +52,31 @@ Rectangle {
         anchors.top: parent.top
         anchors.topMargin: 150
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Scan  RFID  Card"
+        text: "Place  RFID"
         font.family: "Typo Graphica"
         color: "Black"
         font.pointSize: 200
+    }
+
+    BasicButton {
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 275
+        anchors.horizontalCenter: parent.horizontalCenter
+        height: global_vars.buttonHeight
+        width: global_vars.buttonWidth
+        id: check_in_button
+        label.text: "Scan"
+
+        location: "qrc:/Images/rfid_chip.png"
+        iconHeight: 92
+        iconAnchors.verticalCenterOffset: -5
+
+        onClicked: {
+            nextLayer(root.objectName, "logged_in")
+            GlobVars.userpass = testing.readCard(04)
+            splituserpass()
+            root.state = "hidden"
+        }
     }
 
     BottomTab {
@@ -121,6 +145,21 @@ Rectangle {
         console.log("password: ", global_vars.password)
         root.state = "hidden"
         nextLayer(root.Objectname, "logged_in")
+    }
+
+    function splituserpass() {
+        GlobVars.userpass = GlobVars.userpass.split('=')
+        global_vars.username = GlobVars.userpass[0]
+
+        var increment_length = GlobVars.userpass[1].length
+        var i = 0
+        global_vars.password = ''
+        while (i < increment_length) {
+            global_vars.password += GlobVars.star
+            i += 1
+        }
+
+        global_vars.realpass = GlobVars.userpass[1]
     }
 }
 

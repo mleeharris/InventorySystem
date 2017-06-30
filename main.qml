@@ -88,6 +88,22 @@ Window {
     GlobalVars{id: global_vars}
 
     Rectangle {
+        id: testerino
+        color: "red"
+        x: 50
+        y: 50
+        height: 100
+        width: 100
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                console.log(testing.readCard(04))
+            }
+        }
+    }
+
+    Rectangle {
         anchors.fill: parent
         color: "#00000000"
         id: object_holder
@@ -147,7 +163,6 @@ Window {
                 }
             ]
         }
-
 
         Item {
             id: items
@@ -547,5 +562,9 @@ Window {
                 right_tab.state = "Down"
             }
         }
+    }
+
+    function returntwo() {
+        console.log("ayyy")
     }
 }

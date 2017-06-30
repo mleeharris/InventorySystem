@@ -11,7 +11,7 @@ COMMAND = [0xFF, 0xCA, 0x00, 0x00, 0x00] #handshake cmd needed to initiate data 
 
 # get all the available readers
 r = readers()
-print "Available readers:", r
+#print "Available readers:", r
 
 def stringParser(dataCurr):
 #--------------String Parser--------------#
@@ -50,11 +50,14 @@ def readBlock(page):
             #only allows new tags to be worked so no duplicates
             if(dataCurr is not None):
                 dataCurr = dataCurr.decode("hex")
-                print (dataCurr + " read from page " + str(page))
+                print (dataCurr)
+                #print (dataCurr + " read from page " + str(page))
             else:
-                print ("Error: Couldnt read page " + str(page) + ". Authentication needed")
+                sys.stdout.write("Error")
+                #print ("Error: Couldnt read page " + str(page) + ". Authentication needed")
         except Exception,e:
-            print ("Error: Couldnt read page " + str(page) + ". Connection problem.") 
+            sys.stdout.write("Error")
+            #print ("Error: Couldnt read page " + str(page) + ". Connection problem.")
 
 def authBlock(page, keynum):
     if (int(page)%4 == 3):
@@ -71,9 +74,11 @@ def authBlock(page, keynum):
             if (resp[1] == 144):
                 print("Authenticated block: " + str(page))
             if (resp[1] == 99):
-                print ("Authentication of block " + str(page) + " unsuccessful")
+                sys.stdout.write("Error")
+                #print ("Error: Authentication of block " + str(page) + " unsuccessful")
         except Exception, e:
-            print ("Authentication Error No. 2")
+            sys.stdout.write("Error")
+            #print ("Error: Authentication Error No. 2")
 
 def updateBlock(page, value):
     if (int(page)%4 == 3):
@@ -92,9 +97,11 @@ def updateBlock(page, value):
             if resp[1] == 144:
                 print (value + " written to page " + str(page))
             if resp[1] == 99:
-                print ("Error: Could not write " + value + " to page " + str(page) + ". Authentication needed")
+                sys.stdout.write("Error")
+                #print ("Error: Could not write " + value + " to page " + str(page) + ". Authentication needed")
         except Exception, e:
-            print ("Error: Could not write " + value + " to page " + str(page)  + ". Connection problem.")
+            sys.stdout.write("Error")
+            #print ("Error: Could not write " + value + " to page " + str(page)  + ". Connection problem.")
 
 def addKey(keynum, key):
     try:
@@ -108,9 +115,11 @@ def addKey(keynum, key):
         if (resp[1] == 144):
             print ("Added key " + str(keynum) + " as " + str(key))
         if (resp[1] == 99):
-            print ("Unsuccessful addition of key number " + str(keynum))
+            sys.stdout.write("Error")
+            #print ("Error: Unsuccessful addition of key number " + str(keynum))
     except Exception, e:
-        print ("Error: Unsuccessful addition of key number " + str(keynum))
+        sys.stdout.write("Error")
+        #print ("Error: Unsuccessful addition of key number " + str(keynum))
 
 
 if __name__ == "__main__":
@@ -130,7 +139,6 @@ if __name__ == "__main__":
     addkey_group = parser.add_argument_group("addkey")
     addkey_group.add_argument('--addkey', nargs=2, metavar=('KEYNUM','KEY'), help='Input 0 or 1 for the key number, then 6 bytes for the key')
 
-
     args = parser.parse_args()
 
     #Choosing which reader to use
@@ -143,7 +151,7 @@ if __name__ == "__main__":
     else:
         reader = r[0]
 
-    print "Using:", reader
+    #print "Using:", reader
     
     #Page numbers are sent as ints, not hex, to the reader
     if args.read:

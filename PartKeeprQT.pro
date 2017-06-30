@@ -1,9 +1,10 @@
 TEMPLATE = app
 
-QT += qml quick
+QT += qml quick serialport
 CONFIG += c++11
 
-SOURCES += main.cpp
+SOURCES += main.cpp \
+    terminal.cpp
 
 RESOURCES += qml.qrc
 
@@ -31,3 +32,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     NFCReader.py
+
+HEADERS += \
+    terminal.h

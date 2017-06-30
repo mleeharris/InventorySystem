@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.1
 import QtQuick.Controls 1.1
 import QtGraphicalEffects 1.0
 import "qrc:/Components"
+import "qrc:/JavaScript/globalVars.js" as GlobVars
 
 Rectangle {
     id: root
@@ -49,9 +50,10 @@ Rectangle {
     }
 
     BasicButton {
-        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.left: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 120
+        width: global_vars.buttonWidth/2
         id: login_button
         label.text: "Login"
 
@@ -62,6 +64,24 @@ Rectangle {
             tabOperationLoggedIn("middle","Up")
             nextLayer(root.objectName, "check")
             root.state = "hidden"
+        }
+    }
+
+    BasicButton {
+        anchors.right: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 120
+        width: global_vars.buttonWidth/2
+        id: scan_button
+        label.text: "Scan"
+
+        location: "qrc:/Images/rfid_chip.png"
+        iconHeight: 92
+        iconAnchors.verticalCenterOffset: -5
+
+        onClicked: {
+            GlobVars.userpass = testing.readCard(04)
+            splituserpass()
         }
     }
 
@@ -273,6 +293,21 @@ Rectangle {
                 right_tab.state = "Down"
             }
         }
+    }
+
+    function splituserpass() {
+        GlobVars.userpass = GlobVars.userpass.split('=')
+        global_vars.username = GlobVars.userpass[0]
+
+        var increment_length = GlobVars.userpass[1].length
+        var i = 0
+        global_vars.password = ''
+        while (i < increment_length) {
+            global_vars.password += GlobVars.star
+            i += 1
+        }
+
+        global_vars.realpass = GlobVars.userpass[1]
     }
 }
 
