@@ -66,7 +66,7 @@ Rectangle {
         id: item_delegate
         ScannedItem {
             checked: ListView.isCurrentItem
-            width: 1000
+            width: 1100
             height: 80
             item_id.text: itemText
             MouseArea {
@@ -88,7 +88,9 @@ Rectangle {
     ListView {
         id: item_listview
         anchors.fill: temp_background
-        anchors.margins: 30
+        anchors.leftMargin: 30
+        anchors.topMargin: 190
+        anchors.bottomMargin: 30
         delegate: item_delegate
         model: item_model
         spacing: 12
@@ -98,15 +100,34 @@ Rectangle {
 
     Text {
         text: "Check Out"
-        anchors.top: parent.top
-        anchors.topMargin: 100
-        anchors.left: parent.left
-        anchors.leftMargin: 87
-        height: clear_button.height
-        width: clear_button.width
-        font.family: "TypoGraphica"
-        font.pixelSize: 102
+        anchors.top: temp_background.top
+        anchors.topMargin: 20
+        anchors.horizontalCenter: temp_background.horizontalCenter
+        font.family: "Bebas Neue"
+        font.pixelSize: 115
         id: check_out
+    }
+
+    Rectangle {
+        id: line
+        color: 'black'
+        height: 2
+        width: 1100
+        anchors.horizontalCenter: check_out.horizontalCenter
+        anchors.top: check_out.bottom
+        anchors.topMargin: 5
+    }
+
+    Text {
+        id: username
+        anchors.top: parent.top
+        anchors.topMargin: 60
+        anchors.left: parent.left
+        anchors.leftMargin: 70
+        text: global_vars.username
+        font.family: "Helvetica"
+        color: "Black"
+        font.pointSize: 40
     }
 
     Text {
@@ -196,6 +217,7 @@ Rectangle {
         }
         onClicked: {
             nextLayer(root.objectName, "check")
+            deletionAll()
             root.state = "hidden"
         }
     }

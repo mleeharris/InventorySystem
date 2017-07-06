@@ -51,6 +51,7 @@ Rectangle {
 
     BasicButton {
         anchors.left: parent.horizontalCenter
+        anchors.leftMargin: 15
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 120
         width: global_vars.buttonWidth/2
@@ -69,6 +70,7 @@ Rectangle {
 
     BasicButton {
         anchors.right: parent.horizontalCenter
+        anchors.rightMargin: 15
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 120
         width: global_vars.buttonWidth/2
@@ -80,7 +82,7 @@ Rectangle {
         iconAnchors.verticalCenterOffset: -5
 
         onClicked: {
-            GlobVars.userpass = testing.readCard(04)
+            GlobVars.userpass = testing.readCard()
             splituserpass()
         }
     }
@@ -89,8 +91,8 @@ Rectangle {
         color: "black"
         id: temp_background
         height: 150
-        width: login_button.width
-        anchors.left: login_button.left
+        width: login_button.width*2+(30)
+        anchors.right: login_button.right
         anchors.bottom: login_button.top
         anchors.bottomMargin: 20
         radius: 40
@@ -108,7 +110,7 @@ Rectangle {
         height: temp_background.height-(40*2)
         font.pointSize: 20
         wrapMode: Text.Wrap
-        text: "Yoooooooooooooo"
+        text: global_vars.login_error
     }
 
     property int wrapperHeight: 800
@@ -127,8 +129,8 @@ Rectangle {
         height: wrapperWidth
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 165
-        anchors.leftMargin: 200
+        anchors.topMargin: 140
+        anchors.leftMargin: 180
 
         Column {
             id: labels
@@ -224,14 +226,14 @@ Rectangle {
                 id: white_box_1
                 color: "white"
                 height: boxHeight
-                width: 0.5 * userpass_wrapper.width + wrapperSize * 4
+                width: 0.5 * userpass_wrapper.width + wrapperSize * 4 + 80
                 radius: height/2
             }
 
             Rectangle {
                 color: "white"
                 height: boxHeight
-                width: 0.5 * userpass_wrapper.width + wrapperSize * 4
+                width: 0.5 * userpass_wrapper.width + wrapperSize * 4 + 80
                 radius: height/2
             }
         }
@@ -297,17 +299,27 @@ Rectangle {
 
     function splituserpass() {
         GlobVars.userpass = GlobVars.userpass.split('=')
-        global_vars.username = GlobVars.userpass[0]
 
-        var increment_length = GlobVars.userpass[1].length
-        var i = 0
-        global_vars.password = ''
-        while (i < increment_length) {
-            global_vars.password += GlobVars.star
-            i += 1
+        if (GlobVars.userpass[0] == "Error") {
+            global_vars.username = ''
+            global_vars.realpass = ''
+            global_vars.password = ''
+            global_vars.login_error = 'Error: Try placing card and scanning again'
         }
 
+        else {
+            global_vars.username = GlobVars.userpass[0]
+
+            var increment_length = GlobVars.userpass[1].length
+            var i = 0
+            global_vars.password = ''
+            while (i < increment_length) {
+                global_vars.password += GlobVars.star
+                i += 1
+            }
         global_vars.realpass = GlobVars.userpass[1]
+        global_vars.login_error = ''
+        }
     }
 }
 

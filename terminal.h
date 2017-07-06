@@ -16,7 +16,8 @@ public:
     explicit terminal (QObject* parent = 0);
     ~terminal();
 
-    Q_INVOKABLE QString readCard(int block);
+    Q_INVOKABLE QString readCard();
+    Q_INVOKABLE QString readCard2();
 
 public slots:
     int returntwo();

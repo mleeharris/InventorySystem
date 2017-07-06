@@ -5,6 +5,7 @@ import QtQuick.Dialogs 1.1
 import QtQuick.Controls 1.1
 import QtGraphicalEffects 1.0
 import "qrc:/Components"
+import "qrc:/JavaScript/globalVars.js" as GlobVars
 
 Rectangle {
     id: root
@@ -58,6 +59,18 @@ Rectangle {
         font.family: "Bebas Neue"
         color: "Black"
         font.pointSize: 200
+    }
+
+    Text {
+        id: username
+        anchors.top: parent.top
+        anchors.topMargin: 60
+        anchors.left: parent.left
+        anchors.leftMargin: 70
+        text: global_vars.username
+        font.family: "Helvetica"
+        color: "Black"
+        font.pointSize: 40
     }
 
     BasicButton {
@@ -170,6 +183,28 @@ Rectangle {
             }
         }
     }
+
+//    function deletionAllIn() {
+//        var index = GlobVars.itemListIn.length
+//        console.log("index: ", index)
+//        var i = 0
+//        while (i < index) {
+//            item_model.remove(0)
+//            i += 1
+//        }
+//        GlobVars.itemListIn = []
+//    }
+
+//    function deletionAllOut() {
+//        var index = GlobVars.itemList.length
+//        console.log("index: ", index)
+//        var i = 0
+//        while (i < index) {
+//            item_model.remove(0)
+//            i += 1
+//        }
+//        GlobVars.itemList = []
+//    }
 }
 
 

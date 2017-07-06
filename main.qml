@@ -88,22 +88,6 @@ Window {
     GlobalVars{id: global_vars}
 
     Rectangle {
-        id: testerino
-        color: "red"
-        x: 50
-        y: 50
-        height: 100
-        width: 100
-
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                console.log(testing.readCard(04))
-            }
-        }
-    }
-
-    Rectangle {
         anchors.fill: parent
         color: "#00000000"
         id: object_holder
@@ -326,7 +310,9 @@ Window {
             iconAnchors.verticalCenterOffset: -5
 
             onClicked: {
-                slot_switchLayer("main", "scan_page")
+                slot_switchLayer("main", "logged_in")
+                GlobVars.userpass = testing.readCard()
+                splituserpass()
                 object_holder.state = "hidden"
             }
         }
@@ -378,12 +364,6 @@ Window {
         console.log("nextLayer: ", nextLayer)
 
         if (currentLayer === "main") {
-            if (nextLayer === "scan_page") {
-                scan_page.state = "visible"
-                tabOperationForLoggedIn("middle","Up")
-                tabOperationForScanPage("middle","Up")
-                tabOperationMain("middle","Up")
-            }
             if (nextLayer === "login_page") {
                 login_page.state = "visible"
                 tabOperationForLoggedIn("middle","Up")
@@ -398,7 +378,6 @@ Window {
         }
         if (currentLayer === "scan_page") {
             if (nextLayer === "main") {
-                console.log("boi")
                 object_holder.state = "visible"
                 tabOperationForLoggedIn("middle","Down")
                 tabOperationMain("middle", "Down")
@@ -424,6 +403,7 @@ Window {
                 object_holder.state = "visible"
                 tabOperationMain("middle", "Down")
                 tabOperationForScanPage("middle","Down")
+                tabOperationForLoggedIn("middle","Down")
             }
             if (nextLayer === "check") {
                 barcode.state = "off"
@@ -561,6 +541,31 @@ Window {
             if (state === "Down") {
                 right_tab.state = "Down"
             }
+        }
+    }
+
+    function splituserpass() {
+        GlobVars.userpass = GlobVars.userpass.split('=')
+
+        if (GlobVars.userpass[0] == "Error") {
+            global_vars.username = ''
+            global_vars.realpass = ''
+            global_vars.password = ''
+            global_vars.login_error = 'Error: Try placing card and scanning again'
+        }
+
+        else {
+            global_vars.username = GlobVars.userpass[0]
+
+            var increment_length = GlobVars.userpass[1].length
+            var i = 0
+            global_vars.password = ''
+            while (i < increment_length) {
+                global_vars.password += GlobVars.star
+                i += 1
+            }
+        global_vars.realpass = GlobVars.userpass[1]
+        global_vars.login_error = ''
         }
     }
 

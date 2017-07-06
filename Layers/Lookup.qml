@@ -60,13 +60,34 @@ Rectangle {
 
     Text {
         text: "Lookup"
+        anchors.top: temp_background.top
+        anchors.topMargin: 20
+        anchors.horizontalCenter: temp_background.horizontalCenter
+        font.family: "Bebas Neue"
+        font.pixelSize: 115
+        id: lookup_text
+    }
+
+    Rectangle {
+        id: line
+        color: 'black'
+        height: 2
+        width: 1100
+        anchors.horizontalCenter: lookup_text.horizontalCenter
+        anchors.top: lookup_text.bottom
+        anchors.topMargin: 5
+    }
+
+    Text {
+        id: username
         anchors.top: parent.top
-        anchors.topMargin: 90
+        anchors.topMargin: 60
         anchors.left: parent.left
-        anchors.leftMargin: 87
-        font.family: "TypoGraphica"
-        font.pixelSize: 145
-        id: look_up
+        anchors.leftMargin: 70
+        text: global_vars.username
+        font.family: "Helvetica"
+        color: "Black"
+        font.pointSize: 40
     }
 
     Text {
@@ -136,7 +157,7 @@ Rectangle {
         id: info_text
         anchors.top: temp_background.top
         anchors.left: temp_background.left
-        anchors.topMargin: 40
+        anchors.topMargin: 180
         anchors.leftMargin: 40
         width: temp_background.width-(40*2)
         height: temp_background.height-(40*2)

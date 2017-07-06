@@ -69,6 +69,18 @@ Rectangle {
         font.pointSize: 200
     }
 
+    Text {
+        id: username
+        anchors.top: parent.top
+        anchors.topMargin: 60
+        anchors.left: parent.left
+        anchors.leftMargin: 70
+        text: global_vars.username
+        font.family: "Helvetica"
+        color: "Black"
+        font.pointSize: 40
+    }
+
     BasicButton {
         id: check_in_button
         anchors.horizontalCenter: parent.horizontalCenter
@@ -190,7 +202,7 @@ Rectangle {
         height: temp_background.height-(40*2)
         font.pointSize: 20
         wrapMode: Text.Wrap
-        text: "boiboiboiboiboiboiboiboiboiboiboiboiboiboiboiboiboiboiboiboiboiboi"
+        text: global_vars.check_error
     }
 
     function tabOperationEndPage(tabnum, state) {

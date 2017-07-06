@@ -11,7 +11,11 @@ Item {
     property string tempLetter: ''
     property string realpass: ''
 
-    property string userpass
+    //property string userpass
+
+    /*Error Msgs*/
+    property string login_error: ''
+    property string check_error: 'YoooBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOI'
 
     /*Background*/
     property string grayColor: "#DCDCDC"

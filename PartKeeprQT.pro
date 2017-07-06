@@ -4,7 +4,8 @@ QT += qml quick serialport
 CONFIG += c++11
 
 SOURCES += main.cpp \
-    terminal.cpp
+    terminal.cpp \
+    threadcall.cpp
 
 RESOURCES += qml.qrc
 
@@ -34,4 +35,5 @@ DISTFILES += \
     NFCReader.py
 
 HEADERS += \
-    terminal.h
+    terminal.h \
+    threadcall.h

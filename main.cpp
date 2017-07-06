@@ -10,6 +10,7 @@
 #include <QDebug>
 #include <QProcess>
 #include "terminal.h"
+#include "threadcall.h"
 
 int main(int argc, char *argv[]) {
     QGuiApplication app(argc, argv);
@@ -17,11 +18,12 @@ int main(int argc, char *argv[]) {
     QQmlApplicationEngine engine;
 
     terminal Testerino;
+    threadcall PlsWork;
+    PlsWork.start();
     //qDebug << terminal.returnone();
 
-    QProcess *process = new QProcess;
-    process->setWorkingDirectory("/home/drmoo");
-    process->start("pcsc_scan");
+    qDebug() << "Hello from GUI thread " << app.thread()->currentThreadId();
+    PlsWork.wait();
 
     //qmlRegisterType<terminalObject>("customObjs", 1, 0, "terminalObjectQML");
 
