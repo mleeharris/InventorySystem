@@ -82,8 +82,11 @@ Rectangle {
         iconAnchors.verticalCenterOffset: -5
 
         onClicked: {
-            GlobVars.userpass = testing.readCard()
-            splituserpass()
+            //console.log("thread.updateGet(): " + thread.updateGet())
+            if (thread.updateGet() === "Error") {
+                GlobVars.userpass = testing.readCard()
+                splituserpass()
+            }
         }
     }
 
@@ -301,6 +304,7 @@ Rectangle {
         GlobVars.userpass = GlobVars.userpass.split('=')
 
         if (GlobVars.userpass[0] == "Error") {
+            console.log("ayyyyy")
             global_vars.username = ''
             global_vars.realpass = ''
             global_vars.password = ''
@@ -320,6 +324,11 @@ Rectangle {
         global_vars.realpass = GlobVars.userpass[1]
         global_vars.login_error = ''
         }
+    }
+
+    function loginInfo() {
+        GlobVars.userpass = thread.userpassGet()
+        splituserpass()
     }
 }
 

@@ -19,8 +19,15 @@ import "qrc:/JavaScript/globalVars.js" as GlobVars
 Window {
     id: main_window
     visible: true
+
     width: 1920
     height: 1080
+
+    /*
+    width: 1000
+    height: 1000
+    */
+
     objectName: "MainWindow"
 
     signal tabOperationForScanPage(string tabnum, string state)
@@ -377,12 +384,6 @@ Window {
             }
         }
         if (currentLayer === "scan_page") {
-            if (nextLayer === "main") {
-                object_holder.state = "visible"
-                tabOperationForLoggedIn("middle","Down")
-                tabOperationMain("middle", "Down")
-                tabOperationForScanPage("middle","Down")
-            }
             if (nextLayer === "logged_in") {
                 logged_in.state = "visible"
             }
@@ -571,5 +572,10 @@ Window {
 
     function returntwo() {
         console.log("ayyy")
+    }
+
+    function scanned() {
+        slot_switchLayer("main","logged_in")
+        object_holder.state = "hidden"
     }
 }

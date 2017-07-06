@@ -18,20 +18,24 @@ int main(int argc, char *argv[]) {
     QQmlApplicationEngine engine;
 
     terminal Testerino;
-    threadcall PlsWork;
-    PlsWork.start();
+    threadcall Threadz;
+    Threadz.start();
     //qDebug << terminal.returnone();
 
     qDebug() << "Hello from GUI thread " << app.thread()->currentThreadId();
-    PlsWork.wait();
 
     //qmlRegisterType<terminalObject>("customObjs", 1, 0, "terminalObjectQML");
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
-//    QObject *MainWindow = engine.rootObjects().first();
+    QObject *MainWindow = engine.rootObjects().first();
+    QObject *LoggedIn = MainWindow->findChild<QObject *>("logged_in");
 
     engine.rootContext()->setContextProperty("testing", &Testerino);
+    engine.rootContext()->setContextProperty("thread", &Threadz);
+
+    threadcall::connect(&Threadz,SIGNAL(sig_loginInfo()),LoggedIn,SLOT(loginInfo()));
+    threadcall::connect(&Threadz,SIGNAL(sig_loginInfo()),MainWindow,SLOT(scanned()));
 
     if (engine.rootObjects().isEmpty())
         return -1;
