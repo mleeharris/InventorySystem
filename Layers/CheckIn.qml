@@ -2,7 +2,7 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 import QtQml 2.2
 import QtQuick.Dialogs 1.1
-import QtQuick.Controls 1.1
+import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 import "qrc:/JavaScript"
 import "qrc:/Components"
@@ -87,6 +87,7 @@ Rectangle {
 
     ListView {
         id: item_listview
+        height: 500
         anchors.fill: temp_background
         anchors.leftMargin: 30
         anchors.topMargin: 190
@@ -96,6 +97,12 @@ Rectangle {
         spacing: 12
         z: 4
         clip: true
+
+//        ScrollBar.vertical: ScrollBar {
+//            parent: item_listview
+//            anchors.top: parent.top
+//            anchors.left: parent.right
+//        }
     }
 
     Text {
@@ -234,6 +241,17 @@ Rectangle {
         radius: 40
         opacity: 0.2
         z: 3
+
+//        ScrollBar {
+//            id: vbar
+//            hoverEnabled: true
+//            active: hovered || pressed
+//            orientation: Qt.Vertical
+//            size: 1000
+//            anchors.top: temp_background.top
+//            anchors.right: temp_background.right
+//            anchors.bottom: temp_background.bottom
+//        }
     }
 
     function deletionAll() {
@@ -246,7 +264,6 @@ Rectangle {
         }
         GlobVars.itemListIn = []
         item_counter.text = "Items: 0"
-
     }
 
     function itemScan(item) {
@@ -254,12 +271,9 @@ Rectangle {
         GlobVars.itemListIn.push(item.slice(0,-1))
         console.log("GlobVars: ", GlobVars.itemListIn)
 
-        item_model.insert(item_listview.currentIndex + 1, {
-                              "itemText": "ID: " + item
-                          })
+        item_model.insert(item_listview.currentIndex + 1, {"itemText": "ID: " + item})
         item_listview.currentIndex = item_listview.currentIndex + 1
         item_counter.text = "Items: " + GlobVars.itemListIn.length
-
     }
 
 

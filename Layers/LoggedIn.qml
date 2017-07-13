@@ -49,22 +49,22 @@ Rectangle {
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
-    Rectangle {
-        color: 'red'
-        height: 100
-        width: 100
-        x: 10
-        y: 10
-        id: admin_button
+//    Rectangle {
+//        color: 'red'
+//        height: 100
+//        width: 100
+//        x: 10
+//        y: 10
+//        id: admin_button
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                root.state = "hidden"
-                nextLayer(root.objectName, "scan_page")
-            }
-        }
-    }
+//        MouseArea {
+//            anchors.fill: parent
+//            onClicked: {
+//                root.state = "hidden"
+//                nextLayer(root.objectName, "scan_page")
+//            }
+//        }
+//    }
 
     BasicButton {
         anchors.horizontalCenter: temp_background.horizontalCenter
@@ -83,7 +83,6 @@ Rectangle {
                 root.state = "hidden"
             }
             else {
-                //tabOperationLoggedIn("middle","Up")
                 nextLayer(root.objectName, "check")
                 root.state = "hidden"
             }
