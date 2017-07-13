@@ -12,12 +12,12 @@ Rectangle {
 
     signal nextLayer(string currentLayer, string nextLayer)
 
-
+    property string err_msg
 
     Component.onCompleted: {
         root.state = "hidden"
 
-        middle_tab.state = "Down"
+        middle_tab.state = "Up"
         right_tab.state = "Up"
 
         main_window.tabOperationForScanPage.connect(tabOperationScanPage)
@@ -48,34 +48,201 @@ Rectangle {
     }
 
     Text {
-        id: please_scan
+        id: admin_console
         anchors.top: parent.top
-        anchors.topMargin: 150
+        anchors.topMargin: 70
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Place  RFID"
+        text: "Admin  Console"
         font.family: "Typo Graphica"
         color: "Black"
-        font.pointSize: 200
+        font.pointSize: 100
+    }
+
+    Rectangle {
+        color: "black"
+        id: temp_background
+        height: 250
+        width: 700
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 80
+        radius: 40
+        opacity: 0.2
+        z: 3
+    }
+
+    Text {
+        id: active_check
+        anchors.horizontalCenter: temp_background.horizontalCenter
+        anchors.bottom: temp_background.top
+        anchors.bottomMargin: 20
+        text: "No card actively placed"
+        font.family: "Helvetica"
+        font.pixelSize: 36
+    }
+
+    Text {
+        id: info_text
+        anchors.top: temp_background.top
+        anchors.left: temp_background.left
+        anchors.topMargin: 40
+        anchors.leftMargin: 40
+        width: temp_background.width-(40*2)
+        height: temp_background.height-(40*2)
+        font.pointSize: 20
+        wrapMode: Text.Wrap
+        text: global_vars.admin_error
+    }
+
+    ButtonInput {
+        anchors.left: parent.left
+        anchors.leftMargin: 100
+        anchors.top: admin_console.bottom
+        anchors.topMargin: 20
+        height: global_vars.buttonHeightAdmin
+        width: global_vars.buttonWidthAdmin
+        id: addkey_button
+        label.text: "Add  Key"
+
+        helpText: "12 HEX values needed (FFFFFFFFFFFF is key)"
+        maxLength: 12
+
+        onClicked: {
+            if (thread.activeGet() === 0) {
+                testing.addKey(inputText, "00")
+                global_vars.admin_error = testing.getMsg()
+            }
+            if (thread.activeGet() === 1) {
+                if (inputText.length == 0) {
+                    global_vars.admin_error = "Error: No key entered"
+                }
+                if (inputText.length > 0) {
+                    //testing.addKey("FFFFFFFFFFFF", "00")
+                    testing.addKey(inputText, "00")
+                    global_vars.admin_error = testing.getMsg()
+                }
+            }
+        }
+    }
+
+    ButtonInput {
+        anchors.left: addkey_button.left
+        anchors.leftMargin: addkey_button.leftMargin
+        anchors.top: addkey_button.bottom
+        anchors.topMargin: 20
+        height: global_vars.buttonHeightAdmin
+        width: global_vars.buttonWidthAdmin
+        id: auth_button
+        label.text: "Authorize"
+
+        helpText: "Enter 04 for user/pass"
+        maxLength: 2
+
+        onClicked: {
+            if (thread.activeGet() === 0) {
+                global_vars.admin_error = ""
+            }
+            if (thread.activeGet() === 1) {
+                if (inputText.length == 0) {
+                    global_vars.admin_error = "Error: No authorization block entered"
+                }
+                if (inputText.length > 0) {
+                    testing.auth(inputText)
+                    global_vars.admin_error = testing.getMsg()
+                }
+            }
+        }
+    }
+
+    ButtonInput {
+        anchors.left: parent.horizontalCenter
+        anchors.leftMargin: 30
+        anchors.top: admin_console.bottom
+        anchors.topMargin: 20
+        height: global_vars.buttonHeightAdmin
+        width: global_vars.buttonWidthAdmin
+        id: username
+        label.text: "Set  User"
+
+        helpText: "Type Username Above"
+        maxLength: 15
+
+        onClicked: {
+            if (thread.activeGet() === 0) {
+                global_vars.admin_error = ""
+            }
+            if (thread.activeGet() === 1) {
+                if (inputText.length == 0) {
+                    global_vars.admin_error = "Error: No username entered"
+                }
+                if (inputText.length > 0) {
+                    thread.userChange(inputText)
+                    testing.updateBlock("04", inputText)
+                    global_vars.admin_error = testing.getMsg()
+                    GlobVars.userpass = testing.readCard()
+                    splituserpass()
+                }
+            }
+        }
+    }
+
+    ButtonInput {
+        anchors.left: username.left
+        anchors.leftMargin: username.leftMargin
+        anchors.top: username.bottom
+        anchors.topMargin: 20
+        height: global_vars.buttonHeightAdmin
+        width: global_vars.buttonWidthAdmin
+        id: password
+        label.text: "Set  Pass"
+
+        helpText: "Type Password Above"
+        maxLength: 15
+
+        onClicked: {
+            if (thread.activeGet() === 0) {
+                global_vars.admin_error = ""
+            }
+            if (thread.activeGet() === 1) {
+                if (inputText.length == 0) {
+                    global_vars.admin_error = "Error: No password entered"
+                }
+                if (inputText.length > 0) {
+                    thread.passChange(inputText)
+                    testing.updateBlock("05", inputText)
+                    global_vars.admin_error = testing.getMsg()
+                    GlobVars.userpass = testing.readCard()
+                    splituserpass()
+                }
+            }
+        }
     }
 
     BasicButton {
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 275
-        anchors.horizontalCenter: parent.horizontalCenter
-        height: global_vars.buttonHeight
-        width: global_vars.buttonWidth
-        id: check_in_button
-        label.text: "Scan"
-
-        location: "qrc:/Images/rfid_chip.png"
-        iconHeight: 92
-        iconAnchors.verticalCenterOffset: -5
+        id: readall
+        anchors.right: parent.right
+        anchors.top: parent.top
+        anchors.rightMargin: 140
+        anchors.topMargin: 100
+        height: 100
+        width: 250
+        label.text: "Print"
 
         onClicked: {
-            nextLayer(root.objectName, "logged_in")
-            GlobVars.userpass = testing.readCard()
-            splituserpass()
-            root.state = "hidden"
+            if (thread.activeGet() === 0) {
+                global_vars.admin_error = "Error: No card connected"
+            }
+            if (thread.activeGet() === 1) {
+                global_vars.admin_error = '';
+                testing.readBlock("04")
+                global_vars.admin_error += testing.getMsg()
+                global_vars.admin_error += '\n'
+                testing.readBlock("05")
+                global_vars.admin_error += testing.getMsg()
+                global_vars.admin_error += '\n'
+                testing.readBlock("07")
+                global_vars.admin_error += testing.getMsg()
+            }
         }
     }
 
@@ -112,7 +279,7 @@ Rectangle {
             location = "qrc:/Images/back.png"
         }
         onClicked: {
-            nextLayer(root.objectName, "main")
+            nextLayer(root.objectName, "logged_in")
             root.state = "hidden"
         }
     }
@@ -169,6 +336,16 @@ Rectangle {
             }
         global_vars.realpass = GlobVars.userpass[1]
         global_vars.login_error = ''
+        }
+    }
+
+    function updateActive() {
+        if (thread.activeGet() === 0) {
+            global_vars.admin_error = '';
+            active_check.text = 'No card actively connected'
+        }
+        if (thread.activeGet() === 1) {
+            active_check.text = 'Card is ready for updates'
         }
     }
 }

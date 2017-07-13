@@ -16,11 +16,22 @@ public:
     explicit terminal (QObject* parent = 0);
     ~terminal();
 
+    Q_INVOKABLE void updateMsg(QString);
+
     Q_INVOKABLE QString readCard();
-    Q_INVOKABLE QString readCard2();
+
+    Q_INVOKABLE void addKey(QString, QString);
+    Q_INVOKABLE void auth(QString);
+    Q_INVOKABLE QString readBlock(QString);
+    Q_INVOKABLE QString updateBlock(QString, QString);
+    Q_INVOKABLE QString getMsg();
 
 public slots:
     int returntwo();
+
+private:
+    QString msg;
+
 };
 
 #endif // TERMINAL_H

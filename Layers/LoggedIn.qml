@@ -49,12 +49,28 @@ Rectangle {
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
+    Rectangle {
+        color: 'red'
+        height: 100
+        width: 100
+        x: 10
+        y: 10
+        id: admin_button
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                root.state = "hidden"
+                nextLayer(root.objectName, "scan_page")
+            }
+        }
+    }
+
     BasicButton {
-        anchors.left: parent.horizontalCenter
-        anchors.leftMargin: 15
+        anchors.horizontalCenter: temp_background.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 120
-        width: global_vars.buttonWidth/2
+        anchors.bottomMargin: 130
+        width: temp_background.width
         id: login_button
         label.text: "Login"
 
@@ -62,42 +78,48 @@ Rectangle {
         iconHeight: global_vars.login_height
         iconAnchors.verticalCenterOffset: global_vars.login_offset
         onClicked: {
-            tabOperationLoggedIn("middle","Up")
-            nextLayer(root.objectName, "check")
-            root.state = "hidden"
-        }
-    }
-
-    BasicButton {
-        anchors.right: parent.horizontalCenter
-        anchors.rightMargin: 15
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 120
-        width: global_vars.buttonWidth/2
-        id: scan_button
-        label.text: "Scan"
-
-        location: "qrc:/Images/rfid_chip.png"
-        iconHeight: 92
-        iconAnchors.verticalCenterOffset: -5
-
-        onClicked: {
-            //console.log("thread.updateGet(): " + thread.updateGet())
-            if (thread.updateGet() === "Error") {
-                GlobVars.userpass = testing.readCard()
-                splituserpass()
+            if (global_vars.username === "admin" && global_vars.realpass === "abc123pass") {
+                nextLayer(root.objectName, "scan_page")
+                root.state = "hidden"
+            }
+            else {
+                //tabOperationLoggedIn("middle","Up")
+                nextLayer(root.objectName, "check")
+                root.state = "hidden"
             }
         }
     }
+
+//    BasicButton {
+//        anchors.right: parent.horizontalCenter
+//        anchors.rightMargin: 15
+//        anchors.bottom: parent.bottom
+//        anchors.bottomMargin: 120
+//        width: global_vars.buttonWidth/2
+//        id: scan_button
+//        label.text: "Scan"
+
+//        location: "qrc:/Images/rfid_chip.png"
+//        iconHeight: 92
+//        iconAnchors.verticalCenterOffset: -5
+
+//        onClicked: {
+//            //console.log("thread.updateGet(): " + thread.updateGet())
+//            if (thread.updateGet() === "Error") {
+//                GlobVars.userpass = testing.readCard()
+//                splituserpass()
+//            }
+//        }
+//    }
 
     Rectangle {
         color: "black"
         id: temp_background
         height: 150
-        width: login_button.width*2+(30)
-        anchors.right: login_button.right
+        width: 700
+        anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: login_button.top
-        anchors.bottomMargin: 20
+        anchors.bottomMargin: 15
         radius: 40
         opacity: 0.2
         z: 3

@@ -23,19 +23,24 @@ public:
     Q_INVOKABLE QString passGet();
     Q_INVOKABLE QString userpassGet();
     Q_INVOKABLE QString updateGet();
+    Q_INVOKABLE int activeGet();
 
     Q_INVOKABLE void userChange(QString);
     Q_INVOKABLE void passChange(QString);
     Q_INVOKABLE void updateChange(QString);
+    Q_INVOKABLE void activeChange(int);
 
 signals:
     void sig_loginInfo();
+    void sig_active();
 
 private:
     QString username;
     QString password;
 
     QString update;
+
+    int active;
 
     void run();
 };

@@ -16,6 +16,7 @@ Item {
     /*Error Msgs*/
     property string login_error: ''
     property string check_error: 'YoooBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOI'
+    property string admin_error: ''
 
     /*Background*/
     property string grayColor: "#DCDCDC"
@@ -68,4 +69,8 @@ Item {
     property int clear_offset: -4
     property int startover_height: 95
     property int startover_offset: -4
+
+    /*Admin Console*/
+    property int buttonHeightAdmin: 140
+    property int buttonWidthAdmin: 400
 }

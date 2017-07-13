@@ -34,6 +34,10 @@ QString threadcall::updateGet() {
     return update;
 }
 
+int threadcall::activeGet() {
+    return active;
+}
+
 void threadcall::userChange(QString newname) {
     username = newname;
 }
@@ -44,6 +48,10 @@ void threadcall::passChange(QString newname) {
 
 void threadcall::updateChange(QString newname) {
     update = newname;
+}
+
+void threadcall::activeChange(int newnum) {
+    active = newnum;
 }
 
 void threadcall::run() {
@@ -70,40 +78,91 @@ void threadcall::run() {
     QString namechange;
 
     while(1) {
-        QProcess *process2 = new QProcess;
-        process2->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-        process2->start("python NFCReader.py --auth 04 00");
-        process2->waitForFinished(-1);
+        if (activeGet() == 0) {
+            QProcess *process2 = new QProcess;
+            process2->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
+            process2->start("python NFCReader.py --auth 04 00");
+            process2->waitForFinished(-1);
 
-        QProcess *process4 = new QProcess;
-        process4->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-        process4->start("python NFCReader.py --read 04");
-        process4->waitForFinished(-1);
+            QProcess *process4 = new QProcess;
+            process4->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
+            process4->start("python NFCReader.py --read 04");
+            process4->waitForFinished(-1);
 
-        stdout4 = process4->readAllStandardOutput();
+            stdout4 = process4->readAllStandardOutput();
 
-        QProcess *process5 = new QProcess;
-        process5->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-        process5->start("python NFCReader.py --read 05");
-        process5->waitForFinished(-1);
+            QProcess *process5 = new QProcess;
+            process5->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
+            process5->start("python NFCReader.py --read 05");
+            process5->waitForFinished(-1);
 
-        stdout5 = process5->readAllStandardOutput();
+            stdout5 = process5->readAllStandardOutput();
 
-        updateChange(stdout4);
+            updateChange(stdout4);
 
-        if (stdout4 == "Error") {
-            namechange = "Error";
-            //qDebug() << stdout4 << ' :: ' << stdout5;
+            if (stdout4 == "Error") {
+                activeChange(0);
+                emit sig_active();
+                namechange = "Error";
+                //qDebug() << stdout4 << ' :: ' << stdout5;
+            }
+            else if (namechange != stdout4) {
+                activeChange(1);
+                namechange = stdout4;
+                userChange(stdout4);
+                passChange(stdout5);
+                emit sig_loginInfo();
+                emit sig_active();
+                //qDebug() << stdout4 << ' lmao ' << stdout5;
+            }
+            else {
+                //qDebug() << stdout4 << ' ayyyyyy ' << stdout5;
+            }
         }
-        else if (namechange != stdout4) {
-            namechange = stdout4;
-            userChange(stdout4);
-            passChange(stdout5);
-            emit sig_loginInfo();
-            //qDebug() << stdout4 << ' lmao ' << stdout5;
-        }
-        else {
-            //qDebug() << stdout4 << ' ayyyyyy ' << stdout5;
+        if (activeGet() == 1) {
+            int i = 0;
+            while (i < 400000000) {
+                i++;
+            }
+            QProcess *process2 = new QProcess;
+            process2->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
+            process2->start("python NFCReader.py --auth 04 00");
+            process2->waitForFinished(-1);
+
+            QProcess *process4 = new QProcess;
+            process4->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
+            process4->start("python NFCReader.py --read 04");
+            process4->waitForFinished(-1);
+
+            stdout4 = process4->readAllStandardOutput();
+
+            QProcess *process5 = new QProcess;
+            process5->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
+            process5->start("python NFCReader.py --read 05");
+            process5->waitForFinished(-1);
+
+            stdout5 = process5->readAllStandardOutput();
+
+            updateChange(stdout4);
+
+            if (stdout4 == "Error") {
+                activeChange(0);
+                emit sig_active();
+                namechange = "Error";
+                //qDebug() << stdout4 << ' :: ' << stdout5;
+            }
+            else if (namechange != stdout4) {
+                activeChange(1);
+                namechange = stdout4;
+                userChange(stdout4);
+                passChange(stdout5);
+                emit sig_loginInfo();
+                emit sig_active();
+                //qDebug() << stdout4 << ' lmao ' << stdout5;
+            }
+            else {
+                //qDebug() << stdout4 << ' ayyyyyy ' << stdout5;
+            }
         }
     }
 

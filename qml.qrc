@@ -41,5 +41,6 @@
         <file>Layers/Lookup.qml</file>
         <file>Images/magnifier.png</file>
         <file>Components/Scanner.qml</file>
+        <file>Components/ButtonInput.qml</file>
     </qresource>
 </RCC>

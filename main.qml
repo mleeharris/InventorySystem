@@ -375,11 +375,13 @@ Window {
                 login_page.state = "visible"
                 tabOperationForLoggedIn("middle","Up")
                 tabOperationForLoginPage("middle","Up")
+                tabOperationForScanPage("middle","Up")
                 tabOperationMain("middle","Up")
             }
             if (nextLayer === "logged_in") {
                 logged_in.state = "visible"
                 tabOperationForLoggedIn("middle","Up")
+                tabOperationForScanPage("middle","Up")
                 tabOperationMain("middle","Up")
             }
         }
@@ -393,7 +395,6 @@ Window {
                 object_holder.state = "visible"
                 tabOperationForLoggedIn("middle","Down")
                 tabOperationMain("middle", "Down")
-                tabOperationForScanPage("middle","Down")
             }
             if (nextLayer === "logged_in") {
                 logged_in.state = "visible"
@@ -409,6 +410,11 @@ Window {
             if (nextLayer === "check") {
                 barcode.state = "off"
                 check.state = "visible"
+            }
+            if (nextLayer === "scan_page") {
+                scan_page.state = "visible"
+                global_vars.admin_error = ''
+                //tabOperationForScanPage("middle","Up")
             }
         }
         if (currentLayer === "check") {
@@ -575,7 +581,9 @@ Window {
     }
 
     function scanned() {
-        slot_switchLayer("main","logged_in")
-        object_holder.state = "hidden"
+        if (object_holder.state == "visible") {
+            slot_switchLayer("main","logged_in")
+            object_holder.state = "hidden"
+        }
     }
 }

@@ -49,8 +49,11 @@ def readBlock(page):
 
             #only allows new tags to be worked so no duplicates
             if(dataCurr is not None):
-                dataCurr = dataCurr.decode("hex")
-                print (dataCurr)
+                if (int(page)%4 == 3):
+                    print (dataCurr)
+                else :
+                    dataCurr = dataCurr.decode("hex")
+                    print (dataCurr)
                 #print (dataCurr + " read from page " + str(page))
             else:
                 sys.stdout.write("Error")
@@ -109,7 +112,7 @@ def addKey(keynum, key):
         status_connection = connection.connect()
         connection.transmit(COMMAND)
         WRITE_COMMAND = [0xFF, 0x82, 0x00, int(keynum), 0x06, int(key[0:2], 16), int(key[2:4], 16), int(key[4:6], 16), int(key[6:8], 16), int(key[8:10], 16), int(key[10:12], 16)]
-        print(WRITE_COMMAND)
+        #print(WRITE_COMMAND)
 
         resp = connection.transmit(WRITE_COMMAND)
         if (resp[1] == 144):
