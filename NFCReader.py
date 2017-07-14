@@ -2,6 +2,7 @@
 import re, argparse
 from smartcard.System import readers
 import datetime, sys
+import binascii
 
 #ACS ACR122U NFC Reader
 #Suprisingly, to get data from the tag, it is a handshake protocol
@@ -52,13 +53,15 @@ def readBlock(page):
                 if (int(page)%4 == 3):
                     print (dataCurr)
                 else :
-                    dataCurr = dataCurr.decode("hex")
+                    #dataCurr = ''.join([chr(int(dataCurr[x:x+2],16)) for x in range(0,len(dataCurr),2)])
+                    dataCurr = binascii.unhexlify(dataCurr)
+                    dataCurr = str(dataCurr,'ascii')
                     print (dataCurr)
                 #print (dataCurr + " read from page " + str(page))
             else:
                 sys.stdout.write("Error")
                 #print ("Error: Couldnt read page " + str(page) + ". Authentication needed")
-        except Exception,e:
+        except (Exception):
             sys.stdout.write("Error")
             #print ("Error: Couldnt read page " + str(page) + ". Connection problem.")
 
@@ -69,29 +72,29 @@ def authBlock(page, keynum):
         try:
             connection = reader.createConnection()
             status_connection = connection.connect()
-            connection.transmit(COMMAND) 
+            connection.transmit(COMMAND)
             WRITE_COMMAND = [0xFF, 0x86, 0x00, 0x00, 0x05, 0x01, 0x00, int(page), 0x60, int(keynum)]
             #print(WRITE_COMMAND)
-            
+
             resp = connection.transmit(WRITE_COMMAND)
             if (resp[1] == 144):
                 print("Authenticated block: " + str(page))
             if (resp[1] == 99):
                 sys.stdout.write("Error")
                 #print ("Error: Authentication of block " + str(page) + " unsuccessful")
-        except Exception, e:
+        except (Exception):
             sys.stdout.write("Error")
             #print ("Error: Authentication Error No. 2")
 
 def updateBlock(page, value):
     if (int(page)%4 == 3):
         print ("Error: You cannot update trailer blocks")
-    else: 
+    else:
         try:
             connection = reader.createConnection()
             status_connection = connection.connect()
             connection.transmit(COMMAND)
-            print (int(page)) 
+            print (int(page))
             WRITE_COMMAND = [0xFF, 0xD6, 0x00, int(page), 0x10, int(value[0:2], 16), int(value[2:4], 16), int(value[4:6], 16), int(value[6:8], 16), int(value[8:10], 16), int(value[10:12], 16), int(value[12:14], 16), int(value[14:16], 16), int(value[16:18], 16), int(value[18:20], 16), int(value[20:22], 16), int(value[22:24], 16), int(value[24:26], 16), int(value[26:28], 16), int(value[28:30], 16), int(value[30:32], 16)]
             # Let's write a page Page 9 is usually 00000000
             #print(WRITE_COMMAND)
@@ -102,7 +105,7 @@ def updateBlock(page, value):
             if resp[1] == 99:
                 sys.stdout.write("Error")
                 #print ("Error: Could not write " + value + " to page " + str(page) + ". Authentication needed")
-        except Exception, e:
+        except (Exception):
             sys.stdout.write("Error")
             #print ("Error: Could not write " + value + " to page " + str(page)  + ". Connection problem.")
 
@@ -120,7 +123,7 @@ def addKey(keynum, key):
         if (resp[1] == 99):
             sys.stdout.write("Error")
             #print ("Error: Unsuccessful addition of key number " + str(keynum))
-    except Exception, e:
+    except (Exception):
         sys.stdout.write("Error")
         #print ("Error: Unsuccessful addition of key number " + str(keynum))
 
@@ -155,7 +158,7 @@ if __name__ == "__main__":
         reader = r[0]
 
     #print "Using:", reader
-    
+
     #Page numbers are sent as ints, not hex, to the reader
     if args.read:
         page = args.read[0]
@@ -170,21 +173,24 @@ if __name__ == "__main__":
         page = args.update[0]
         data = args.update[1]
 
-        data = data.encode("hex")
+        b = bytearray()
+        b.extend(map(ord, data))
+        #data = b'yoooo'
+
+        b = binascii.hexlify(b)
+        b = str(b,'ascii')
         # print data
         # print type(data)
 
         # print len(data)
-        if (len(data) < 32):
-            left = 32-len(data)
-            i = len(data)
+        if (len(b) < 32):
+            left = 32-len(b)
+            i = len(b)
             while (i < 32):
-                data = data + '0'
+                b = b + '0'
                 i += 1
 
-        data = data.upper()
-
-        updateBlock(int(page), data)
+        updateBlock(int(page), b)
 
     if args.addkey:
         keynum = args.addkey[0]
