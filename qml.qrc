@@ -42,5 +42,6 @@
         <file>Images/magnifier.png</file>
         <file>Components/Scanner.qml</file>
         <file>Components/ButtonInput.qml</file>
+        <file>JavaScript/connect.js</file>
     </qresource>
 </RCC>

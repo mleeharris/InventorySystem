@@ -59,19 +59,19 @@ void threadcall::run() {
 
     QProcess *process2 = new QProcess;
     process2->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-    process2->start("python NFCReader.py --auth 04 00");
+    process2->start("python3 NFCReader.py --auth 04 00");
     process2->waitForFinished(-1);
 
     QProcess *process4 = new QProcess;
     process4->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-    process4->start("python NFCReader.py --read 04");
+    process4->start("python3 NFCReader.py --read 04");
     process4->waitForFinished(-1);
 
     QString stdout4 = process4->readAllStandardOutput();
 
     QProcess *process5 = new QProcess;
     process5->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-    process5->start("python NFCReader.py --read 05");
+    process5->start("python3 NFCReader.py --read 05");
     process5->waitForFinished(-1);
 
     QString stdout5 = process5->readAllStandardOutput();
@@ -81,19 +81,19 @@ void threadcall::run() {
         if (activeGet() == 0) {
             QProcess *process2 = new QProcess;
             process2->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-            process2->start("python NFCReader.py --auth 04 00");
+            process2->start("python3 NFCReader.py --auth 04 00");
             process2->waitForFinished(-1);
 
             QProcess *process4 = new QProcess;
             process4->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-            process4->start("python NFCReader.py --read 04");
+            process4->start("python3 NFCReader.py --read 04");
             process4->waitForFinished(-1);
 
             stdout4 = process4->readAllStandardOutput();
 
             QProcess *process5 = new QProcess;
             process5->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-            process5->start("python NFCReader.py --read 05");
+            process5->start("python3 NFCReader.py --read 05");
             process5->waitForFinished(-1);
 
             stdout5 = process5->readAllStandardOutput();
@@ -126,19 +126,19 @@ void threadcall::run() {
             }
             QProcess *process2 = new QProcess;
             process2->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-            process2->start("python NFCReader.py --auth 04 00");
+            process2->start("python3 NFCReader.py --auth 04 00");
             process2->waitForFinished(-1);
 
             QProcess *process4 = new QProcess;
             process4->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-            process4->start("python NFCReader.py --read 04");
+            process4->start("python3 NFCReader.py --read 04");
             process4->waitForFinished(-1);
 
             stdout4 = process4->readAllStandardOutput();
 
             QProcess *process5 = new QProcess;
             process5->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-            process5->start("python NFCReader.py --read 05");
+            process5->start("python3 NFCReader.py --read 05");
             process5->waitForFinished(-1);
 
             stdout5 = process5->readAllStandardOutput();

@@ -6,6 +6,7 @@ import QtQuick.Controls 1.1
 import QtGraphicalEffects 1.0
 import "qrc:/Components"
 import "qrc:/JavaScript/globalVars.js" as GlobVars
+import "qrc:/JavaScript/connect.js" as Connect
 
 Rectangle {
     id: root
@@ -65,6 +66,24 @@ Rectangle {
 //            }
 //        }
 //    }
+
+    Rectangle {
+        color: 'blue'
+        height: 100
+        width: 100
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 10
+        id: admin_button
+
+        MouseArea {
+            anchors.fill: parent
+            onClicked: {
+                console.log('bum')
+                Connect.test()
+            }
+        }
+    }
 
     BasicButton {
         anchors.horizontalCenter: temp_background.horizontalCenter

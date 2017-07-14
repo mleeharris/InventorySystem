@@ -16,13 +16,13 @@ terminal::~terminal(){
 }
 
 void terminal::addKey(QString keycode, QString keynum) {
-    QString use = "python NFCReader.py --addkey ";
+    QString use = "python3 NFCReader.py --addkey ";
     use.append(QString("%1 ").arg(keynum));
     use.append(QString("%1").arg(keycode));
 
     QProcess *process1 = new QProcess;
     process1->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-    //process1->start("python NFCReader.py --addkey 00 FFFFFFFFFFFF");
+    //process1->start("python3 NFCReader.py --addkey 00 FFFFFFFFFFFF");
     qDebug() << use;
     process1->start(use);
     process1->waitForFinished(-1);
@@ -41,11 +41,11 @@ void terminal::addKey(QString keycode, QString keynum) {
 }
 
 void terminal::auth(QString blocktoauth) {
-    QString use = QString("python NFCReader.py --auth %1 00").arg(blocktoauth);
+    QString use = QString("python3 NFCReader.py --auth %1 00").arg(blocktoauth);
 
     QProcess *process1 = new QProcess;
     process1->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-    //process1->start("python NFCReader.py --auth 04 00");
+    //process1->start("python3 NFCReader.py --auth 04 00");
     process1->start(use);
     process1->waitForFinished(-1);
 
@@ -62,7 +62,7 @@ void terminal::auth(QString blocktoauth) {
 }
 
 QString terminal::readBlock(QString blocktoread) {
-    QString use = "python NFCReader.py --read ";
+    QString use = "python3 NFCReader.py --read ";
     use.append(QString("%1").arg(blocktoread));
 
     qDebug() << use;
@@ -95,7 +95,7 @@ QString terminal::readBlock(QString blocktoread) {
 }
 
 QString terminal::updateBlock(QString blocktowrite, QString info) {
-    QString use = "python NFCReader.py --update ";
+    QString use = "python3 NFCReader.py --update ";
     use.append(QString("%1 ").arg(blocktowrite));
     use.append(QString("%1").arg(info));
 
@@ -131,19 +131,19 @@ void terminal::updateMsg(QString newmsg) {
 QString terminal::readCard() {
     QProcess *process2 = new QProcess;
     process2->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-    process2->start("python NFCReader.py --auth 04 00");
+    process2->start("python3 NFCReader.py --auth 04 00");
     process2->waitForFinished(-1);
 
     QProcess *process4 = new QProcess;
     process4->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-    process4->start("python NFCReader.py --read 04");
+    process4->start("python3 NFCReader.py --read 04");
     process4->waitForFinished(-1);
 
     QString stdout4 = process4->readAllStandardOutput();
 
     QProcess *process5 = new QProcess;
     process5->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-    process5->start("python NFCReader.py --read 05");
+    process5->start("python3 NFCReader.py --read 05");
     process5->waitForFinished(-1);
 
     QString stdout5 = process5->readAllStandardOutput();
@@ -160,7 +160,7 @@ int terminal::returntwo() {
 //void terminalCall() {
 //    QProcess *process = new QProcess;
 //    process->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-//    process->start("python NFCReader.py --addkey 00 FFFFFFFFFFFF");
+//    process->start("python3 NFCReader.py --addkey 00 FFFFFFFFFFFF");
 //    process->waitForFinished(-1);
 
 //    QString stdout = process->readAllStandardOutput();
@@ -170,7 +170,7 @@ int terminal::returntwo() {
 
 //    QProcess *process2 = new QProcess;
 //    process2->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-//    process2->start("python NFCReader.py --auth 04 00");
+//    process2->start("python3 NFCReader.py --auth 04 00");
 //    process2->waitForFinished(-1);
 
 //    QString stdout2 = process2->readAllStandardOutput();
@@ -180,7 +180,7 @@ int terminal::returntwo() {
 
 //    QProcess *process3 = new QProcess;
 //    process3->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-//    process3->start("python NFCReader.py --update 04 Superbud9123");
+//    process3->start("python3 NFCReader.py --update 04 Superbud9123");
 //    process3->waitForFinished(-1);
 
 //    QString stdout3 = process3->readAllStandardOutput();
@@ -190,7 +190,7 @@ int terminal::returntwo() {
 
 //    QProcess *process4 = new QProcess;
 //    process4->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
-//    process4->start("python NFCReader.py --read 04");
+//    process4->start("python3 NFCReader.py --read 04");
 //    process4->waitForFinished(-1);
 
 //    QString stdout4 = process4->readAllStandardOutput();
