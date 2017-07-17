@@ -6,17 +6,26 @@
 
  *************************************************************************** */
 
+var actionSuccess = 0;
+
 function test() {
 
     //queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","login","","POST");
 
     queryHandler("partMaster","warehouseMaster","http://192.168.10.97","parts","1","addStock","quantity=5","PUT")
+    //queryHandler("partMaster","warehouseMaster","http://192.168.10.97","parts","2","","","PUT");
 
     // ADD QUERY HERE TO TEST
 }
 
 /* ******************************** QUERY HANDLER ***************************************************** */
 
+
+function login(username, password) {
+    console.log(username);
+    console.log(password);
+    queryHandler(username,password,"http://192.168.10.97","users","","login","","POST");
+}
 
 function queryHandler(user, password, server, module, partID, command, json,method){
 
@@ -33,7 +42,7 @@ function queryHandler(user, password, server, module, partID, command, json,meth
 
         if (module == "stock_entries") {
             restURL += "?" + json;
-            json="";
+            json = "";
         }
 
         httpConnect(restURL,user,password,json,command,method);
@@ -65,89 +74,95 @@ function httpConnect(urlStr, user, password, json, command, method) {
 
 function responseHandler(response,headers,command) {
 
+    try {
+        var arr = JSON.parse(response);
+        actionSuccess = 1;
+    }
+    catch(err) {
+        actionSuccess = 0;
+        console.log("Action Failed")
+        switch(command) {
+            case "login":
+                console.log("Couldn't log in")
+                global_vars.loggedIn = 0;
+        }
+    }
 
-    if(command!="logout")
-            var arr = JSON.parse(response);
+    if (actionSuccess == 1) {
+        console.log("************************* RESPONSE HEADERS  ********************************\n");
 
-    console.log("************************* RESPONSE HEADERS  ********************************\n");
+        console.log(headers);
 
-    console.log(headers);
+        console.log("********************* RESPONSE BODY ************************************\n");
 
-    console.log("********************* RESPONSE BODY ************************************\n");
+        console.log(response);
 
-    console.log(response);
+        switch(command) {
+            case "addStock":
+                //Where responses are going to be handled
+                 console.log("Add Stock Executed\n");
+                break;
 
-    switch(command) {
-        case "addStock":
+            case "setStock":
+                //Where responses are going to be handled
+                console.log("Set Stock Executed\n");
+                break;
 
-            //Where responses are going to be handled
-             console.log("Add Stock Executed\n");
+            case "removeStock":
+                //Where responses are going to be handled
+                console.log("Remove Stock Executed\n");
+                break;
 
-            break;
-        case "setStock":
+            case "login":
+                if(arr) {
+                    console.log("Connected");
+                    console.log("Welcome " + arr["username"]);
+                    global_vars.loggedIn = 1;
+                    console.log("loggedIn: ", global_vars.loggedIn)
+                }
+                break;
 
-            //Where responses are going to be handled
-            console.log("Set Stock Executed\n");
+            case "logout":
+                break;
 
-            break;
+            default:
+                console.log("********************* PARTS INFORMATION ************************************\n");
 
-        case "removeStock":
+                //for an easier use of JSONS try using https://jsonformatter.curiousconcept.com/
+                console.log("Name :" + arr["name"]);
+                console.log("internal Part Number :" + arr["internalPartNumber"]);
+                console.log("Stock Level :" + arr["stockLevel"] + " " + arr["partUnit"]["name"]);
+                console.log("Storage Location :" + arr["storageLocation"]["name"]);
+                console.log("Type :" + arr["@type"]);
+                console.log("Description :" + arr["description"]);
+                console.log("Minimum Stock :" + arr["minStockLevel"]);
+                console.log("Low Stock ? :" + arr["lowStock"]);
 
-            //Where responses are going to be handled
-            console.log("Remove Stock Executed\n");
+                /* ********************************* DISPLAY IMAGE ************************************************
 
-            break;
+                var xhr = getXMLHttpRequest();
+                xhr.onreadystatechange=ProcessResponse;
+                imageUrl="http://192.168.10.97/api/part_attachments/"+arr["internalPartNumber"]+"/getFile"
+                xhr.open("GET",imageUrl, true);
+                xhr.overrideMimeType('text/plain; charset=x-user-defined');
+                xhr.send(null);
 
-        case "login":
-
-            if(arr){
-                console.log("Connected");
-                console.log("Welcome " + arr["username"]);
-            }
-            break;
-
-        case "logout":
-
-            break;
-
-        default:
-
-            console.log("********************* PARTS INFORMATION ************************************\n");
-
-            //for an easier use of JSONS try using https://jsonformatter.curiousconcept.com/
-            console.log("Name :" + arr["name"]);
-            console.log("internal Part Number :" + arr["internalPartNumber"]);
-            console.log("Stock Level :" + arr["stockLevel"] + " " + arr["partUnit"]["name"]);
-            console.log("Storage Location :" + arr["storageLocation"]["name"]);
-            console.log("Type :" + arr["@type"]);
-            console.log("Description :" + arr["description"]);
-            console.log("Minimum Stock :" + arr["minStockLevel"]);
-            console.log("Low Stock ? :" + arr["lowStock"]);
-
-            /* ********************************* DISPLAY IMAGE ************************************************
-
-            var xhr = getXMLHttpRequest();
-            xhr.onreadystatechange=ProcessResponse;
-            imageUrl="http://192.168.10.97/api/part_attachments/"+arr["internalPartNumber"]+"/getFile"
-            xhr.open("GET",imageUrl, true);
-            xhr.overrideMimeType('text/plain; charset=x-user-defined');
-            xhr.send(null);
-
-            function ProcessResponse()
-            {
-               if(xhr.readyState==4)
-              {
-                if (xhr.status==200)
+                function ProcessResponse()
                 {
-                    retval ="";
-                    for (var i=0; i<=xhr.responseText.length-1; i++)
-                          retval += String.fromCharCode(xhr.responseText.charCodeAt(i) & 0xff);
-               }
-             }
+                   if(xhr.readyState==4)
+                  {
+                    if (xhr.status==200)
+                    {
+                        retval ="";
+                        for (var i=0; i<=xhr.responseText.length-1; i++)
+                              retval += String.fromCharCode(xhr.responseText.charCodeAt(i) & 0xff);
+                   }
+                 }
 
-            Display image encoded in 64:  encode64(xhr.responseText);
+                Display image encoded in 64:  encode64(xhr.responseText);
 
-            */
+                */
+        }
     }
 }
 

@@ -73,4 +73,7 @@ Item {
     /*Admin Console*/
     property int buttonHeightAdmin: 140
     property int buttonWidthAdmin: 400
+
+    /*API*/
+    property int loggedIn: 0
 }

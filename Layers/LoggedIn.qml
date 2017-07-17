@@ -50,6 +50,10 @@ Rectangle {
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
+    Timer {
+        id: timer
+    }
+
 //    Rectangle {
 //        color: 'red'
 //        height: 100
@@ -67,23 +71,23 @@ Rectangle {
 //        }
 //    }
 
-    Rectangle {
-        color: 'blue'
-        height: 100
-        width: 100
-        anchors.top: parent.top
-        anchors.right: parent.right
-        anchors.margins: 10
-        id: admin_button
+//    Rectangle {
+//        color: 'blue'
+//        height: 100
+//        width: 100
+//        anchors.top: parent.top
+//        anchors.right: parent.right
+//        anchors.margins: 10
+//        id: admin_button
 
-        MouseArea {
-            anchors.fill: parent
-            onClicked: {
-                console.log('bum')
-                Connect.test()
-            }
-        }
-    }
+//        MouseArea {
+//            anchors.fill: parent
+//            onClicked: {
+//                console.log('bum')
+//                Connect.test()
+//            }
+//        }
+//    }
 
     BasicButton {
         anchors.horizontalCenter: temp_background.horizontalCenter
@@ -97,14 +101,23 @@ Rectangle {
         iconHeight: global_vars.login_height
         iconAnchors.verticalCenterOffset: global_vars.login_offset
         onClicked: {
-            if (global_vars.username === "admin" && global_vars.realpass === "abc123pass") {
-                nextLayer(root.objectName, "scan_page")
-                root.state = "hidden"
-            }
-            else {
-                nextLayer(root.objectName, "check")
-                root.state = "hidden"
-            }
+            //Connect.test()
+            Connect.login(global_vars.username, global_vars.realpass)
+            console.log("global_vars.loggedIn: ", global_vars.loggedIn)
+            global_vars.login_error = "Logging in"
+            delay(1000, function() {
+                if (global_vars.username === "admin" && global_vars.realpass === "abc123pass") {
+                    nextLayer(root.objectName, "scan_page")
+                    root.state = "hidden"
+                }
+                else if (global_vars.loggedIn == 1) {
+                    nextLayer(root.objectName, "check")
+                    root.state = "hidden"
+                }
+                else {
+                    global_vars.login_error = "Error: Username or password not correct"
+                }
+            })
         }
     }
 
@@ -369,6 +382,13 @@ Rectangle {
     function loginInfo() {
         GlobVars.userpass = thread.userpassGet()
         splituserpass()
+    }
+
+    function delay(delayTime, cb) {
+        timer.interval = delayTime;
+        timer.repeat = false;
+        timer.triggered.connect(cb);
+        timer.start();
     }
 }
 
