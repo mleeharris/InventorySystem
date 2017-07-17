@@ -357,7 +357,6 @@ Rectangle {
         GlobVars.userpass = GlobVars.userpass.split('=')
 
         if (GlobVars.userpass[0] == "Error") {
-            console.log("ayyyyy")
             global_vars.username = ''
             global_vars.realpass = ''
             global_vars.password = ''

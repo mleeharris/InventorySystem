@@ -76,4 +76,7 @@ Item {
 
     /*API*/
     property int loggedIn: 0
+
+    property int checkInError: 0
+    property int checkOutError: 0
 }

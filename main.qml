@@ -20,14 +20,14 @@ Window {
     id: main_window
     visible: true
 
-    /*
+
     width: 1920
     height: 1080
-    */
 
+    /*
     width: 1000
     height: 1000
-
+    */
 
     objectName: "MainWindow"
 
@@ -369,7 +369,7 @@ Window {
 
     function slot_switchLayer(currentLayer, nextLayer) {
         //console.log("currentLayer: ", currentLayer)
-        console.log("nextLayer: ", nextLayer)
+        //console.log("nextLayer: ", nextLayer)
 
         if (currentLayer === "main") {
             if (nextLayer === "login_page") {

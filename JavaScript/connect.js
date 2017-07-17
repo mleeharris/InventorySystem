@@ -27,6 +27,32 @@ function login(username, password) {
     queryHandler(username,password,"http://192.168.10.97","users","","login","","POST");
 }
 
+function logout(username, password) {
+    console.log(username);
+    console.log(password);
+    queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","logout","","GET");
+}
+
+function checkIn(itemListIn) {
+    var i = 0;
+    global_vars.checkInError = 0;
+    while (i < itemListIn.length) {
+        console.log("itemListIn[i]: ", itemListIn[i])
+        queryHandler(global_vars.username,global_vars.realpass,"http://192.168.10.97","parts",itemListIn[i],"addStock","quantity=1","PUT");
+        i += 1
+    }
+}
+
+function checkOut(itemList) {
+    var i = 0;
+    global_vars.checkOutError = 0;
+    while (i < itemList.length) {
+        console.log("itemList[i]: ", itemList[i])
+        queryHandler(global_vars.username,global_vars.realpass,"http://192.168.10.97","parts",itemList[i],"removeStock","quantity=1","PUT");
+        i += 1
+    }
+}
+
 function queryHandler(user, password, server, module, partID, command, json,method){
 
     var restURL=server + "/api/"
@@ -80,11 +106,28 @@ function responseHandler(response,headers,command) {
     }
     catch(err) {
         actionSuccess = 0;
-        console.log("Action Failed")
         switch(command) {
             case "login":
-                console.log("Couldn't log in")
+                console.log("Action Failed");
+                console.log("Couldn't log in");
                 global_vars.loggedIn = 0;
+                break;
+
+            case "logout":
+                console.log("Logged Out");
+                break;
+
+            case "addStock":
+                console.log("Action Failed");
+                console.log("Couldn't check in part");
+                global_vars.checkInError = 1;
+                break;
+
+            case "removeStock":
+                console.log("Action Failed");
+                console.log("Couldn't check out part");
+                global_vars.checkOutError = 1;
+                break;
         }
     }
 
@@ -190,6 +233,13 @@ function encode64(buffer) {
     return Qt.btoa(binary);
 }
 
+//function delay(delayTime, cb) {
+//    timer = new Timer();
+//    timer.interval = delayTime;
+//    timer.repeat = false;
+//    timer.triggered.connect(cb);
+//    timer.start();
+//}
 
 /* ******************************** CORRESPONDENCE TABLE && EXAMPLES ************************************
 

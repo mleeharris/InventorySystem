@@ -6,8 +6,8 @@ import QtQuick.Controls 1.1
 import QtGraphicalEffects 1.0
 import "qrc:/JavaScript"
 import "qrc:/Components"
-import "qrc:/JavaScript/componentCreation.js" as Creation
 import "qrc:/JavaScript/globalVars.js" as GlobVars
+import "qrc:/JavaScript/connect.js" as Connect
 
 Rectangle {
     id: root
@@ -56,6 +56,10 @@ Rectangle {
     Image {
         id: background_image
         source: "qrc:/Images/background_opening_3.jpg"
+    }
+
+    Timer {
+        id: timer
     }
 
     ListModel {
@@ -155,9 +159,11 @@ Rectangle {
 
         onClicked: {
             //send list to API here
+            Connect.checkOut(GlobVars.itemList)
+            global_vars.check_error = "Checking out... Please wait... "
             console.log("GlobVars.itemList: ", GlobVars.itemList)
-            //
 
+            callTimer()
             deletionAll()
             nextLayer(root.objectName, "end_page")
             root.state = "hidden"
@@ -238,7 +244,6 @@ Rectangle {
 
     function deletionAll() {
         var index = GlobVars.itemList.length
-        console.log("index: ", index)
         var i = 0
         while (i < index) {
             item_model.remove(0)
@@ -249,7 +254,6 @@ Rectangle {
     }
 
     function itemScan(item) {
-        console.log(item)
         GlobVars.itemList.push(item.slice(0,-1))
         console.log("GlobVars: ", GlobVars.itemList)
 
@@ -263,9 +267,7 @@ Rectangle {
 
     function deletionHandlingCheckOut() {
         item_model.remove(item_listview.currentIndex)
-        console.log("item_listview.currentIndex: ", item_listview.currentIndex)
         GlobVars.itemList.splice(item_listview.currentIndex, 1)
-        console.log("GLobVars.itemList: ", GlobVars.itemList)
         item_counter.text = "Items: " + GlobVars.itemList.length
 //        console.log("itemID: ", itemID)
 //        console.log("GlobVars.itemList: ", GlobVars.itemList)
@@ -320,5 +322,20 @@ Rectangle {
                 right_tab.state = "Down"
             }
         }
+    }
+
+    function delay(delayTime, cb) {
+        timer.interval = delayTime;
+        timer.repeat = false;
+        timer.triggered.connect(cb);
+        timer.start();
+    }
+
+    function callTimer() {
+        delay(2000, function() {
+            if (global_vars.checkInError == 0) {
+                global_vars.check_error = "All items checked out successfully"
+            }
+        });
     }
 }

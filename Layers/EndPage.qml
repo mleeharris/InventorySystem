@@ -6,8 +6,8 @@ import QtQuick.Controls 1.1
 import QtGraphicalEffects 1.0
 import "qrc:/JavaScript"
 import "qrc:/Components"
-import "qrc:/JavaScript/componentCreation.js" as Creation
 import "qrc:/JavaScript/globalVars.js" as GlobVars
+import "qrc:/JavaScript/connect.js" as Connect
 
 Rectangle {
     id: root
@@ -56,6 +56,10 @@ Rectangle {
     Image {
         id: background_image
         source: "qrc:/Images/background_opening_3.jpg"
+    }
+
+    Timer {
+        id: timer
     }
 
     Text {
@@ -135,8 +139,12 @@ Rectangle {
 
         onClicked: {
             itemFromEnd()
-            root.state = "hidden"
-            nextLayer(root.objectName, "main")
+            global_vars.check_error = "Logging Out"
+            Connect.logout(global_vars.username, global_vars.realpass)
+            delay(1000, function() {
+                root.state = "hidden"
+                nextLayer(root.objectName, "main")
+            })
         }
     }
 
@@ -222,5 +230,21 @@ Rectangle {
                 right_tab.state = "Down"
             }
         }
+    }
+
+    function delay(delayTime, cb) {
+        timer.interval = delayTime;
+        timer.repeat = false;
+        timer.triggered.connect(cb);
+        timer.start();
+    }
+
+    function callTimer() {
+        console.log("boiyo")
+        delay(1000, function() {
+            if (global_vars.checkInError == 0) {
+                global_vars.check_error = "All items checked in successfully"
+            }
+        });
     }
 }
