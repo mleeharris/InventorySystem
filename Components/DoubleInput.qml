@@ -20,6 +20,7 @@ Rectangle  {
     property alias textChange2: text_input_2.text
     property alias helpText2: helper_2.text
     property alias helpText3: helper_3.text
+    property alias adminState: admin_check.state
 
     clip: false
     signal pressed()

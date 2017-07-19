@@ -118,9 +118,10 @@ Rectangle {
                 //console.log("admin?: ", adminClicked)
                 delay(1000, function() {
                     if (global_vars.addUser === true) {
+                        global_vars.admin_api_error = "Added new user"
                         textChange1 = ''
                         textChange2 = ''
-                        adminClicked = false
+                        adminState = "unchecked"
                     }
                 })
             }

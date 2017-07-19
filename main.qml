@@ -15,6 +15,7 @@ import "qrc:/Layers"
 import "qrc:/Function"
 import "qrc:/Images"
 import "qrc:/JavaScript/globalVars.js" as GlobVars
+import "qrc:/JavaScript/connect.js" as Connect
 
 Window {
     id: main_window
@@ -284,6 +285,7 @@ Window {
             //label.text: "Power"
             location: "qrc:/Images/power.png"
             onPressed: {
+                Connect.test()
                 location = "qrc:/Images/power_dark.png"
             }
             onReleased: {

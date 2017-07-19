@@ -10,6 +10,7 @@ var actionSuccess = 0;
 
 function test() {
 
+    //queryHandler("wrong","stuff","http://192.168.10.97","users","","login","","POST", "");
     //queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","login","","POST");
 
     //queryHandler("partMaster","warehouseMaster","http://192.168.10.97","parts","1","addStock","quantity=5","PUT")
@@ -58,20 +59,16 @@ function lookUp(item) {
 }
 
 function addUser(newusername, newpassword) {
-//    console.log("user: ", newusername);
-//    console.log("pass: ", newpassword);
-//    console.log("typeof: ", typeof newusername);
-
-//    var userstring = '{"newPassword":"' + newpassword + '","username":"' + newusername + '"}'
-//    console.log('userstring: ', userstring);
+    global_vars.addUser = false
     var userstring = '{"newPassword":"' + newpassword + '","username":"' + newusername + '","protected":false}'
-    console.log('userstring: ', userstring);
+//    console.log('userstring: ', userstring);
     queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","",userstring,"POST", "addUser");
 }
 
 function addUserAdmin(newusername, newpassword) {
+    global_vars.addUser = false
     var userstring = '{"newPassword":"' + newpassword + '","username":"' + newusername + '","protected":true}'
-    console.log('userstring: ', userstring);
+//    console.log('userstring: ', userstring);
     queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","",userstring,"POST", "addUser");
 }
 
@@ -98,16 +95,19 @@ function httpConnect(urlStr, user, password, json, command, method, command2) {
     var encode =  encode64(string2Bin(user + ":" + password));
     var xmlhttp = new XMLHttpRequest();
 
-    xmlhttp.onreadystatechange=function() {
+    xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == XMLHttpRequest.DONE) {
-
-            responseHandler(xmlhttp.responseText,xmlhttp.getAllResponseHeaders(),command, command2);
-
+            if (xmlhttp.status > 199 && xmlhttp.status < 300) {
+                responseHandler(xmlhttp.responseText, xmlhttp.getAllResponseHeaders(), command, command2);
+            }
+            else {
+                errorHandler(xmlhttp.responseText, xmlhttp.getAllResponseHeaders(), command, command2)
+            }
         }
 
         if(xmlhttp.readyState == xmlhttp.HEADERS_RECEIVED) {
 
-          }
+        }
     }
     console.log(urlStr);
     xmlhttp.open(method, urlStr, true);
@@ -117,152 +117,139 @@ function httpConnect(urlStr, user, password, json, command, method, command2) {
     xmlhttp.send(json);
 }
 
-function responseHandler(response,headers,command, command2) {
+function errorHandler(response, headers, command, command2) {
+    console.log("Action Unsuccessful")
+    switch(command) {
+        case "login":
+            console.log("Couldn't log in");
+            global_vars.loggedIn = 0;
+            break;
 
-    try {
-        var arr = JSON.parse(response);
-        actionSuccess = 1;
+        case "logout":
+            console.log("Logged Out");
+            break;
+
+        case "addStock":
+            console.log("Couldn't check in part");
+            global_vars.checkInError = 1;
+            break;
+
+        case "removeStock":
+            console.log("Couldn't check out part");
+            global_vars.checkOutError = 1;
+            break;
+
+        default:
+            switch(command2) {
+                case "lookUp":
+                    console.log("Couldn't lookup part");
+                    break;
+
+                case "addUser":
+                    console.log("Couldn't add user");
+                    global_vars.addUser = false;
+                    global_vars.admin_api_error = "Couldn't add new user"
+                    break;
+            }
     }
-    catch(err) {
-        actionSuccess = 0;
-        switch(command) {
-            case "login":
-                console.log("Action Failed");
-                console.log("Couldn't log in");
-                global_vars.loggedIn = 0;
-                break;
+}
 
-            case "logout":
-                console.log("Logged Out");
-                break;
+function responseHandler(response, headers, command, command2) {
+    var arr = JSON.parse(response);
 
-            case "addStock":
-                console.log("Action Failed");
-                console.log("Couldn't check in part");
-                global_vars.checkInError = 1;
-                break;
+    console.log("Action Successful")
+    console.log("************************* RESPONSE HEADERS  ********************************\n");
 
-            case "removeStock":
-                console.log("Action Failed");
-                console.log("Couldn't check out part");
-                global_vars.checkOutError = 1;
-                break;
+    console.log(headers);
 
-            default:                
-                switch(command2) {
-                    case "lookUp":
-                        console.log("Action Failed");
-                        console.log("Couldn't lookup part");
-                        break;
+    console.log("********************* RESPONSE BODY ************************************\n");
 
-                    case "addUser":
-                        console.log("Action Failed");
-                        console.log("Couldn't add user");
-                        global_vars.addUser = false;
-                        global_vars.admin_api_error = "Couldn't add new user"
-                        break;
+    console.log(response);
 
-                    default:
-                        console.log("Action Failed");
-                }
-        }
-    }
+    switch(command) {
+        case "addStock":
+            //Where responses are going to be handled
+             console.log("Add Stock Executed\n");
+            break;
 
-    if (actionSuccess == 1) {
-        console.log("************************* RESPONSE HEADERS  ********************************\n");
+        case "setStock":
+            //Where responses are going to be handled
+            console.log("Set Stock Executed\n");
+            break;
 
-        console.log(headers);
+        case "removeStock":
+            //Where responses are going to be handled
+            console.log("Remove Stock Executed\n");
+            break;
 
-        console.log("********************* RESPONSE BODY ************************************\n");
+        case "login":
+            if(arr) {
+                console.log("Connected");
+                console.log("Welcome " + arr["username"]);
+                global_vars.loggedIn = 1;
+                console.log("loggedIn: ", global_vars.loggedIn)
+            }
+            break;
 
-        console.log(response);
+        case "logout":
+            break;
 
-        switch(command) {
-            case "addStock":
-                //Where responses are going to be handled
-                 console.log("Add Stock Executed\n");
-                break;
+        default:
+            switch(command2) {
+                case "lookUp":
+                    console.log("********************* PARTS INFORMATION ************************************\n");
 
-            case "setStock":
-                //Where responses are going to be handled
-                console.log("Set Stock Executed\n");
-                break;
+                    //for an easier use of JSONS try using https://jsonformatter.curiousconcept.com/
+                    console.log("Name :" + arr["name"]);
+                    console.log("internal Part Number :" + arr["internalPartNumber"]);
+                    console.log("Stock Level :" + arr["stockLevel"] + " " + arr["partUnit"]["name"]);
+                    console.log("Storage Location :" + arr["storageLocation"]["name"]);
+                    console.log("Type :" + arr["@type"]);
+                    console.log("Description :" + arr["description"]);
+                    console.log("Minimum Stock :" + arr["minStockLevel"]);
+                    console.log("Low Stock ? :" + arr["lowStock"]);
 
-            case "removeStock":
-                //Where responses are going to be handled
-                console.log("Remove Stock Executed\n");
-                break;
+                    global_vars.lookupString = '';
+                    global_vars.lookupString += ("Name: " + arr["name"] + "\n");
+                    global_vars.lookupString += ("ID: " + arr["@id"] + "\n");
+                    global_vars.lookupString += ("Stock Level: " + arr["stockLevel"] + " " + arr["partUnit"]["name"] + "\n");
+                    global_vars.lookupString += ("Storage Location: " + arr["storageLocation"]["name"] + "\n");
+                    global_vars.lookupString += ("Type: " + arr["@type"] + "\n");
+                    global_vars.lookupString += ("Description: " + arr["description"] + "\n");
+                    global_vars.lookupString += ("Minimum Stock: " + arr["minStockLevel"] + "\n");
+                    global_vars.lookupString += ("Low Stock: " + arr["lowStock"] + "\n");
+                    break;
 
-            case "login":
-                if(arr) {
-                    console.log("Connected");
-                    console.log("Welcome " + arr["username"]);
-                    global_vars.loggedIn = 1;
-                    console.log("loggedIn: ", global_vars.loggedIn)
-                }
-                break;
+                    /* ********************************* DISPLAY IMAGE ************************************************
 
-            case "logout":
-                break;
+                    var xhr = getXMLHttpRequest();
+                    xhr.onreadystatechange=ProcessResponse;
+                    imageUrl="http://192.168.10.97/api/part_attachments/"+arr["internalPartNumber"]+"/getFile"
+                    xhr.open("GET",imageUrl, true);
+                    xhr.overrideMimeType('text/plain; charset=x-user-defined');
+                    xhr.send(null);
 
-            default:
-                switch(command2) {
-                    case "lookUp":
-                        console.log("********************* PARTS INFORMATION ************************************\n");
-
-                        //for an easier use of JSONS try using https://jsonformatter.curiousconcept.com/
-                        console.log("Name :" + arr["name"]);
-                        console.log("internal Part Number :" + arr["internalPartNumber"]);
-                        console.log("Stock Level :" + arr["stockLevel"] + " " + arr["partUnit"]["name"]);
-                        console.log("Storage Location :" + arr["storageLocation"]["name"]);
-                        console.log("Type :" + arr["@type"]);
-                        console.log("Description :" + arr["description"]);
-                        console.log("Minimum Stock :" + arr["minStockLevel"]);
-                        console.log("Low Stock ? :" + arr["lowStock"]);
-
-                        global_vars.lookupString = '';
-                        global_vars.lookupString += ("Name: " + arr["name"] + "\n");
-                        global_vars.lookupString += ("ID: " + arr["@id"] + "\n");
-                        global_vars.lookupString += ("Stock Level: " + arr["stockLevel"] + " " + arr["partUnit"]["name"] + "\n");
-                        global_vars.lookupString += ("Storage Location: " + arr["storageLocation"]["name"] + "\n");
-                        global_vars.lookupString += ("Type: " + arr["@type"] + "\n");
-                        global_vars.lookupString += ("Description: " + arr["description"] + "\n");
-                        global_vars.lookupString += ("Minimum Stock: " + arr["minStockLevel"] + "\n");
-                        global_vars.lookupString += ("Low Stock: " + arr["lowStock"] + "\n");
-                        break;
-
-                        /* ********************************* DISPLAY IMAGE ************************************************
-
-                        var xhr = getXMLHttpRequest();
-                        xhr.onreadystatechange=ProcessResponse;
-                        imageUrl="http://192.168.10.97/api/part_attachments/"+arr["internalPartNumber"]+"/getFile"
-                        xhr.open("GET",imageUrl, true);
-                        xhr.overrideMimeType('text/plain; charset=x-user-defined');
-                        xhr.send(null);
-
-                        function ProcessResponse()
+                    function ProcessResponse()
+                    {
+                       if(xhr.readyState==4)
+                      {
+                        if (xhr.status==200)
                         {
-                           if(xhr.readyState==4)
-                          {
-                            if (xhr.status==200)
-                            {
-                                retval ="";
-                                for (var i=0; i<=xhr.responseText.length-1; i++)
-                                      retval += String.fromCharCode(xhr.responseText.charCodeAt(i) & 0xff);
-                           }
-                         }
+                            retval ="";
+                            for (var i=0; i<=xhr.responseText.length-1; i++)
+                                  retval += String.fromCharCode(xhr.responseText.charCodeAt(i) & 0xff);
+                       }
+                     }
 
-                        Display image encoded in 64:  encode64(xhr.responseText);
+                    Display image encoded in 64:  encode64(xhr.responseText);
 
-                        */
+                    */
 
-                    case "addUser":
-                        global_vars.admin_api_error = "Added new user"
-                        global_vars.addUser = true
-                        console.log("Add User Executed\n")
-                        break;
-                }
-        }
+                case "addUser":
+                    global_vars.addUser = true
+                    console.log("Add User Executed\n")
+                    break;
+            }
     }
 }
 
