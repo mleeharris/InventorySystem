@@ -52,7 +52,7 @@ Rectangle {
         anchors.top: parent.top
         anchors.topMargin: 70
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Admin  Console"
+        text: "Admin  RFID"
         font.family: "Typo Graphica"
         color: "Black"
         font.pointSize: 100
@@ -279,7 +279,7 @@ Rectangle {
             location = "qrc:/Images/back.png"
         }
         onClicked: {
-            nextLayer(root.objectName, "logged_in")
+            nextLayer(root.objectName, "admin_selection")
             root.state = "hidden"
         }
     }

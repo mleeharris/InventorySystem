@@ -106,8 +106,10 @@ Rectangle {
             console.log("global_vars.loggedIn: ", global_vars.loggedIn)
             global_vars.login_error = "Logging in"
             delay(1000, function() {
+                global_vars.login_error = ''
+
                 if (global_vars.username === "admin" && global_vars.realpass === "abc123pass") {
-                    nextLayer(root.objectName, "scan_page")
+                    nextLayer(root.objectName, "admin_selection")
                     root.state = "hidden"
                 }
                 else if (global_vars.loggedIn == 1) {
@@ -115,7 +117,7 @@ Rectangle {
                     root.state = "hidden"
                 }
                 else {
-                    global_vars.login_error = "Error: Username or password not correct"
+                    global_vars.login_error = "Error: Username or password not correct. Try removing card and placing again"
                 }
             })
         }
@@ -360,7 +362,7 @@ Rectangle {
             global_vars.username = ''
             global_vars.realpass = ''
             global_vars.password = ''
-            global_vars.login_error = 'Error: Try placing card and scanning again'
+            global_vars.login_error = 'Error: Try removing card and placing again'
         }
 
         else {

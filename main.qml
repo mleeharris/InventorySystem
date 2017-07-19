@@ -39,6 +39,8 @@ Window {
     signal tabOperationForCheckOut(string tabnum, string state)
     signal tabOperationForEndPage(string tabnum, string state)
     signal tabOperationForLookup(string tabnum, string state)
+    signal tabOperationForAdminAPI(string tabnum, string state)
+    signal tabOperationForAdminSelection(string tabnum, string state)
     signal itemScan(string item)
     signal itemScanIn(string item)
     signal itemLookup(string item)
@@ -80,6 +82,8 @@ Window {
         end_page.nextLayer.connect(slot_switchLayer)
         check_in.nextLayer.connect(slot_switchLayer)
         lookup.nextLayer.connect(slot_switchLayer)
+        admin_api.nextLayer.connect(slot_switchLayer)
+        admin_selection.nextLayer.connect(slot_switchLayer)
     }
 
     /*LAYER DECL*/
@@ -91,6 +95,8 @@ Window {
     EndPage{id: end_page; x:0; y: 0}
     CheckIn{id: check_in; x:0; y: 0}
     Lookup{id: lookup; x:0; y: 0}
+    AdminAPI{id: admin_api; x:0; y:0}
+    AdminSelection{id: admin_selection; x:0; y:0}
 
     /*COMPONENT DECL*/
     GlobalVars{id: global_vars}
@@ -387,8 +393,8 @@ Window {
             }
         }
         if (currentLayer === "scan_page") {
-            if (nextLayer === "logged_in") {
-                logged_in.state = "visible"
+            if (nextLayer === "admin_selection") {
+                admin_selection.state = "visible"
             }
         }
         if (currentLayer === "login_page") {
@@ -412,8 +418,8 @@ Window {
                 barcode.state = "off"
                 check.state = "visible"
             }
-            if (nextLayer === "scan_page") {
-                scan_page.state = "visible"
+            if (nextLayer === "admin_selection") {
+                admin_selection.state = "visible"
                 global_vars.admin_error = ''
                 //tabOperationForScanPage("middle","Up")
             }
@@ -443,6 +449,9 @@ Window {
             if (nextLayer === "logged_in") {
                 barcode.state = "on"
                 logged_in.state = "visible"
+            }
+            if (nextLayer === "admin_selection") {
+                admin_api.state = "visible"
             }
         }
         if (currentLayer === "check_in") {
@@ -529,6 +538,22 @@ Window {
                 check.state = "visible"
                 tabOperationForLookup("right","Up")
                 tabOperationForCheck("right","Up")
+            }
+        }
+        if (currentLayer === "admin_selection") {
+            if (nextLayer === "admin_api") {
+                admin_api.state = "visible"
+            }
+            if (nextLayer === "scan_page") {
+                scan_page.state = "visible"
+            }
+            if (nextLayer === "logged_in") {
+                logged_in.state = "visible"
+            }
+        }
+        if (currentLayer === "admin_api") {
+            if (nextLayer === "admin_selection") {
+                admin_selection.state = "visible"
             }
         }
     }

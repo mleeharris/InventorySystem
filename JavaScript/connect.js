@@ -1,4 +1,4 @@
-/*Amine's Code*/
+/*Amine's and Shane's Code*/
 
 /* ***************************************************************************
 
@@ -12,7 +12,7 @@ function test() {
 
     //queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","login","","POST");
 
-    queryHandler("partMaster","warehouseMaster","http://192.168.10.97","parts","1","addStock","quantity=5","PUT")
+    //queryHandler("partMaster","warehouseMaster","http://192.168.10.97","parts","1","addStock","quantity=5","PUT")
     //queryHandler("partMaster","warehouseMaster","http://192.168.10.97","parts","2","","","PUT");
 
     // ADD QUERY HERE TO TEST
@@ -24,13 +24,13 @@ function test() {
 function login(username, password) {
     console.log(username);
     console.log(password);
-    queryHandler(username,password,"http://192.168.10.97","users","","login","","POST");
+    queryHandler(username,password,"http://192.168.10.97","users","","login","","POST", "");
 }
 
 function logout(username, password) {
     console.log(username);
     console.log(password);
-    queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","logout","","GET");
+    queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","logout","","GET", "");
 }
 
 function checkIn(itemListIn) {
@@ -38,7 +38,7 @@ function checkIn(itemListIn) {
     global_vars.checkInError = 0;
     while (i < itemListIn.length) {
         console.log("itemListIn[i]: ", itemListIn[i])
-        queryHandler(global_vars.username,global_vars.realpass,"http://192.168.10.97","parts",itemListIn[i],"addStock","quantity=1","PUT");
+        queryHandler(global_vars.username,global_vars.realpass,"http://192.168.10.97","parts",itemListIn[i],"addStock","quantity=1","PUT", "");
         i += 1
     }
 }
@@ -48,15 +48,35 @@ function checkOut(itemList) {
     global_vars.checkOutError = 0;
     while (i < itemList.length) {
         console.log("itemList[i]: ", itemList[i])
-        queryHandler(global_vars.username,global_vars.realpass,"http://192.168.10.97","parts",itemList[i],"removeStock","quantity=1","PUT");
+        queryHandler(global_vars.username,global_vars.realpass,"http://192.168.10.97","parts",itemList[i],"removeStock","quantity=1","PUT", "");
         i += 1
     }
 }
 
-function queryHandler(user, password, server, module, partID, command, json,method){
+function lookUp(item) {
+    queryHandler(global_vars.username,global_vars.realpass,"http://192.168.10.97","parts",item,"","","PUT", "lookUp");
+}
 
+function addUser(newusername, newpassword) {
+//    console.log("user: ", newusername);
+//    console.log("pass: ", newpassword);
+//    console.log("typeof: ", typeof newusername);
+
+//    var userstring = '{"newPassword":"' + newpassword + '","username":"' + newusername + '"}'
+//    console.log('userstring: ', userstring);
+    var userstring = '{"newPassword":"' + newpassword + '","username":"' + newusername + '","protected":false}'
+    console.log('userstring: ', userstring);
+    queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","",userstring,"POST", "addUser");
+}
+
+function addUserAdmin(newusername, newpassword) {
+    var userstring = '{"newPassword":"' + newpassword + '","username":"' + newusername + '","protected":true}'
+    console.log('userstring: ', userstring);
+    queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","",userstring,"POST", "addUser");
+}
+
+function queryHandler(user, password, server, module, partID, command, json, method, command2){
     var restURL=server + "/api/"
-
         if (module != "")
             restURL += module;
 
@@ -70,11 +90,10 @@ function queryHandler(user, password, server, module, partID, command, json,meth
             restURL += "?" + json;
             json = "";
         }
-
-        httpConnect(restURL,user,password,json,command,method);
+        httpConnect(restURL, user, password, json, command, method, command2);
 }
 
-function httpConnect(urlStr, user, password, json, command, method) {
+function httpConnect(urlStr, user, password, json, command, method, command2) {
 
     var encode =  encode64(string2Bin(user + ":" + password));
     var xmlhttp = new XMLHttpRequest();
@@ -82,7 +101,7 @@ function httpConnect(urlStr, user, password, json, command, method) {
     xmlhttp.onreadystatechange=function() {
         if (xmlhttp.readyState == XMLHttpRequest.DONE) {
 
-            responseHandler(xmlhttp.responseText,xmlhttp.getAllResponseHeaders(),command);
+            responseHandler(xmlhttp.responseText,xmlhttp.getAllResponseHeaders(),command, command2);
 
         }
 
@@ -98,7 +117,7 @@ function httpConnect(urlStr, user, password, json, command, method) {
     xmlhttp.send(json);
 }
 
-function responseHandler(response,headers,command) {
+function responseHandler(response,headers,command, command2) {
 
     try {
         var arr = JSON.parse(response);
@@ -128,6 +147,24 @@ function responseHandler(response,headers,command) {
                 console.log("Couldn't check out part");
                 global_vars.checkOutError = 1;
                 break;
+
+            default:                
+                switch(command2) {
+                    case "lookUp":
+                        console.log("Action Failed");
+                        console.log("Couldn't lookup part");
+                        break;
+
+                    case "addUser":
+                        console.log("Action Failed");
+                        console.log("Couldn't add user");
+                        global_vars.addUser = false;
+                        global_vars.admin_api_error = "Couldn't add new user"
+                        break;
+
+                    default:
+                        console.log("Action Failed");
+                }
         }
     }
 
@@ -169,42 +206,62 @@ function responseHandler(response,headers,command) {
                 break;
 
             default:
-                console.log("********************* PARTS INFORMATION ************************************\n");
+                switch(command2) {
+                    case "lookUp":
+                        console.log("********************* PARTS INFORMATION ************************************\n");
 
-                //for an easier use of JSONS try using https://jsonformatter.curiousconcept.com/
-                console.log("Name :" + arr["name"]);
-                console.log("internal Part Number :" + arr["internalPartNumber"]);
-                console.log("Stock Level :" + arr["stockLevel"] + " " + arr["partUnit"]["name"]);
-                console.log("Storage Location :" + arr["storageLocation"]["name"]);
-                console.log("Type :" + arr["@type"]);
-                console.log("Description :" + arr["description"]);
-                console.log("Minimum Stock :" + arr["minStockLevel"]);
-                console.log("Low Stock ? :" + arr["lowStock"]);
+                        //for an easier use of JSONS try using https://jsonformatter.curiousconcept.com/
+                        console.log("Name :" + arr["name"]);
+                        console.log("internal Part Number :" + arr["internalPartNumber"]);
+                        console.log("Stock Level :" + arr["stockLevel"] + " " + arr["partUnit"]["name"]);
+                        console.log("Storage Location :" + arr["storageLocation"]["name"]);
+                        console.log("Type :" + arr["@type"]);
+                        console.log("Description :" + arr["description"]);
+                        console.log("Minimum Stock :" + arr["minStockLevel"]);
+                        console.log("Low Stock ? :" + arr["lowStock"]);
 
-                /* ********************************* DISPLAY IMAGE ************************************************
+                        global_vars.lookupString = '';
+                        global_vars.lookupString += ("Name: " + arr["name"] + "\n");
+                        global_vars.lookupString += ("ID: " + arr["@id"] + "\n");
+                        global_vars.lookupString += ("Stock Level: " + arr["stockLevel"] + " " + arr["partUnit"]["name"] + "\n");
+                        global_vars.lookupString += ("Storage Location: " + arr["storageLocation"]["name"] + "\n");
+                        global_vars.lookupString += ("Type: " + arr["@type"] + "\n");
+                        global_vars.lookupString += ("Description: " + arr["description"] + "\n");
+                        global_vars.lookupString += ("Minimum Stock: " + arr["minStockLevel"] + "\n");
+                        global_vars.lookupString += ("Low Stock: " + arr["lowStock"] + "\n");
+                        break;
 
-                var xhr = getXMLHttpRequest();
-                xhr.onreadystatechange=ProcessResponse;
-                imageUrl="http://192.168.10.97/api/part_attachments/"+arr["internalPartNumber"]+"/getFile"
-                xhr.open("GET",imageUrl, true);
-                xhr.overrideMimeType('text/plain; charset=x-user-defined');
-                xhr.send(null);
+                        /* ********************************* DISPLAY IMAGE ************************************************
 
-                function ProcessResponse()
-                {
-                   if(xhr.readyState==4)
-                  {
-                    if (xhr.status==200)
-                    {
-                        retval ="";
-                        for (var i=0; i<=xhr.responseText.length-1; i++)
-                              retval += String.fromCharCode(xhr.responseText.charCodeAt(i) & 0xff);
-                   }
-                 }
+                        var xhr = getXMLHttpRequest();
+                        xhr.onreadystatechange=ProcessResponse;
+                        imageUrl="http://192.168.10.97/api/part_attachments/"+arr["internalPartNumber"]+"/getFile"
+                        xhr.open("GET",imageUrl, true);
+                        xhr.overrideMimeType('text/plain; charset=x-user-defined');
+                        xhr.send(null);
 
-                Display image encoded in 64:  encode64(xhr.responseText);
+                        function ProcessResponse()
+                        {
+                           if(xhr.readyState==4)
+                          {
+                            if (xhr.status==200)
+                            {
+                                retval ="";
+                                for (var i=0; i<=xhr.responseText.length-1; i++)
+                                      retval += String.fromCharCode(xhr.responseText.charCodeAt(i) & 0xff);
+                           }
+                         }
 
-                */
+                        Display image encoded in 64:  encode64(xhr.responseText);
+
+                        */
+
+                    case "addUser":
+                        global_vars.admin_api_error = "Added new user"
+                        global_vars.addUser = true
+                        console.log("Add User Executed\n")
+                        break;
+                }
         }
     }
 }
@@ -297,7 +354,7 @@ function encode64(buffer) {
 
    // ADDING A USER
 
-         queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","",'{"newPassword":"pass","username":"user"}',"POST");
+         queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","",'{"newPassword":"pass","username":"user","admin":0}',"POST");
 
    // ADDING AN ITEM
 

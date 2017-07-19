@@ -43,5 +43,8 @@
         <file>Components/Scanner.qml</file>
         <file>Components/ButtonInput.qml</file>
         <file>JavaScript/connect.js</file>
+        <file>Layers/AdminAPI.qml</file>
+        <file>Layers/AdminSelection.qml</file>
+        <file>Components/DoubleInput.qml</file>
     </qresource>
 </RCC>

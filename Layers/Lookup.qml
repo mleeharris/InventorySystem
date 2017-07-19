@@ -8,6 +8,7 @@ import "qrc:/JavaScript"
 import "qrc:/Components"
 import "qrc:/JavaScript/componentCreation.js" as Creation
 import "qrc:/JavaScript/globalVars.js" as GlobVars
+import "qrc:/JavaScript/connect.js" as Connect
 
 Rectangle {
     id: root
@@ -66,6 +67,10 @@ Rectangle {
         font.family: "Bebas Neue"
         font.pixelSize: 115
         id: lookup_text
+    }
+
+    Timer {
+        id: timer
     }
 
     Rectangle {
@@ -161,14 +166,18 @@ Rectangle {
         anchors.leftMargin: 40
         width: temp_background.width-(40*2)
         height: temp_background.height-(40*2)
-        font.pointSize: 20
+        font.pointSize: 24
+        lineHeight: 1.5
         wrapMode: Text.Wrap
     }
 
     function itemScan(item) {
         console.log(item)
         item_display.text = "Item: " + item
-        info_text.text = item + item + item + item + item + item + item + item + item + item + item
+        Connect.lookUp(item)
+        info_text.text = "Looking up... Please wait... "
+        callTimer()
+        //info_text.text = item + item + item + item + item + item + item + item + item + item + item
     }
 
     function tabOperationLookup(tabnum, state) {
@@ -188,5 +197,18 @@ Rectangle {
                 right_tab.state = "Down"
             }
         }
+    }
+
+    function delay(delayTime, cb) {
+        timer.interval = delayTime;
+        timer.repeat = false;
+        timer.triggered.connect(cb);
+        timer.start();
+    }
+
+    function callTimer() {
+        delay(1000, function() {
+            info_text.text = global_vars.lookupString
+        });
     }
 }

@@ -11,12 +11,11 @@ Item {
     property string tempLetter: ''
     property string realpass: ''
 
-    //property string userpass
-
     /*Error Msgs*/
     property string login_error: ''
     property string check_error: 'YoooBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOI'
     property string admin_error: ''
+    property string admin_api_error: ''
 
     /*Background*/
     property string grayColor: "#DCDCDC"
@@ -76,7 +75,9 @@ Item {
 
     /*API*/
     property int loggedIn: 0
+    property bool addUser: false
 
     property int checkInError: 0
     property int checkOutError: 0
+    property string lookupString: ''
 }
