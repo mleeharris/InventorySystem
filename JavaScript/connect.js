@@ -31,7 +31,7 @@ function login(username, password) {
 function logout(username, password) {
     console.log(username);
     console.log(password);
-    queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","logout","","GET", "");
+    queryHandler(username,password,"http://192.168.10.97","users","","logout","","GET", "");
 }
 
 function checkIn(itemListIn) {
@@ -155,7 +155,9 @@ function errorHandler(response, headers, command, command2) {
 }
 
 function responseHandler(response, headers, command, command2) {
-    var arr = JSON.parse(response);
+    if (command != "logout") {
+        var arr = JSON.parse(response);
+    }
 
     console.log("Action Successful")
     console.log("************************* RESPONSE HEADERS  ********************************\n");

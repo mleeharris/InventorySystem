@@ -1,6 +1,7 @@
 import QtQuick 2.6
 import QtQuick.Window 2.2
 import "qrc:/Components"
+import "qrc:/JavaScript/connect.js" as Connect
 
 Rectangle {
     id: root
@@ -69,8 +70,11 @@ Rectangle {
             location = "qrc:/Images/power.png"
         }
         onClicked: {
-            Qt.quit()
-            root.state = "hidden"
+            global_vars.howto_error = "Exiting..."
+            Connect.logout(global_vars.username, global_vars.realpass)
+            clock.delay(1000, function() {
+                Qt.quit()
+            })
         }
     }
 
@@ -92,6 +96,17 @@ Rectangle {
             nextLayer(root.objectName, "main")
             root.state = "hidden"
         }
+    }
+
+    Error {
+        id: howto_error
+        errorHeight: 300
+        errorWidth: 600
+        errorText: global_vars.howto_error
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 130
     }
 
     function tabOperationLoginPage(tabnum, state) {

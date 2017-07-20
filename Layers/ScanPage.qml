@@ -2,6 +2,8 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 import "qrc:/Components"
 import "qrc:/JavaScript/globalVars.js" as GlobVars
+import "qrc:/JavaScript/connect.js" as Connect
+
 
 Rectangle {
     id: root
@@ -42,6 +44,10 @@ Rectangle {
         }
     ]
 
+    Clock {
+        id: clock_scanpage
+    }
+
     Image {
         id: background_image
         source: "qrc:/Images/background_opening_3.jpg"
@@ -58,40 +64,27 @@ Rectangle {
         font.pointSize: 100
     }
 
-    Rectangle {
-        color: "black"
-        id: temp_background
+
+    Error {
+        id: scanpage_error
         height: 250
         width: 700
+        errorText: global_vars.admin_error
+        z: 1
+
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 80
-        radius: 40
-        opacity: 0.2
-        z: 3
     }
 
     Text {
         id: active_check
-        anchors.horizontalCenter: temp_background.horizontalCenter
-        anchors.bottom: temp_background.top
+        anchors.horizontalCenter: scanpage_error.horizontalCenter
+        anchors.bottom: scanpage_error.top
         anchors.bottomMargin: 20
         text: "No card actively placed"
         font.family: "Helvetica"
         font.pixelSize: 36
-    }
-
-    Text {
-        id: info_text
-        anchors.top: temp_background.top
-        anchors.left: temp_background.left
-        anchors.topMargin: 40
-        anchors.leftMargin: 40
-        width: temp_background.width-(40*2)
-        height: temp_background.height-(40*2)
-        font.pointSize: 20
-        wrapMode: Text.Wrap
-        text: global_vars.admin_error
     }
 
     ButtonInput {
@@ -260,8 +253,11 @@ Rectangle {
             location = "qrc:/Images/power.png"
         }
         onClicked: {
-            Qt.quit()
-            root.state = "hidden"
+            global_vars.admin_error = "Logging Out..."
+            Connect.logout(global_vars.username, global_vars.realpass)
+            clock_scanpage.delay(1000, function() {
+                Qt.quit()
+            })
         }
     }
 

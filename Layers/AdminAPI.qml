@@ -1,5 +1,9 @@
 import QtQuick 2.6
 import QtQuick.Window 2.2
+import QtQml 2.2
+import QtQuick.Dialogs 1.1
+import QtQuick.Controls 1.1
+import QtGraphicalEffects 1.0
 import "qrc:/Components"
 import "qrc:/JavaScript/globalVars.js" as GlobVars
 import "qrc:/JavaScript/connect.js" as Connect
@@ -46,10 +50,6 @@ Rectangle {
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
-    Timer {
-        id: timer
-    }
-
     Text {
         id: admin_api
         anchors.top: parent.top
@@ -61,30 +61,20 @@ Rectangle {
         font.pointSize: 100
     }
 
-    Rectangle {
-        color: "black"
-        id: temp_background
-        height: 250
-        width: 700
+    Error {
+        id: api_error
+        errorHeight: 250
+        errorWidth: 700
+        errorText: global_vars.admin_api_error
+        z: 1
+
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 80
-        radius: 40
-        opacity: 0.2
-        z: 3
     }
 
-    Text {
-        id: info_text
-        anchors.top: temp_background.top
-        anchors.left: temp_background.left
-        anchors.topMargin: 40
-        anchors.leftMargin: 40
-        width: temp_background.width-(40*2)
-        height: temp_background.height-(40*2)
-        font.pointSize: 20
-        wrapMode: Text.Wrap
-        text: global_vars.admin_api_error
+    Clock {
+        id: clock_adminapi
     }
 
     DoubleInput {
@@ -116,7 +106,7 @@ Rectangle {
                     Connect.addUser(inputText1, inputText2)
                 }
                 //console.log("admin?: ", adminClicked)
-                delay(1000, function() {
+                clock_adminapi.delay(1000, function() {
                     if (global_vars.addUser === true) {
                         global_vars.admin_api_error = "Added new user"
                         textChange1 = ''
@@ -142,8 +132,11 @@ Rectangle {
             location = "qrc:/Images/power.png"
         }
         onClicked: {
-            Qt.quit()
-            root.state = "hidden"
+            global_vars.admin_api_error = "Logging Out..."
+            Connect.logout(global_vars.username, global_vars.realpass)
+            clock_adminapi.delay(1000, function() {
+                Qt.quit()
+            })
         }
     }
 
@@ -219,13 +212,6 @@ Rectangle {
         global_vars.realpass = GlobVars.userpass[1]
         global_vars.login_error = ''
         }
-    }
-
-    function delay(delayTime, cb) {
-        timer.interval = delayTime;
-        timer.repeat = false;
-        timer.triggered.connect(cb);
-        timer.start();
     }
 }
 

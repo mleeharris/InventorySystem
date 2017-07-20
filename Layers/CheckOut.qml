@@ -58,8 +58,8 @@ Rectangle {
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
-    Timer {
-        id: timer
+    Clock {
+        id: clock_checkout
     }
 
     ListModel {
@@ -160,7 +160,7 @@ Rectangle {
         onClicked: {
             //send list to API here
             Connect.checkOut(GlobVars.itemList)
-            global_vars.check_error = "Checking out... Please wait... "
+            global_vars.endpage_error = "Checking out... Please wait... "
             console.log("GlobVars.itemList: ", GlobVars.itemList)
 
             callTimer()
@@ -332,9 +332,9 @@ Rectangle {
     }
 
     function callTimer() {
-        delay(2000, function() {
+        clock_checkout.delay(2000, function() {
             if (global_vars.checkInError == 0) {
-                global_vars.check_error = "All items checked out successfully"
+                global_vars.endpage_error = "All items checked out successfully"
             }
         });
     }

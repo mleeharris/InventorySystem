@@ -2,6 +2,7 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 import "qrc:/Components"
 import "qrc:/JavaScript/globalVars.js" as GlobVars
+import "qrc:/JavaScript/connect.js" as Connect
 
 Rectangle {
     id: root
@@ -56,6 +57,10 @@ Rectangle {
         font.pointSize: 150
     }
 
+    Clock {
+        id: clock_adminselection
+    }
+
     BottomTab {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
@@ -70,8 +75,11 @@ Rectangle {
             location = "qrc:/Images/power.png"
         }
         onClicked: {
-            Qt.quit()
-            root.state = "hidden"
+            global_vars.admin_selection_error = "Logging Out..."
+            Connect.logout(global_vars.username, global_vars.realpass)
+            clock_adminselection.delay(1000, function() {
+                Qt.quit()
+            })
         }
     }
 
@@ -124,6 +132,18 @@ Rectangle {
             nextLayer(root.objectName, "admin_api")
             root.state = "hidden"
         }
+    }
+
+    Error {
+        id: admin_selection_error
+        errorHeight: 250
+        errorWidth: 700
+        errorText: global_vars.admin_selection_error
+        z: 1
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 80
     }
 
     function tabOperationAdminSelectionPage(tabnum, state) {

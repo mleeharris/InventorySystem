@@ -50,10 +50,6 @@ Rectangle {
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
-    Timer {
-        id: timer
-    }
-
 //    Rectangle {
 //        color: 'red'
 //        height: 100
@@ -89,11 +85,15 @@ Rectangle {
 //        }
 //    }
 
+    Clock {
+        id: clock_loggedin
+    }
+
     BasicButton {
-        anchors.horizontalCenter: temp_background.horizontalCenter
+        anchors.horizontalCenter: login_error.horizontalCenter
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 130
-        width: temp_background.width
+        width: login_error.width
         id: login_button
         label.text: "Login"
 
@@ -104,8 +104,8 @@ Rectangle {
             //Connect.test()
             Connect.login(global_vars.username, global_vars.realpass)
             console.log("global_vars.loggedIn: ", global_vars.loggedIn)
-            global_vars.login_error = "Logging in"
-            delay(1000, function() {
+            global_vars.login_error = "Logging in..."
+            clock_loggedin.delay(1000, function() {
                 global_vars.login_error = ''
 
                 if (global_vars.username === "admin" && global_vars.realpass === "abc123pass") {
@@ -145,30 +145,16 @@ Rectangle {
 //        }
 //    }
 
-    Rectangle {
-        color: "black"
-        id: temp_background
-        height: 150
-        width: 700
+    Error {
+        id: login_error
+        errorHeight: 150
+        errorWidth: 700
+        errorText: global_vars.login_error
+        z: 3
+
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: login_button.top
         anchors.bottomMargin: 15
-        radius: 40
-        opacity: 0.2
-        z: 3
-    }
-
-    Text {
-        id: info_text
-        anchors.top: temp_background.top
-        anchors.left: temp_background.left
-        anchors.topMargin: 40
-        anchors.leftMargin: 40
-        width: temp_background.width-(40*2)
-        height: temp_background.height-(40*2)
-        font.pointSize: 20
-        wrapMode: Text.Wrap
-        text: global_vars.login_error
     }
 
     property int wrapperHeight: 800
@@ -312,8 +298,12 @@ Rectangle {
             location = "qrc:/Images/power.png"
         }
         onClicked: {
-            Qt.quit()
-            root.state = "hidden"
+            global_vars.login_error = "Exiting..."
+            Connect.logout(global_vars.username, global_vars.realpass)
+            clock_loggedin.delay(1000, function() {
+                root.state = "hidden"
+                Qt.quit()
+            })
         }
     }
 
@@ -383,13 +373,6 @@ Rectangle {
     function loginInfo() {
         GlobVars.userpass = thread.userpassGet()
         splituserpass()
-    }
-
-    function delay(delayTime, cb) {
-        timer.interval = delayTime;
-        timer.repeat = false;
-        timer.triggered.connect(cb);
-        timer.start();
     }
 }
 

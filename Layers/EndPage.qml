@@ -58,10 +58,6 @@ Rectangle {
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
-    Timer {
-        id: timer
-    }
-
     Text {
         id: title_text
         anchors.top: parent.top
@@ -124,6 +120,10 @@ Rectangle {
         }
     }
 
+    Clock {
+        id: clock_endpage
+    }
+
     BasicButton {
         anchors.top: check_out_button.bottom
         anchors.topMargin: 20
@@ -139,9 +139,9 @@ Rectangle {
 
         onClicked: {
             itemFromEnd()
-            global_vars.check_error = "Logging Out"
+            global_vars.endpage_error = "Logging Out"
             Connect.logout(global_vars.username, global_vars.realpass)
-            delay(1000, function() {
+            clock_endpage.delay(1000, function() {
                 root.state = "hidden"
                 nextLayer(root.objectName, "main")
             })
@@ -162,7 +162,11 @@ Rectangle {
             location = "qrc:/Images/power.png"
         }
         onClicked: {
-            Qt.quit()
+            global_vars.endpage_error = "Logging Out..."
+            Connect.logout(global_vars.username, global_vars.realpass)
+            clock_endpage.delay(1000, function() {
+                Qt.quit()
+            })
         }
     }
 
@@ -186,31 +190,17 @@ Rectangle {
         }
     }
 
-    Rectangle {
-        color: "black"
-        id: temp_background
-        height: 450
-        width: 500
+    Error {
+        id: endpage_error
+        errorHeight: 450
+        errorWidth: 500
+        errorText: global_vars.endpage_error
+        z: 1
+
         anchors.left: parent.left
         anchors.leftMargin: 100
         anchors.bottom: parent.bottom
         anchors.bottomMargin: 130
-        radius: 40
-        opacity: 0.2
-        z: 3
-    }
-
-    Text {
-        id: info_text
-        anchors.top: temp_background.top
-        anchors.left: temp_background.left
-        anchors.topMargin: 40
-        anchors.leftMargin: 40
-        width: temp_background.width-(40*2)
-        height: temp_background.height-(40*2)
-        font.pointSize: 20
-        wrapMode: Text.Wrap
-        text: global_vars.check_error
     }
 
     function tabOperationEndPage(tabnum, state) {
@@ -232,18 +222,11 @@ Rectangle {
         }
     }
 
-    function delay(delayTime, cb) {
-        timer.interval = delayTime;
-        timer.repeat = false;
-        timer.triggered.connect(cb);
-        timer.start();
-    }
-
     function callTimer() {
         console.log("boiyo")
-        delay(1000, function() {
+        clock_endpage.delay(1000, function() {
             if (global_vars.checkInError == 0) {
-                global_vars.check_error = "All items checked in successfully"
+                global_vars.endpage_error = "All items checked in successfully"
             }
         });
     }

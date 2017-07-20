@@ -58,8 +58,8 @@ Rectangle {
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
-    Timer {
-        id: timer
+    Clock {
+        id: clock_checkin
     }
 
     ListModel {
@@ -167,7 +167,7 @@ Rectangle {
         onClicked: {
             //send list to API here
             Connect.checkIn(GlobVars.itemListIn)
-            global_vars.check_error = "Checking in... Please wait... "
+            global_vars.endpage_error = "Checking in... Please wait... "
             console.log("GlobVars.itemListIn: ", GlobVars.itemListIn)
             //
 
@@ -342,17 +342,10 @@ Rectangle {
         }
     }
 
-    function delay(delayTime, cb) {
-        timer.interval = delayTime;
-        timer.repeat = false;
-        timer.triggered.connect(cb);
-        timer.start();
-    }
-
     function callTimer() {
-        delay(2000, function() {
+        clock_checkin.delay(2000, function() {
             if (global_vars.checkInError == 0) {
-                global_vars.check_error = "All items checked in successfully"
+                global_vars.endpage_error = "All items checked in successfully"
             }
         });
     }

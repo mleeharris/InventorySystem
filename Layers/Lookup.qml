@@ -207,7 +207,7 @@ Rectangle {
     }
 
     function callTimer() {
-        delay(1000, function() {
+        clock.delay(1000, function() {
             info_text.text = global_vars.lookupString
         });
     }

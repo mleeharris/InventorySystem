@@ -46,5 +46,7 @@
         <file>Layers/AdminAPI.qml</file>
         <file>Layers/AdminSelection.qml</file>
         <file>Components/DoubleInput.qml</file>
+        <file>Components/Error.qml</file>
+        <file>Components/Clock.qml</file>
     </qresource>
 </RCC>

@@ -12,10 +12,14 @@ Item {
     property string realpass: ''
 
     /*Error Msgs*/
+    property string main_error: 'Welcome'
+    property string howto_error: 'There seems to be nothing here yet'
     property string login_error: ''
-    property string check_error: 'YoooBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOIBOI'
     property string admin_error: ''
+    property string checkpage_error: ''
     property string admin_api_error: ''
+    property string admin_selection_error: ''
+    property string endpage_error: ''
 
     /*Background*/
     property string grayColor: "#DCDCDC"

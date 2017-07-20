@@ -23,14 +23,14 @@ void terminal::addKey(QString keycode, QString keynum) {
     QProcess *process1 = new QProcess;
     process1->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
     //process1->start("python3 NFCReader.py --addkey 00 FFFFFFFFFFFF");
-    qDebug() << use;
+    //qDebug() << use;
     process1->start(use);
     process1->waitForFinished(-1);
 
     QString stdout1 = process1->readAllStandardOutput();
 
-    qDebug() << stdout1;
-    qDebug() << keycode;
+    //qDebug() << stdout1;
+    //qDebug() << keycode;
 
     if (stdout1 == "Error") {
         updateMsg("Error: The key " + keycode + " was not added");
@@ -51,7 +51,7 @@ void terminal::auth(QString blocktoauth) {
 
     QString stdout1 = process1->readAllStandardOutput();
 
-    qDebug() << stdout1;
+    //qDebug() << stdout1;
 
     if (stdout1 == "Error") {
         updateMsg("Error: Not authorized");
@@ -65,7 +65,7 @@ QString terminal::readBlock(QString blocktoread) {
     QString use = "python3 NFCReader.py --read ";
     use.append(QString("%1").arg(blocktoread));
 
-    qDebug() << use;
+    //qDebug() << use;
 
     QProcess *process1 = new QProcess;
     process1->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");
@@ -74,7 +74,7 @@ QString terminal::readBlock(QString blocktoread) {
 
     QString stdout1 = process1->readAllStandardOutput();
 
-    qDebug() << stdout1;
+    //qDebug() << stdout1;
 
     if (stdout1 == "Error") {
         updateMsg("Error: Not read");
@@ -99,7 +99,7 @@ QString terminal::updateBlock(QString blocktowrite, QString info) {
     use.append(QString("%1 ").arg(blocktowrite));
     use.append(QString("%1").arg(info));
 
-    qDebug() << use;
+    //qDebug() << use;
 
     QProcess *process1 = new QProcess;
     process1->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");

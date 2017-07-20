@@ -126,6 +126,10 @@ Window {
             }
         ]
 
+        Clock {
+            id: clock_main
+        }
+
         Item {
             id: barcode
             focus: true
@@ -292,7 +296,11 @@ Window {
                 location = "qrc:/Images/power.png"
             }
             onClicked: {
-                Qt.quit()
+                global_vars.main_error = "Exiting..."
+                Connect.logout(global_vars.username, global_vars.realpass)
+                clock_main.delay(1000, function() {
+                    Qt.quit()
+                })
             }
         }
 
@@ -303,6 +311,7 @@ Window {
             id: middle_tab
             //label.text: "Back"
             location: "qrc:/Images/back.png"
+            z: 2
             onPressed: {
                 location = "qrc:/Images/back_dark.png"
             }
@@ -349,6 +358,19 @@ Window {
                 object_holder.state = "hidden"
             }
         }
+
+        Error {
+            id: main_error
+            errorHeight: 400
+            errorWidth: 440
+            errorText: global_vars.main_error
+            z: 1
+
+            anchors.left: parent.left
+            anchors.leftMargin: 120
+            anchors.bottom: parent.bottom
+            anchors.bottomMargin: 130
+        }
     }
 
     function userpass(userpass) {
@@ -376,8 +398,8 @@ Window {
     }
 
     function slot_switchLayer(currentLayer, nextLayer) {
-        //console.log("currentLayer: ", currentLayer)
-        //console.log("nextLayer: ", nextLayer)
+        console.log("currentLayer: ", currentLayer)
+        console.log("nextLayer: ", nextLayer)
 
         if (currentLayer === "main") {
             if (nextLayer === "login_page") {
@@ -586,7 +608,7 @@ Window {
             global_vars.username = ''
             global_vars.realpass = ''
             global_vars.password = ''
-            global_vars.login_error = 'Error: Try placing card and scanning again'
+            global_vars.login_error = 'Error: No card currently read. Try removing card and placing again'
         }
 
         else {

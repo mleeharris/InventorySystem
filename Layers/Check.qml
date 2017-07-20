@@ -6,6 +6,7 @@ import QtQuick.Controls 1.1
 import QtGraphicalEffects 1.0
 import "qrc:/Components"
 import "qrc:/JavaScript/globalVars.js" as GlobVars
+import "qrc:/JavaScript/connect.js" as Connect
 
 Rectangle {
     id: root
@@ -127,6 +128,10 @@ Rectangle {
         }
     }
 
+    Clock {
+        id: clock_check
+    }
+
     BottomTab {
         anchors.bottom: parent.bottom
         anchors.right: parent.right
@@ -141,8 +146,11 @@ Rectangle {
             location = "qrc:/Images/power.png"
         }
         onClicked: {
-            Qt.quit()
-            root.state = "hidden"
+            global_vars.checkpage_error = 'Logging Out...'
+            Connect.logout(global_vars.username, global_vars.realpass)
+            clock_check.delay(1000, function() {
+                Qt.quit()
+            })
         }
     }
 
@@ -163,6 +171,18 @@ Rectangle {
             nextLayer(root.objectName, "logged_in")
             root.state = "hidden"
         }
+    }
+
+    Error {
+        id: check_error
+        errorHeight: 150
+        errorWidth: middle_tab.width
+        errorText: global_vars.checkpage_error
+        z: 1
+
+        anchors.left: middle_tab.left
+        anchors.bottom: middle_tab.top
+        anchors.bottomMargin: 40
     }
 
     function tabOperationCheck(tabnum, state) {
