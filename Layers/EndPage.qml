@@ -139,7 +139,7 @@ Rectangle {
 
         onClicked: {
             itemFromEnd()
-            global_vars.endpage_error = "Logging Out"
+            global_vars.endpage_error = "Logging Out..."
             Connect.logout(global_vars.username, global_vars.realpass)
             clock_endpage.delay(1000, function() {
                 root.state = "hidden"
@@ -220,14 +220,5 @@ Rectangle {
                 right_tab.state = "Down"
             }
         }
-    }
-
-    function callTimer() {
-        console.log("boiyo")
-        clock_endpage.delay(1000, function() {
-            if (global_vars.checkInError == 0) {
-                global_vars.endpage_error = "All items checked in successfully"
-            }
-        });
     }
 }

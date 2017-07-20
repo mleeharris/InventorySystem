@@ -18,7 +18,6 @@
         <file>Components/ScannedItem.qml</file>
         <file>Images/x.png</file>
         <file>Images/x_gray.png</file>
-        <file>JavaScript/componentCreation.js</file>
         <file>JavaScript/globalVars.js</file>
         <file>Layers/EndPage.qml</file>
         <file>Layers/CheckIn.qml</file>

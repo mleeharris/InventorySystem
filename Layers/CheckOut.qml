@@ -163,7 +163,12 @@ Rectangle {
             global_vars.endpage_error = "Checking out... Please wait... "
             console.log("GlobVars.itemList: ", GlobVars.itemList)
 
-            callTimer()
+            clock_checkout.delay(2000, function() {
+                if (global_vars.checkInError == 0) {
+                    global_vars.endpage_error = "All items checked out successfully"
+                }
+            });
+
             deletionAll()
             nextLayer(root.objectName, "end_page")
             root.state = "hidden"
@@ -322,20 +327,5 @@ Rectangle {
                 right_tab.state = "Down"
             }
         }
-    }
-
-    function delay(delayTime, cb) {
-        timer.interval = delayTime;
-        timer.repeat = false;
-        timer.triggered.connect(cb);
-        timer.start();
-    }
-
-    function callTimer() {
-        clock_checkout.delay(2000, function() {
-            if (global_vars.checkInError == 0) {
-                global_vars.endpage_error = "All items checked out successfully"
-            }
-        });
     }
 }

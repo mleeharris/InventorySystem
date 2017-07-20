@@ -1,33 +1,38 @@
 import QtQuick 2.2
 import QtGraphicalEffects 1.0
 import "qrc:/Components/"
+import "qrc:/Function/"
 
 Item  {
     id: root
-    objectName: "button"
+    objectName: "scanner"
 
-    signal userpassScan(string item)
     signal pressed()
     signal released()
     signal clicked()
+    signal temp()
+    signal scanned()
 
     Keys.onPressed: {
-        if ( (String(event.key) != '16777251') && (String(event.key) != '16777248') ) {
-            //console.log('added')
-            global_vars.userpass_creation = global_vars.userpass_creation + event.text
-        }
-        if (String(event.key) == '16777220') {
-            //console.log('reset')
-            userpassScan(global_vars.userpass_creation)
-            global_vars.userpass_creation = ''
-        }
+                //console.log("event.key: ", event.key)
+                //console.log("event.text: ", event.text)
+                if ( (String(event.key) != '16777251') && (String(event.key) != '16777248') ) {
+                    global_vars.event = event.text
+                    root.temp()
+                    //global_vars.currentItem = global_vars.currentItem + event.text
+                }
+                if (String(event.key) == '16777220') {
+                    //console.log("global_vars.currentItem: ", global_vars.currentItem)
+                    root.scanned()
+                    //global_vars.currentItem = ''
+                }
     }
 
     states:[
         State {
             name: "on";
             PropertyChanges {
-                target: barcode
+                target: root
                 enabled: true
                 focus: true
             }
@@ -35,7 +40,7 @@ Item  {
         State {
             name: "off";
             PropertyChanges {
-                target: barcode
+                target: root
                 enabled: false
                 focus: false
             }

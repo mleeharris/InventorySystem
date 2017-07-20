@@ -10,6 +10,7 @@ Item {
     property string password: ''
     property string tempLetter: ''
     property string realpass: ''
+    property string event: ''
 
     /*Error Msgs*/
     property string main_error: 'Welcome'

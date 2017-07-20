@@ -130,144 +130,49 @@ Window {
             id: clock_main
         }
 
-        Item {
+        Scanner {
             id: barcode
-            focus: true
-            Keys.onPressed: {
-                //console.log("event.key: ", event.key)
-                //console.log("event.text: ", event.text)
-                if ( (String(event.key) != '16777251') && (String(event.key) != '16777248') ) {
-                    //console.log('added')
-                    global_vars.userpass_creation = global_vars.userpass_creation + event.text
-                }
-                if (String(event.key) == '16777220') {
-                    //console.log('reset')
-                    userpass(global_vars.userpass_creation)
-                    global_vars.userpass_creation = ''
-                }
-            }
-
-            states:[
-                State {
-                    name: "on";
-                    PropertyChanges {
-                        target: barcode
-                        enabled: true
-                        focus: true
-                    }
-                },
-                State {
-                    name: "off";
-                    PropertyChanges {
-                        target: barcode
-                        enabled: false
-                        focus: false
-                    }
-                }
-            ]
+//            onTemp: {
+//                global_vars.currentItem = global_vars.currentItem + global_vars.event
+//            }
+//            onScanned: {
+//                userpass(global_vars.userpass_creation)
+//                global_vars.currentItem = ''
+//            }
         }
 
-        Item {
+        Scanner {
             id: items
-            Keys.onPressed: {
-                //console.log("event.key: ", event.key)
-                //console.log("event.text: ", event.text)
-                if ( (String(event.key) != '16777251') && (String(event.key) != '16777248') ) {
-                    global_vars.currentItem = global_vars.currentItem + event.text
-                }
-                if (String(event.key) == '16777220') {
-                    itemScan(global_vars.currentItem)
-                    global_vars.currentItem = ''
-                }
+            onTemp: {
+                global_vars.currentItem = global_vars.currentItem + global_vars.event
+            }
+            onScanned: {
+                itemScan(global_vars.currentItem)
+                global_vars.currentItem = ''
             }
 
-            states:[
-                State {
-                    name: "on";
-                    PropertyChanges {
-                        target: items
-                        enabled: true
-                        focus: true;
-                    }
-                },
-                State {
-                    name: "off";
-                    PropertyChanges {
-                        target: items
-                        enabled: false
-                        focus: false;
-                    }
-                }
-            ]
         }
 
-        Item {
+        Scanner {
             id: items_in
-            Keys.onPressed: {
-                //console.log("event.key: ", event.key)
-                //console.log("event.text: ", event.text)
-                if ( (String(event.key) != '16777251') && (String(event.key) != '16777248') ) {
-                    global_vars.currentItem = global_vars.currentItem + event.text
-                }
-                if (String(event.key) == '16777220') {
-                    itemScanIn(global_vars.currentItem)
-                    global_vars.currentItem = ''
-                }
+            onTemp: {
+                global_vars.currentItem = global_vars.currentItem + global_vars.event
             }
-
-            states:[
-                State {
-                    name: "on";
-                    PropertyChanges {
-                        target: items_in
-                        enabled: true
-                        focus: true;
-                    }
-                },
-                State {
-                    name: "off";
-                    PropertyChanges {
-                        target: items_in
-                        enabled: false
-                        focus: false;
-                    }
-                }
-            ]
+            onScanned: {
+                itemScanIn(global_vars.currentItem)
+                global_vars.currentItem = ''
+            }
         }
 
-        Item {
+        Scanner {
             id: item_lookup
-            Keys.onPressed: {
-                //console.log("event.key: ", event.key)
-                //console.log("event.text: ", event.text)
-                if ( (String(event.key) != '16777251') && (String(event.key) != '16777248') ) {
-                    global_vars.currentItem = global_vars.currentItem + event.text
-                }
-                if (String(event.key) == '16777220') {
-                    console.log("global_vars.currentItem: ", global_vars.currentItem)
-                    itemLookup(global_vars.currentItem)
-                    global_vars.currentItem = ''
-                }
+            onTemp: {
+                global_vars.currentItem = global_vars.currentItem + global_vars.event
             }
-
-            states:[
-                State {
-                    name: "on";
-                    PropertyChanges {
-                        target: item_lookup
-                        enabled: true
-                        focus: true;
-                    }
-                },
-                State {
-                    name: "off";
-                    PropertyChanges {
-                        target: item_lookup
-                        enabled: false
-                        focus: false;
-                    }
-                }
-            ]
+            onScanned: {
+                itemLookup(global_vars.currentItem)
+                global_vars.currentItem = ''
+            }
         }
 
         Text {
@@ -398,8 +303,8 @@ Window {
     }
 
     function slot_switchLayer(currentLayer, nextLayer) {
-        console.log("currentLayer: ", currentLayer)
-        console.log("nextLayer: ", nextLayer)
+        //console.log("currentLayer: ", currentLayer)
+        //console.log("nextLayer: ", nextLayer)
 
         if (currentLayer === "main") {
             if (nextLayer === "login_page") {
@@ -604,6 +509,8 @@ Window {
     function splituserpass() {
         GlobVars.userpass = GlobVars.userpass.split('=')
 
+
+        //PASSWORD ERROR FIX PROBABLY HERE
         if (GlobVars.userpass[0] == "Error") {
             global_vars.username = ''
             global_vars.realpass = ''
@@ -631,6 +538,31 @@ Window {
     }
 
     function scanned() {
+        GlobVars.userpass = thread.userpassGet()
+        GlobVars.userpass = GlobVars.userpass.split('=')
+
+        //PASSWORD ERROR FIX PROBABLY HERE
+        if (GlobVars.userpass[0] == "Error") {
+            global_vars.username = ''
+            global_vars.realpass = ''
+            global_vars.password = ''
+            global_vars.login_error = 'Error: No card currently read. Try removing card and placing again'
+        }
+
+        else {
+            global_vars.username = GlobVars.userpass[0]
+
+            var increment_length = GlobVars.userpass[1].length
+            var i = 0
+            global_vars.password = ''
+            while (i < increment_length) {
+                global_vars.password += GlobVars.star
+                i += 1
+            }
+        global_vars.realpass = GlobVars.userpass[1]
+        global_vars.login_error = ''
+        }
+
         if (object_holder.state == "visible") {
             slot_switchLayer("main","logged_in")
             object_holder.state = "hidden"

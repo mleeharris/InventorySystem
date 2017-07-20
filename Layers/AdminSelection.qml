@@ -165,17 +165,6 @@ Rectangle {
         }
     }
 
-    function userpass(userpass) {
-        console.log('userpass: ', userpass)
-        userpass = userpass.split(':')
-        global_vars.username = userpass[0]
-        global_vars.password = userpass[1]
-        console.log("username: ", global_vars.username)
-        console.log("password: ", global_vars.password)
-        root.state = "hidden"
-        nextLayer(root.Objectname, "logged_in")
-    }
-
     function splituserpass() {
         GlobVars.userpass = GlobVars.userpass.split('=')
 

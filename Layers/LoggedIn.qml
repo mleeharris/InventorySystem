@@ -345,35 +345,10 @@ Rectangle {
         }
     }
 
-    function splituserpass() {
-        GlobVars.userpass = GlobVars.userpass.split('=')
-
-        if (GlobVars.userpass[0] == "Error") {
-            global_vars.username = ''
-            global_vars.realpass = ''
-            global_vars.password = ''
-            global_vars.login_error = 'Error: Try removing card and placing again'
-        }
-
-        else {
-            global_vars.username = GlobVars.userpass[0]
-
-            var increment_length = GlobVars.userpass[1].length
-            var i = 0
-            global_vars.password = ''
-            while (i < increment_length) {
-                global_vars.password += GlobVars.star
-                i += 1
-            }
-        global_vars.realpass = GlobVars.userpass[1]
-        global_vars.login_error = ''
-        }
-    }
-
-    function loginInfo() {
-        GlobVars.userpass = thread.userpassGet()
-        splituserpass()
-    }
+//    function loginInfo() {
+//        GlobVars.userpass = thread.userpassGet()
+//        splituserpass()
+//    }
 }
 
 

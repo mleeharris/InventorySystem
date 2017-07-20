@@ -2,6 +2,7 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 import "qrc:/Components"
 import "qrc:/JavaScript/connect.js" as Connect
+import "qrc:/JavaScript/globalVars.js" as GlobVars
 
 Rectangle {
     id: root

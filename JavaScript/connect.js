@@ -38,7 +38,7 @@ function checkIn(itemListIn) {
     var i = 0;
     global_vars.checkInError = 0;
     while (i < itemListIn.length) {
-        console.log("itemListIn[i]: ", itemListIn[i])
+        //console.log("itemListIn[i]: ", itemListIn[i])
         queryHandler(global_vars.username,global_vars.realpass,"http://192.168.10.97","parts",itemListIn[i],"addStock","quantity=1","PUT", "");
         i += 1
     }
@@ -48,7 +48,7 @@ function checkOut(itemList) {
     var i = 0;
     global_vars.checkOutError = 0;
     while (i < itemList.length) {
-        console.log("itemList[i]: ", itemList[i])
+        //console.log("itemList[i]: ", itemList[i])
         queryHandler(global_vars.username,global_vars.realpass,"http://192.168.10.97","parts",itemList[i],"removeStock","quantity=1","PUT", "");
         i += 1
     }

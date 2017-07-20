@@ -171,7 +171,11 @@ Rectangle {
             console.log("GlobVars.itemListIn: ", GlobVars.itemListIn)
             //
 
-            callTimer()
+            clock_checkin.delay(2000, function() {
+                if (global_vars.checkInError == 0) {
+                    global_vars.endpage_error = "All items checked in successfully"
+                }
+            });
             deletionAll()
             nextLayer(root.objectName, "end_page")
             root.state = "hidden"
@@ -340,13 +344,5 @@ Rectangle {
                 right_tab.state = "Down"
             }
         }
-    }
-
-    function callTimer() {
-        clock_checkin.delay(2000, function() {
-            if (global_vars.checkInError == 0) {
-                global_vars.endpage_error = "All items checked in successfully"
-            }
-        });
     }
 }
