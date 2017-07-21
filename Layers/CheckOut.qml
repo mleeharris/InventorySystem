@@ -58,8 +58,16 @@ Rectangle {
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
-    Clock {
+    Clock2 {
         id: clock_checkout
+    }
+
+    Clock2 {
+        id: clock_checkout2
+    }
+
+    Clock2 {
+        id: clock_checkout3
     }
 
     ListModel {
@@ -73,6 +81,8 @@ Rectangle {
             width: 1100
             height: 80
             item_id.text: itemText
+            item_name.text: itemName
+            item_stock.text: itemStock
             MouseArea {
                 id: item_ma
                 anchors.top: parent.top
@@ -136,12 +146,26 @@ Rectangle {
 
     Text {
         text: "Items: 0"
-        anchors.bottom: clear_button.top
+        anchors.bottom: checkout_error.top
         anchors.bottomMargin: 0
-        anchors.horizontalCenter: clear_button.horizontalCenter
+        anchors.horizontalCenter: checkout_error.horizontalCenter
         font.family: "Bebas Neue"
         font.pixelSize: 74
         id: item_counter
+    }
+
+    Error {
+        id: checkout_error
+        errorHeight: 110
+        errorWidth: clear_button.width
+        errorText: global_vars.checkoutpage_error
+        z: 1
+
+        topMargin.topMargin: 20
+
+        anchors.bottom: clear_button.top
+        anchors.bottomMargin: 10
+        anchors.horizontalCenter: clear_button.horizontalCenter
     }
 
     BasicButton {
@@ -160,16 +184,15 @@ Rectangle {
         onClicked: {
             //send list to API here
             Connect.checkOut(GlobVars.itemList)
+            //console.log( "GlobVars.checkBadOut: ", GlobVars.checkBadOut)
+            //console.log( "GlobVars.checkGoodOut: ", GlobVars.checkGoodOut)
             global_vars.endpage_error = "Checking out... Please wait... "
-            console.log("GlobVars.itemList: ", GlobVars.itemList)
-
-            clock_checkout.delay(2000, function() {
-                if (global_vars.checkInError == 0) {
-                    global_vars.endpage_error = "All items checked out successfully"
-                }
-            });
+            //console.log("GlobVars.itemList: ", GlobVars.itemList)
 
             deletionAll()
+            global_vars.checkOutError = 0;
+            global_funcs.checkOutMsg();
+
             nextLayer(root.objectName, "end_page")
             root.state = "hidden"
         }
@@ -260,13 +283,18 @@ Rectangle {
 
     function itemScan(item) {
         GlobVars.itemList.push(item.slice(0,-1))
-        console.log("GlobVars: ", GlobVars.itemList)
+        //console.log("GlobVars: ", GlobVars.itemList)
+        global_vars.scannedItem = item
 
-        item_model.insert(item_listview.currentIndex + 1, {
-                              "itemText": "ID: " + item
-                          })
-        item_listview.currentIndex = item_listview.currentIndex + 1
-        item_counter.text = "Items: " + GlobVars.itemList.length
+        Connect.lookUp(item)
+        if (clock_checkout2.connected == false) {
+            clock_checkout2.connect( function() {
+                item_model.insert(item_listview.currentIndex + 1, {"itemText": "ID: " + global_vars.scannedItem, "itemName": "Name: " + global_vars.lookupName, "itemStock": "Stock: " + global_vars.lookupStock})
+                item_listview.currentIndex = item_listview.currentIndex + 1
+                item_counter.text = "Items: " + GlobVars.itemList.length
+            })
+        }
+        clock_checkout2.delay(200)
     }
 
 
@@ -274,6 +302,8 @@ Rectangle {
         item_model.remove(item_listview.currentIndex)
         GlobVars.itemList.splice(item_listview.currentIndex, 1)
         item_counter.text = "Items: " + GlobVars.itemList.length
+
+
 //        console.log("itemID: ", itemID)
 //        console.log("GlobVars.itemList: ", GlobVars.itemList)
 //        var i = 0

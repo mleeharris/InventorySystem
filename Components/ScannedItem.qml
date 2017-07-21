@@ -7,12 +7,12 @@ Rectangle  {
     id: root
     objectName: "button"
     property alias item_id: item_txt
+    property alias item_name: name
+    property alias item_stock: stock
     property bool checked: false
     signal pressed()
     signal released()
     signal clicked()
-
-    //signal deletionHandling(string itemID)
 
     state: "visible"
     states:[
@@ -50,11 +50,41 @@ Rectangle  {
         anchors.left: root.left
         anchors.leftMargin: 30
         anchors.top: root.top
-        anchors.right: root.right
+        anchors.right: root.horizontalCenter
+        anchors.rightMargin: 160
         anchors.bottom: root.bottom
         font.family: "Helvetica"
         text: ""
         font.pointSize: global_vars.itemFontsize
+        smooth: true
+        color: global_vars.darkGrayColor
+        //horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+    }
+
+    Text {
+        id: name
+        anchors.left: item_txt.right
+        anchors.top: root.top
+        anchors.bottom: root.bottom
+        font.family: "Helvetica"
+        text: ""
+        font.pointSize: global_vars.itemFontsize - 25
+        smooth: true
+        color: global_vars.darkGrayColor
+        //horizontalAlignment: Text.AlignHCenter
+        verticalAlignment: Text.AlignVCenter
+    }
+
+    Text {
+        id: stock
+        anchors.left: name.right
+        anchors.leftMargin: 80
+        anchors.top: root.top
+        anchors.bottom: root.bottom
+        font.family: "Helvetica"
+        text: ""
+        font.pointSize: global_vars.itemFontsize - 25
         smooth: true
         color: global_vars.darkGrayColor
         //horizontalAlignment: Text.AlignHCenter
@@ -90,7 +120,6 @@ Rectangle  {
                 root.released()
             }
             onClicked: {
-                console.log("yo")
                 //deletionHandlingCheckOut(item_txt.text)
                 //root.state = "hidden"
                 root.clicked()

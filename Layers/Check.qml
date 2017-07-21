@@ -87,6 +87,8 @@ Rectangle {
         iconAnchors.verticalCenterOffset: global_vars.check_in_offset
 
         onClicked: {
+            global_vars.checkoutpage_error = ''
+            global_vars.checkinpage_error = ''
             nextLayer(root.objectName, "check_in")
             root.state = "hidden"
         }
@@ -105,6 +107,8 @@ Rectangle {
         iconAnchors.verticalCenterOffset: global_vars.check_out_offset
 
         onClicked: {
+            global_vars.checkoutpage_error = ''
+            global_vars.checkinpage_error = ''
             nextLayer(root.objectName, "check_out")
             root.state = "hidden"
         }

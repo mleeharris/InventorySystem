@@ -1,4 +1,5 @@
 import QtQuick 2.2
+import "qrc:/JavaScript/globalVars.js" as GlobVars
 
 Item {
     objectName: "GlobalVars"
@@ -18,6 +19,8 @@ Item {
     property string login_error: ''
     property string admin_error: ''
     property string checkpage_error: ''
+    property string checkinpage_error: ''
+    property string checkoutpage_error: ''
     property string admin_api_error: ''
     property string admin_selection_error: ''
     property string endpage_error: ''
@@ -85,4 +88,8 @@ Item {
     property int checkInError: 0
     property int checkOutError: 0
     property string lookupString: ''
+
+    property string lookupName: ''
+    property string scannedItem: ''
+    property string lookupStock: ''
 }

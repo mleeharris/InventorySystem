@@ -326,6 +326,7 @@ Rectangle {
 
     function updateActive() {
         if (thread.activeGet() === 0) {
+            if (global_vars.admin_error != "Logging Out...")
             global_vars.admin_error = '';
             active_check.text = 'No card actively connected'
         }

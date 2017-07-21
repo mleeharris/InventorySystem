@@ -101,6 +101,7 @@ Window {
 
     /*COMPONENT DECL*/
     GlobalVars{id: global_vars}
+    GlobalFuncs{id: global_funcs}
 
     Rectangle {
         anchors.fill: parent
@@ -242,7 +243,7 @@ Window {
             onClicked: {
                 slot_switchLayer("main", "logged_in")
                 GlobVars.userpass = testing.readCard()
-                splituserpass()
+                scanned()
                 object_holder.state = "hidden"
             }
         }
@@ -506,43 +507,21 @@ Window {
         }
     }
 
-    function splituserpass() {
-        GlobVars.userpass = GlobVars.userpass.split('=')
-
-
-        //PASSWORD ERROR FIX PROBABLY HERE
-        if (GlobVars.userpass[0] == "Error") {
-            global_vars.username = ''
-            global_vars.realpass = ''
-            global_vars.password = ''
-            global_vars.login_error = 'Error: No card currently read. Try removing card and placing again'
-        }
-
-        else {
-            global_vars.username = GlobVars.userpass[0]
-
-            var increment_length = GlobVars.userpass[1].length
-            var i = 0
-            global_vars.password = ''
-            while (i < increment_length) {
-                global_vars.password += GlobVars.star
-                i += 1
-            }
-        global_vars.realpass = GlobVars.userpass[1]
-        global_vars.login_error = ''
-        }
-    }
-
     function returntwo() {
         console.log("ayyy")
     }
 
     function scanned() {
-        GlobVars.userpass = thread.userpassGet()
-        GlobVars.userpass = GlobVars.userpass.split('=')
+        //GlobVars.userpass = thread.userpassGet()
+        //GlobVars.userpass = GlobVars.userpass.split('=')
+
+        GlobVars.username = thread.userGet();
+        GlobVars.realpass = thread.passGet();
+
+        console.log("GlobVars.username: ", GlobVars.username)
 
         //PASSWORD ERROR FIX PROBABLY HERE
-        if (GlobVars.userpass[0] == "Error") {
+        if (GlobVars.username == "Error" || GlobVars.username == '' || GlobVars.password == "Error") {
             global_vars.username = ''
             global_vars.realpass = ''
             global_vars.password = ''
@@ -550,16 +529,16 @@ Window {
         }
 
         else {
-            global_vars.username = GlobVars.userpass[0]
+            global_vars.username = GlobVars.username
 
-            var increment_length = GlobVars.userpass[1].length
+            var increment_length = GlobVars.realpass.length
             var i = 0
             global_vars.password = ''
             while (i < increment_length) {
                 global_vars.password += GlobVars.star
                 i += 1
             }
-        global_vars.realpass = GlobVars.userpass[1]
+        global_vars.realpass = GlobVars.realpass
         global_vars.login_error = ''
         }
 

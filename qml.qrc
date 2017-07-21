@@ -47,5 +47,7 @@
         <file>Components/DoubleInput.qml</file>
         <file>Components/Error.qml</file>
         <file>Components/Clock.qml</file>
+        <file>Components/Clock2.qml</file>
+        <file>Function/GlobalFuncs.qml</file>
     </qresource>
 </RCC>

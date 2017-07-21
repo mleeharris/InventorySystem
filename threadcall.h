@@ -21,7 +21,6 @@ public:
 
     Q_INVOKABLE QString userGet();
     Q_INVOKABLE QString passGet();
-    Q_INVOKABLE QString userpassGet();
     Q_INVOKABLE QString updateGet();
     Q_INVOKABLE int activeGet();
 

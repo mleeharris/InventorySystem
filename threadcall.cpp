@@ -25,11 +25,6 @@ QString threadcall::passGet() {
     return password;
 }
 
-QString threadcall::userpassGet() {
-    QString toReturn = username + '=' + password;
-    return toReturn;
-}
-
 QString threadcall::updateGet() {
     return update;
 }

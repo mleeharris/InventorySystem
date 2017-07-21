@@ -14,8 +14,8 @@ Rectangle  {
 
     function delay(delayTime, cb) {
         timer.interval = delayTime;
-        timer.repeat = false;
         timer.triggered.connect(cb);
+        timer.repeat = false;
         timer.start();
     }
 }

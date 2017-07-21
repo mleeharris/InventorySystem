@@ -62,6 +62,10 @@ Rectangle {
         id: clock_checkin
     }
 
+    Clock2 {
+        id: clock_checkin2
+    }
+
     ListModel {
         id: item_model
     }
@@ -73,6 +77,8 @@ Rectangle {
             width: 1100
             height: 80
             item_id.text: itemText
+            item_name.text: itemName
+            item_stock.text: itemStock
             MouseArea {
                 id: item_ma
                 anchors.top: parent.top
@@ -143,12 +149,26 @@ Rectangle {
 
     Text {
         text: "Items: 0"
-        anchors.bottom: clear_button.top
+        anchors.bottom: checkin_error.top
         anchors.bottomMargin: 0
-        anchors.horizontalCenter: clear_button.horizontalCenter
+        anchors.horizontalCenter: checkin_error.horizontalCenter
         font.family: "Bebas Neue"
         font.pixelSize: 74
         id: item_counter
+    }
+
+    Error {
+        id: checkin_error
+        errorHeight: 110
+        errorWidth: clear_button.width
+        errorText: global_vars.checkinpage_error
+        z: 1
+
+        topMargin.topMargin: 20
+
+        anchors.bottom: clear_button.top
+        anchors.bottomMargin: 10
+        anchors.horizontalCenter: clear_button.horizontalCenter
     }
 
     BasicButton {
@@ -165,17 +185,18 @@ Rectangle {
         iconAnchors.verticalCenterOffset: global_vars.check_in_offset
 
         onClicked: {
+            global_vars.checkInError = 0;
+            GlobVars.checkBadIn = [];
+            GlobVars.checkGoodIn = [];
+
             //send list to API here
             Connect.checkIn(GlobVars.itemListIn)
             global_vars.endpage_error = "Checking in... Please wait... "
             console.log("GlobVars.itemListIn: ", GlobVars.itemListIn)
             //
 
-            clock_checkin.delay(2000, function() {
-                if (global_vars.checkInError == 0) {
-                    global_vars.endpage_error = "All items checked in successfully"
-                }
-            });
+            global_funcs.checkInMsg()
+
             deletionAll()
             nextLayer(root.objectName, "end_page")
             root.state = "hidden"
@@ -251,7 +272,7 @@ Rectangle {
         anchors.topMargin: 100
         radius: 40
         opacity: 0.2
-        z: 3
+        z: 3   
 
 //        ScrollBar {
 //            id: vbar
@@ -278,13 +299,25 @@ Rectangle {
 
     function itemScan(item) {
         GlobVars.itemListIn.push(item.slice(0,-1))
-        console.log("GlobVars: ", GlobVars.itemListIn)
+        //console.log("GlobVars: ", GlobVars.itemListIn)
+        global_vars.scannedItem = item
 
-        item_model.insert(item_listview.currentIndex + 1, {"itemText": "ID: " + item})
-        item_listview.currentIndex = item_listview.currentIndex + 1
-        item_counter.text = "Items: " + GlobVars.itemListIn.length
+        Connect.lookUp(item)
+        if (clock_checkin2.connected == false) {
+            clock_checkin2.connect( function() {
+                item_model.insert(item_listview.currentIndex + 1, {"itemText": "ID: " + global_vars.scannedItem, "itemName": "Name: " + global_vars.lookupName, "itemStock": "Stock: " + global_vars.lookupStock})
+                item_listview.currentIndex = item_listview.currentIndex + 1
+                item_counter.text = "Items: " + GlobVars.itemListIn.length
+            })
+        }
+        clock_checkin2.delay(200)
     }
 
+//    function itemCreation(item) {
+//        item_model.insert(item_listview.currentIndex + 1, {"itemText": "ID: " + item, "itemName": "Name: " + global_vars.lookupName})
+//        item_listview.currentIndex = item_listview.currentIndex + 1
+//        item_counter.text = "Items: " + GlobVars.itemListIn.length
+//    }
 
     function deletionHandlingCheckOut() {
         item_model.remove(item_listview.currentIndex)

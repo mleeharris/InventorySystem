@@ -25,54 +25,57 @@ function test() {
 function login(username, password) {
     console.log(username);
     console.log(password);
-    queryHandler(username,password,"http://192.168.10.97","users","","login","","POST", "");
+    queryHandler(username, password, "http://192.168.10.97", "users", "", "login", "", "POST", "", "");
 }
 
 function logout(username, password) {
     console.log(username);
     console.log(password);
-    queryHandler(username,password,"http://192.168.10.97","users","","logout","","GET", "");
+    queryHandler(username, password, "http://192.168.10.97", "users", "", "logout", "", "GET", "", "");
 }
 
 function checkIn(itemListIn) {
     var i = 0;
-    global_vars.checkInError = 0;
     while (i < itemListIn.length) {
         //console.log("itemListIn[i]: ", itemListIn[i])
-        queryHandler(global_vars.username,global_vars.realpass,"http://192.168.10.97","parts",itemListIn[i],"addStock","quantity=1","PUT", "");
+        queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.97", "parts", itemListIn[i], "addStock", "quantity=1", "PUT", "", itemListIn[i]);
         i += 1
     }
 }
 
 function checkOut(itemList) {
     var i = 0;
-    global_vars.checkOutError = 0;
     while (i < itemList.length) {
         //console.log("itemList[i]: ", itemList[i])
-        queryHandler(global_vars.username,global_vars.realpass,"http://192.168.10.97","parts",itemList[i],"removeStock","quantity=1","PUT", "");
+        //console.log ("=======================NEW QUERY==============================================================================")
+        queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.97", "parts", itemList[i], "removeStock", "quantity=1", "PUT", "", itemList[i]);
         i += 1
     }
 }
 
 function lookUp(item) {
-    queryHandler(global_vars.username,global_vars.realpass,"http://192.168.10.97","parts",item,"","","PUT", "lookUp");
+    queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.97", "parts", item, "", "", "PUT", "lookUp", "");
 }
 
 function addUser(newusername, newpassword) {
     global_vars.addUser = false
     var userstring = '{"newPassword":"' + newpassword + '","username":"' + newusername + '","protected":false}'
 //    console.log('userstring: ', userstring);
-    queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","",userstring,"POST", "addUser");
+    queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","",userstring,"POST", "addUser", "");
 }
 
 function addUserAdmin(newusername, newpassword) {
     global_vars.addUser = false
     var userstring = '{"newPassword":"' + newpassword + '","username":"' + newusername + '","protected":true}'
 //    console.log('userstring: ', userstring);
-    queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","",userstring,"POST", "addUser");
+    queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","",userstring,"POST", "addUser", "");
 }
 
-function queryHandler(user, password, server, module, partID, command, json, method, command2){
+function addPart(newItem) {
+    queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.97", "parts", "", "", '{"name":"LastInsert","description":"","comment":"","minStockLevel":0,"status":"","needsReview":false,"partCondition":"","productionRemarks":"","internalPartNumber":"","metaPart":false,"category":{"@context":"/api/contexts/PartCategory","@id":"/api/part_categories/1","@type":"PartCategory","categoryPath":"Root Category","expanded":true,"name":"Root Category","description":null,"parentId":"@local-tree-root","index":0},"partUnit":{"@id":"/api/part_measurement_units/1","@type":"PartMeasurementUnit","name":"Pieces","shortName":"pcs","default":true},"footprint":null,"storageLocation":{"@id":"/api/storage_locations/6","@type":"StorageLocation","name":"Column1_Bin3","image":null,"categoryPath":"Root Category"},"stockLevels":[{"stockLevel":288,"price":0,"dateTime":null,"correction":false,"comment":null,"user":null}]}', "POST", "addPart", newItem);
+}
+
+function queryHandler(user, password, server, module, partID, command, json, method, command2, item){
     var restURL=server + "/api/"
         if (module != "")
             restURL += module;
@@ -87,21 +90,23 @@ function queryHandler(user, password, server, module, partID, command, json, met
             restURL += "?" + json;
             json = "";
         }
-        httpConnect(restURL, user, password, json, command, method, command2);
+        httpConnect(restURL, user, password, json, command, method, command2, item);
 }
 
-function httpConnect(urlStr, user, password, json, command, method, command2) {
+function httpConnect(urlStr, user, password, json, command, method, command2, item) {
 
     var encode =  encode64(string2Bin(user + ":" + password));
     var xmlhttp = new XMLHttpRequest();
 
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == XMLHttpRequest.DONE) {
+
+            console.log("===============MSG HANDLER===================")
             if (xmlhttp.status > 199 && xmlhttp.status < 300) {
-                responseHandler(xmlhttp.responseText, xmlhttp.getAllResponseHeaders(), command, command2);
+                responseHandler(xmlhttp.responseText, xmlhttp.getAllResponseHeaders(), command, command2, item);
             }
             else {
-                errorHandler(xmlhttp.responseText, xmlhttp.getAllResponseHeaders(), command, command2)
+                errorHandler(xmlhttp.responseText, xmlhttp.getAllResponseHeaders(), command, command2, item)
             }
         }
 
@@ -109,7 +114,7 @@ function httpConnect(urlStr, user, password, json, command, method, command2) {
 
         }
     }
-    console.log(urlStr);
+    //console.log(urlStr);
     xmlhttp.open(method, urlStr, true);
     xmlhttp.setRequestHeader("Authorization", "Basic " + encode);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded ; charset=UTF-8");
@@ -117,7 +122,7 @@ function httpConnect(urlStr, user, password, json, command, method, command2) {
     xmlhttp.send(json);
 }
 
-function errorHandler(response, headers, command, command2) {
+function errorHandler(response, headers, command, command2, item) {
     console.log("Action Unsuccessful")
     switch(command) {
         case "login":
@@ -131,11 +136,13 @@ function errorHandler(response, headers, command, command2) {
 
         case "addStock":
             console.log("Couldn't check in part");
+            global_funcs.addBadIn(item);
             global_vars.checkInError = 1;
             break;
 
         case "removeStock":
             console.log("Couldn't check out part");
+            global_funcs.addBadOut(item);
             global_vars.checkOutError = 1;
             break;
 
@@ -143,6 +150,10 @@ function errorHandler(response, headers, command, command2) {
             switch(command2) {
                 case "lookUp":
                     console.log("Couldn't lookup part");
+                    global_vars.lookupName = "???"
+                    global_vars.lookupStock = "???"
+                    global_vars.checkinpage_error = "Item " + global_vars.scannedItem + " not found"
+                    global_vars.checkoutpage_error = "Item " + global_vars.scannedItem + " not found"
                     break;
 
                 case "addUser":
@@ -154,24 +165,25 @@ function errorHandler(response, headers, command, command2) {
     }
 }
 
-function responseHandler(response, headers, command, command2) {
+function responseHandler(response, headers, command, command2, item) {
     if (command != "logout") {
         var arr = JSON.parse(response);
     }
 
     console.log("Action Successful")
-    console.log("************************* RESPONSE HEADERS  ********************************\n");
+    //console.log("************************* RESPONSE HEADERS  ********************************\n");
 
-    console.log(headers);
+    //console.log(headers);
 
-    console.log("********************* RESPONSE BODY ************************************\n");
+    //console.log("********************* RESPONSE BODY ************************************\n");
 
-    console.log(response);
+    //console.log(response);
 
     switch(command) {
         case "addStock":
             //Where responses are going to be handled
-             console.log("Add Stock Executed\n");
+            global_funcs.addGoodIn(item);
+            console.log("Add Stock Executed\n");
             break;
 
         case "setStock":
@@ -181,6 +193,7 @@ function responseHandler(response, headers, command, command2) {
 
         case "removeStock":
             //Where responses are going to be handled
+            global_funcs.addGoodOut(item);
             console.log("Remove Stock Executed\n");
             break;
 
@@ -199,17 +212,17 @@ function responseHandler(response, headers, command, command2) {
         default:
             switch(command2) {
                 case "lookUp":
-                    console.log("********************* PARTS INFORMATION ************************************\n");
+                    //console.log("********************* PARTS INFORMATION ************************************\n");
 
                     //for an easier use of JSONS try using https://jsonformatter.curiousconcept.com/
-                    console.log("Name :" + arr["name"]);
-                    console.log("internal Part Number :" + arr["internalPartNumber"]);
-                    console.log("Stock Level :" + arr["stockLevel"] + " " + arr["partUnit"]["name"]);
-                    console.log("Storage Location :" + arr["storageLocation"]["name"]);
-                    console.log("Type :" + arr["@type"]);
-                    console.log("Description :" + arr["description"]);
-                    console.log("Minimum Stock :" + arr["minStockLevel"]);
-                    console.log("Low Stock ? :" + arr["lowStock"]);
+//                    console.log("Name: " + arr["name"]);
+//                    console.log("internal Part Number: " + arr["internalPartNumber"]);
+//                    console.log("Stock Level: " + arr["stockLevel"] + " " + arr["partUnit"]["name"]);
+//                    console.log("Storage Location: " + arr["storageLocation"]["name"]);
+//                    console.log("Type: " + arr["@type"]);
+//                    console.log("Description: " + arr["description"]);
+//                    console.log("Minimum Stock: " + arr["minStockLevel"]);
+//                    console.log("Low Stock: " + arr["lowStock"]);
 
                     global_vars.lookupString = '';
                     global_vars.lookupString += ("Name: " + arr["name"] + "\n");
@@ -220,32 +233,37 @@ function responseHandler(response, headers, command, command2) {
                     global_vars.lookupString += ("Description: " + arr["description"] + "\n");
                     global_vars.lookupString += ("Minimum Stock: " + arr["minStockLevel"] + "\n");
                     global_vars.lookupString += ("Low Stock: " + arr["lowStock"] + "\n");
+
+                    global_vars.lookupName = arr["name"]
+                    global_vars.lookupStock = arr["stockLevel"]
+
+                    global_vars.checkinpage_error = "Item " + global_vars.lookupName + " found, added to list"
+                    global_vars.checkoutpage_error = "Item " + global_vars.lookupName + " found, added to list"
+
+//                    //********************************* DISPLAY IMAGE ************************************************
+
+//                    var xhr = getXMLHttpRequest();
+//                    xhr.onreadystatechange=ProcessResponse;
+//                    imageUrl="http://192.168.10.97/api/part_attachments/"+arr["internalPartNumber"]+"/getFile"
+//                    xhr.open("GET",imageUrl, true);
+//                    xhr.overrideMimeType('text/plain; charset=x-user-defined');
+//                    xhr.send(null);
+
+//                    function ProcessResponse()
+//                    {
+//                       if(xhr.readyState==4)
+//                      {
+//                        if (xhr.status > 199 && xhr.status < 300)
+//                        {
+//                            retval ="";
+//                            for (var i=0; i<=xhr.responseText.length-1; i++)
+//                                  retval += String.fromCharCode(xhr.responseText.charCodeAt(i) & 0xff);
+//                       }
+//                     }
+
+//                    //Display image encoded in 64:
+//                    encode64(xhr.responseText);
                     break;
-
-                    /* ********************************* DISPLAY IMAGE ************************************************
-
-                    var xhr = getXMLHttpRequest();
-                    xhr.onreadystatechange=ProcessResponse;
-                    imageUrl="http://192.168.10.97/api/part_attachments/"+arr["internalPartNumber"]+"/getFile"
-                    xhr.open("GET",imageUrl, true);
-                    xhr.overrideMimeType('text/plain; charset=x-user-defined');
-                    xhr.send(null);
-
-                    function ProcessResponse()
-                    {
-                       if(xhr.readyState==4)
-                      {
-                        if (xhr.status==200)
-                        {
-                            retval ="";
-                            for (var i=0; i<=xhr.responseText.length-1; i++)
-                                  retval += String.fromCharCode(xhr.responseText.charCodeAt(i) & 0xff);
-                       }
-                     }
-
-                    Display image encoded in 64:  encode64(xhr.responseText);
-
-                    */
 
                 case "addUser":
                     global_vars.addUser = true
@@ -278,14 +296,6 @@ function encode64(buffer) {
     }
     return Qt.btoa(binary);
 }
-
-//function delay(delayTime, cb) {
-//    timer = new Timer();
-//    timer.interval = delayTime;
-//    timer.repeat = false;
-//    timer.triggered.connect(cb);
-//    timer.start();
-//}
 
 /* ******************************** CORRESPONDENCE TABLE && EXAMPLES ************************************
 

@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QDir>
 #include <QObject>
+#include <QVector>
 
 //Needed for this branch: terminal access
 #include <QDebug>

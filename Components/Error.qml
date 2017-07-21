@@ -9,6 +9,7 @@ Rectangle  {
     property alias errorHeight: root.height
     property alias errorWidth: root.width
     property alias errorText: info_text.text
+    property alias topMargin: info_text.anchors
 
     color: "#00000000"
 
