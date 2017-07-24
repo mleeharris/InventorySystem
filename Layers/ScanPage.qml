@@ -299,31 +299,6 @@ Rectangle {
         }
     }
 
-    function splituserpass() {
-        GlobVars.userpass = GlobVars.userpass.split('=')
-
-        if (GlobVars.userpass[0] == "Error") {
-            global_vars.username = ''
-            global_vars.realpass = ''
-            global_vars.password = ''
-            global_vars.login_error = 'Error: Try placing card and scanning again'
-        }
-
-        else {
-            global_vars.username = GlobVars.userpass[0]
-
-            var increment_length = GlobVars.userpass[1].length
-            var i = 0
-            global_vars.password = ''
-            while (i < increment_length) {
-                global_vars.password += GlobVars.star
-                i += 1
-            }
-        global_vars.realpass = GlobVars.userpass[1]
-        global_vars.login_error = ''
-        }
-    }
-
     function updateActive() {
         if (thread.activeGet() === 0) {
             if (global_vars.admin_error != "Logging Out...")

@@ -21,6 +21,7 @@ Rectangle  {
     property alias helpText2: helper_2.text
     property alias helpText3: helper_3.text
     property alias adminState: admin_check.state
+    property alias boxWidth: black_background_1.width
 
     clip: false
     signal pressed()
@@ -240,6 +241,7 @@ Rectangle  {
         radius: black_background_1.radius
         height: black_background_1.height
         width: black_background_1.height
+        visible: true
 
         state: "unchecked"
         states:[
@@ -263,6 +265,13 @@ Rectangle  {
                 PropertyChanges {
                     target: root
                     adminClicked: true
+                }
+            },
+            State {
+                name: "invisible";
+                PropertyChanges {
+                    target: admin_check
+                    visible: false
                 }
             }
         ]

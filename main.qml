@@ -42,6 +42,7 @@ Window {
     signal tabOperationForLookup(string tabnum, string state)
     signal tabOperationForAdminAPI(string tabnum, string state)
     signal tabOperationForAdminSelection(string tabnum, string state)
+    signal tabOperationForAdminAPI2(string tabnum, string state)
     signal itemScan(string item)
     signal itemScanIn(string item)
     signal itemLookup(string item)
@@ -85,6 +86,7 @@ Window {
         lookup.nextLayer.connect(slot_switchLayer)
         admin_api.nextLayer.connect(slot_switchLayer)
         admin_selection.nextLayer.connect(slot_switchLayer)
+        admin_api2.nextLayer.connect(slot_switchLayer)
     }
 
     /*LAYER DECL*/
@@ -98,6 +100,7 @@ Window {
     Lookup{id: lookup; x:0; y: 0}
     AdminAPI{id: admin_api; x:0; y:0}
     AdminSelection{id: admin_selection; x:0; y:0}
+    AdminAPI2{id: admin_api2; x:0; y:0}
 
     /*COMPONENT DECL*/
     GlobalVars{id: global_vars}
@@ -485,6 +488,14 @@ Window {
             if (nextLayer === "admin_selection") {
                 admin_selection.state = "visible"
             }
+            if (nextLayer === "admin_api2") {
+                admin_api2.state = "visible"
+            }
+        }
+        if (currentLayer === "admin_api2") {
+            if (nextLayer === "admin_api") {
+                admin_api.state = "visible"
+            }
         }
     }
 
@@ -521,11 +532,11 @@ Window {
         console.log("GlobVars.username: ", GlobVars.username)
 
         //PASSWORD ERROR FIX PROBABLY HERE
-        if (GlobVars.username == "Error" || GlobVars.username == '' || GlobVars.password == "Error") {
+        if (GlobVars.username == "Error" || GlobVars.username == '' || GlobVars.realpass == "Error") {
             global_vars.username = ''
             global_vars.realpass = ''
             global_vars.password = ''
-            global_vars.login_error = 'Error: No card currently read. Try removing card and placing again'
+            global_vars.login_error = 'Error: No card currently read. Try removing card and placing until results show'
         }
 
         else {

@@ -24,6 +24,7 @@ Item {
     property string admin_api_error: ''
     property string admin_selection_error: ''
     property string endpage_error: ''
+    property string admin_api2_error: ''
 
     /*Background*/
     property string grayColor: "#DCDCDC"
@@ -78,12 +79,14 @@ Item {
     property int startover_offset: -4
 
     /*Admin Console*/
-    property int buttonHeightAdmin: 140
+    property int buttonHeightAdmin: 130
     property int buttonWidthAdmin: 400
 
     /*API*/
     property int loggedIn: 0
     property bool addUser: false
+    property bool addPart: false
+    property bool setStock: false
 
     property int checkInError: 0
     property int checkOutError: 0
@@ -92,4 +95,6 @@ Item {
     property string lookupName: ''
     property string scannedItem: ''
     property string lookupStock: ''
+
+    property string addedItem: ''
 }

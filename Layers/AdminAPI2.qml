@@ -1,5 +1,9 @@
 import QtQuick 2.6
 import QtQuick.Window 2.2
+import QtQml 2.2
+import QtQuick.Dialogs 1.1
+import QtQuick.Controls 1.1
+import QtGraphicalEffects 1.0
 import "qrc:/Components"
 import "qrc:/JavaScript/globalVars.js" as GlobVars
 import "qrc:/JavaScript/connect.js" as Connect
@@ -9,7 +13,7 @@ Rectangle {
     visible: true
     width: 1920
     height: 1080
-    objectName: "admin_selection"
+    objectName: "admin_api2"
 
     signal nextLayer(string currentLayer, string nextLayer)
 
@@ -19,7 +23,7 @@ Rectangle {
         middle_tab.state = "Up"
         right_tab.state = "Up"
 
-        main_window.tabOperationForAdminSelection.connect(tabOperationAdminSelectionPage)
+        main_window.tabOperationForAdminAPI2.connect(tabOperationAdminAPIPage2)
     }
 
     states: [
@@ -47,18 +51,30 @@ Rectangle {
     }
 
     Text {
-        id: admin_selection
+        id: admin_api_2
         anchors.top: parent.top
-        anchors.topMargin: 130
+        anchors.topMargin: 70
         anchors.horizontalCenter: parent.horizontalCenter
-        text: "Admin  Selection"
+        text: "Admin  API"
         font.family: "Typo Graphica"
         color: "Black"
-        font.pointSize: 150
+        font.pointSize: 100
     }
 
-    Clock {
-        id: clock_adminselection
+    Error {
+        id: api2_error
+        errorHeight: 250
+        errorWidth: 700
+        errorText: global_vars.admin_api2_error
+        z: 1
+
+        anchors.horizontalCenter: parent.horizontalCenter
+        anchors.bottom: parent.bottom
+        anchors.bottomMargin: 100
+    }
+
+    Clock2 {
+        id: clock_adminapi2
     }
 
     BottomTab {
@@ -75,11 +91,12 @@ Rectangle {
             location = "qrc:/Images/power.png"
         }
         onClicked: {
-            global_vars.admin_selection_error = "Logging Out..."
+            global_vars.admin_api2_error = "Logging Out..."
             Connect.logout(global_vars.username, global_vars.realpass)
-            clock_adminselection.delay(1000, function() {
+            clock_adminapi2.connect(function() {
                 Qt.quit()
             })
+            clock_adminapi2.delay(1000)
         }
     }
 
@@ -97,56 +114,12 @@ Rectangle {
             location = "qrc:/Images/back.png"
         }
         onClicked: {
-            nextLayer(root.objectName, "logged_in")
-            root.state = "hidden"
-        }
-    }
-
-    BasicButton {
-        id: rfid
-        anchors.right: parent.right
-        anchors.top: admin_selection.bottom
-        anchors.rightMargin: 250
-        anchors.topMargin: 20
-        height: 150
-        width: 650
-        label.text: "RFID"
-
-        onClicked: {
-            nextLayer(root.objectName, "scan_page")
-            root.state = "hidden"
-        }
-    }
-
-    BasicButton {
-        id: api
-        anchors.left: parent.left
-        anchors.top: admin_selection.bottom
-        anchors.leftMargin: 250
-        anchors.topMargin: rfid.anchors.topMargin
-        height: rfid.height
-        width: rfid.width
-        label.text: "API"
-
-        onClicked: {
             nextLayer(root.objectName, "admin_api")
             root.state = "hidden"
         }
     }
 
-    Error {
-        id: admin_selection_error
-        errorHeight: 250
-        errorWidth: 700
-        errorText: global_vars.admin_selection_error
-        z: 1
-
-        anchors.horizontalCenter: parent.horizontalCenter
-        anchors.bottom: parent.bottom
-        anchors.bottomMargin: 100
-    }
-
-    function tabOperationAdminSelectionPage(tabnum, state) {
+    function tabOperationAdminAPIPage2(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {
                 middle_tab.state = "Up"

@@ -53,12 +53,12 @@ Rectangle {
     Text {
         id: admin_api
         anchors.top: parent.top
-        anchors.topMargin: 70
+        anchors.topMargin: 60
         anchors.horizontalCenter: parent.horizontalCenter
         text: "Admin  API"
         font.family: "Typo Graphica"
         color: "Black"
-        font.pointSize: 100
+        font.pointSize: 90
     }
 
     Error {
@@ -70,11 +70,35 @@ Rectangle {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 80
+        anchors.bottomMargin: 100
     }
 
-    Clock {
-        id: clock_adminapi
+    BasicButton {
+        id: other_options
+        anchors.right: parent.right
+        anchors.top: admin_api.top
+        anchors.rightMargin: 140
+        anchors.topMargin: 15
+        height: 100
+        width: 250
+        label.text: "More"
+
+        onClicked: {
+            nextLayer(root.objectName, "admin_api2")
+            root.state = "hidden"
+        }
+    }
+
+    Clock2 {
+        id: clock_adminapi_adduser
+    }
+
+    Clock2 {
+        id: clock_adminapi_addpart
+    }
+
+    Clock2 {
+        id: clock_adminapi_setstock
     }
 
     DoubleInput {
@@ -82,7 +106,7 @@ Rectangle {
         anchors.left: parent.left
         anchors.leftMargin: 105
         anchors.top: admin_api.bottom
-        anchors.topMargin: 0
+        anchors.topMargin: -10
         height: global_vars.buttonHeightAdmin
         width: global_vars.buttonWidthAdmin
         label.text: "Add  User"
@@ -92,6 +116,7 @@ Rectangle {
         helpText2: "Password"
         maxLength2: 19
         helpText3: "Admin?"
+        boxWidth: global_vars.buttonWidthAdmin + 165
 
         onClicked: {
             if (inputText1 === '' || inputText2 === '') {
@@ -106,7 +131,7 @@ Rectangle {
                     Connect.addUser(inputText1, inputText2)
                 }
                 //console.log("admin?: ", adminClicked)
-                clock_adminapi.delay(1000, function() {
+                clock_adminapi_adduser.connect(function() {
                     if (global_vars.addUser === true) {
                         global_vars.admin_api_error = "Added new user"
                         textChange1 = ''
@@ -114,8 +139,94 @@ Rectangle {
                         adminState = "unchecked"
                     }
                 })
+                clock_adminapi_adduser.delay(1000)
             }
         }
+    }
+
+    DoubleInput {
+        id: add_part
+        anchors.left: parent.left
+        anchors.leftMargin: 105
+        anchors.top: add_user.bottom
+        anchors.topMargin: 15
+        height: global_vars.buttonHeightAdmin
+        width: global_vars.buttonWidthAdmin
+        label.text: "Add  Part"
+
+        helpText1: "Part Name"
+        maxLength1: 17
+        helpText2: "Location"
+        maxLength2: 17
+        helpText3: ''
+        adminState: "invisible"
+
+        onClicked: {
+            if (inputText1 === '' || inputText2 === '') {
+                global_vars.admin_api_error = "Please enter both a name and a location"
+            }
+            else {
+                global_vars.admin_api_error = "Entering new part... Please wait... "
+                Connect.addPart(inputText1, inputText2)
+                if (clock_adminapi_addpart.connected == false) {
+                    clock_adminapi_addpart.connect(function() {
+                        console.log("global_vars.addPart: ", global_vars.addPart)
+                        if (global_vars.addPart === true) {
+                            global_vars.admin_api_error = "Added new part " + inputText1
+                            textChange1 = ''
+                            textChange2 = ''
+                        }
+                        if (global_vars.addPart === false) {
+                            global_vars.admin_api_error = "Couldn't add new part " + inputText1
+                        }
+                    })
+                }
+                clock_adminapi_addpart.delay(1000);
+            }
+        }
+
+    }
+
+    DoubleInput {
+        id: set_stock
+        anchors.left: parent.left
+        anchors.leftMargin: 105
+        anchors.top: add_part.bottom
+        anchors.topMargin: 15
+        height: global_vars.buttonHeightAdmin
+        width: global_vars.buttonWidthAdmin
+        label.text: "Set  Stock"
+
+        helpText1: "Part ID"
+        maxLength1: 17
+        helpText2: "Quantity"
+        maxLength2: 17
+        helpText3: ''
+        adminState: "invisible"
+
+        onClicked: {
+            if (inputText1 === '' || inputText2 === '') {
+                global_vars.admin_api_error = "Please enter both an item and a quantity"
+            }
+            else {
+                global_vars.admin_api_error = "Setting stock... Please wait... "
+                Connect.setStock(inputText1, inputText2)
+                if (clock_adminapi_setstock.connected == false) {
+                    clock_adminapi_setstock.connect(function() {
+                        if (global_vars.setStock === true) {
+                            global_vars.admin_api_error = "Set stock of item " + inputText1 + " as quantity " + inputText2
+                            textChange1 = ''
+                            textChange2 = ''
+                        }
+                        if (global_vars.setStock === false) {
+                            global_vars.admin_api_error = "Couldn't set stock of item " + inputText1
+                        }
+                    })
+                }
+                clock_adminapi_setstock.delay(1000);
+            }
+        }
+
     }
 
     BottomTab {
@@ -134,9 +245,10 @@ Rectangle {
         onClicked: {
             global_vars.admin_api_error = "Logging Out..."
             Connect.logout(global_vars.username, global_vars.realpass)
-            clock_adminapi.delay(1000, function() {
+            clock_adminapi_adduser.connect(function() {
                 Qt.quit()
             })
+            clock_adminapi_adduser.delay(1000)
         }
     }
 
@@ -175,31 +287,6 @@ Rectangle {
             if (state === "Down") {
                 right_tab.state = "Down"
             }
-        }
-    }
-
-    function splituserpass() {
-        GlobVars.userpass = GlobVars.userpass.split('=')
-
-        if (GlobVars.userpass[0] == "Error") {
-            global_vars.username = ''
-            global_vars.realpass = ''
-            global_vars.password = ''
-            global_vars.login_error = 'Error: Try placing card and scanning again'
-        }
-
-        else {
-            global_vars.username = GlobVars.userpass[0]
-
-            var increment_length = GlobVars.userpass[1].length
-            var i = 0
-            global_vars.password = ''
-            while (i < increment_length) {
-                global_vars.password += GlobVars.star
-                i += 1
-            }
-        global_vars.realpass = GlobVars.userpass[1]
-        global_vars.login_error = ''
         }
     }
 }

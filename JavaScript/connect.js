@@ -46,7 +46,7 @@ function checkIn(itemListIn) {
 function checkOut(itemList) {
     var i = 0;
     while (i < itemList.length) {
-        //console.log("itemList[i]: ", itemList[i])
+        console.log("itemList[i]: ", itemList[i])
         //console.log ("=======================NEW QUERY==============================================================================")
         queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.97", "parts", itemList[i], "removeStock", "quantity=1", "PUT", "", itemList[i]);
         i += 1
@@ -71,8 +71,31 @@ function addUserAdmin(newusername, newpassword) {
     queryHandler("partMaster","warehouseMaster","http://192.168.10.97","users","","",userstring,"POST", "addUser", "");
 }
 
-function addPart(newItem) {
-    queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.97", "parts", "", "", '{"name":"LastInsert","description":"","comment":"","minStockLevel":0,"status":"","needsReview":false,"partCondition":"","productionRemarks":"","internalPartNumber":"","metaPart":false,"category":{"@context":"/api/contexts/PartCategory","@id":"/api/part_categories/1","@type":"PartCategory","categoryPath":"Root Category","expanded":true,"name":"Root Category","description":null,"parentId":"@local-tree-root","index":0},"partUnit":{"@id":"/api/part_measurement_units/1","@type":"PartMeasurementUnit","name":"Pieces","shortName":"pcs","default":true},"footprint":null,"storageLocation":{"@id":"/api/storage_locations/6","@type":"StorageLocation","name":"Column1_Bin3","image":null,"categoryPath":"Root Category"},"stockLevels":[{"stockLevel":288,"price":0,"dateTime":null,"correction":false,"comment":null,"user":null}]}', "POST", "addPart", newItem);
+function addPart(newItem, newLocation) {
+    global_vars.addPart = false
+    var itemstring = '{"name":"' + newItem + '","description":"","comment":"","minStockLevel":0,"status":"","needsReview":false,"partCondition":"","productionRemarks":"","internalPartNumber":"","metaPart":false,"category":{"@context":"/api/contexts/PartCategory","@id":"/api/part_categories/1","@type":"PartCategory","categoryPath":"Root Category","expanded":true,"name":"Root Category","description":null,"parentId":"@local-tree-root","index":0},"partUnit":{"@id":"/api/part_measurement_units/1","@type":"PartMeasurementUnit","name":"Pieces","shortName":"pcs","default":true},"footprint":null,"storageLocation":{"@id":"/api/storage_locations/6","@type":"StorageLocation","name":"' + newLocation + '","image":null,"categoryPath":"Root Category"},"stockLevels":[{"stockLevel":288,"price":0,"dateTime":null,"correction":false,"comment":null,"user":null}]}'
+    //var itemstring = '{"name":"' + newItem + '","description":"","comment":"","minStockLevel":0,"status":"","needsReview":false,"partCondition":"","productionRemarks":"","internalPartNumber":"","metaPart":false,"category":{"@context":"/api/contexts/PartCategory","@id":"/api/part_categories/1","@type":"PartCategory","categoryPath":"Root Category","expanded":true,"name":"Root Category","description":null,"parentId":"@local-tree-root","index":0},"partUnit":{"@id":"/api/part_measurement_units/1","@type":"PartMeasurementUnit","name":"Pieces","shortName":"pcs","default":true},"footprint":null,"storageLocation":{"@id":"/api/storage_locations/6","@type":"StorageLocation","name":"Column1_Bin3","image":null,"categoryPath":"Root Category"},"stockLevels":[{"stockLevel":288,"price":0,"dateTime":null,"correction":false,"comment":null,"user":null}]}'
+    //console.log("itemstring: ", itemstring)
+    //console.log('{"name":"LastInsertzzz","description":"","comment":"","minStockLevel":0,"status":"","needsReview":false,"partCondition":"","productionRemarks":"","internalPartNumber":"","metaPart":false,"category":{"@context":"/api/contexts/PartCategory","@id":"/api/part_categories/1","@type":"PartCategory","categoryPath":"Root Category","expanded":true,"name":"Root Category","description":null,"parentId":"@local-tree-root","index":0},"partUnit":{"@id":"/api/part_measurement_units/1","@type":"PartMeasurementUnit","name":"Pieces","shortName":"pcs","default":true},"footprint":null,"storageLocation":{"@id":"/api/storage_locations/6","@type":"StorageLocation","name":"Column1_Bin3","image":null,"categoryPath":"Root Category"},"stockLevels":[{"stockLevel":288,"price":0,"dateTime":null,"correction":false,"comment":null,"user":null}]}');
+    queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.97", "parts", "", "", itemstring, "POST", "addPart", newItem);
+    //queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.97", "parts", "", "", '{"name":"Insertinoz","description":"","comment":"","minStockLevel":0,"status":"","needsReview":false,"partCondition":"","productionRemarks":"","internalPartNumber":"","metaPart":false,"category":{"@context":"/api/contexts/PartCategory","@id":"/api/part_categories/1","@type":"PartCategory","categoryPath":"Root Category","expanded":true,"name":"Root Category","description":null,"parentId":"@local-tree-root","index":0},"partUnit":{"@id":"/api/part_measurement_units/1","@type":"PartMeasurementUnit","name":"Pieces","shortName":"pcs","default":true},"footprint":null,"storageLocation":{"@id":"/api/storage_locations/6","@type":"StorageLocation","name":"Column1_Bin3","image":null,"categoryPath":"Root Category"},"stockLevels":[{"stockLevel":288,"price":0,"dateTime":null,"correction":false,"comment":null,"user":null}]}', "POST", "addPart", newItem);
+}
+
+function setStock(item, stocknumber) {
+    global_vars.setStock = false
+    var stockstring = 'quantity=num'
+    stockstring = stockstring.replace('num',stocknumber)
+    console.log("stockstring: ", stockstring)
+
+    //queryHandler("partMaster", "warehouseMaster","http://192.168.10.97","parts","27","setStock","quantity=156","PUT", "", item);
+    queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.97", "parts", item, "setStock", stockstring, "PUT", "", item);
+}
+
+function getStockHistory() {
+    //ASK AMINE
+    queryHandler("partMaster","warehouseMaster","http://192.168.10.97","stock_entries","","","start=0&order=%5B%7B%22property%22%3A%22dateTime%22%2C%22direction%22%3A%22DESC%22%7D%5D&filter=%5B%7B%22subfilters%22%3A%5B%5D%2C%22property%22%3A%22part%22%2C%22operator%22%3A%22%3D%22%2C%22value%22%3A%22%2Fapi%2Fparts%2F2%22%7D%5D","GET");
+
+
 }
 
 function queryHandler(user, password, server, module, partID, command, json, method, command2, item){
@@ -146,6 +169,11 @@ function errorHandler(response, headers, command, command2, item) {
             global_vars.checkOutError = 1;
             break;
 
+        case "setStock":
+            console.log("Couldn't set stock");
+            global_vars.setStock = false;
+            break;
+
         default:
             switch(command2) {
                 case "lookUp":
@@ -161,6 +189,12 @@ function errorHandler(response, headers, command, command2, item) {
                     global_vars.addUser = false;
                     global_vars.admin_api_error = "Couldn't add new user"
                     break;
+
+                case "addPart":
+                    console.log("Couldn't add part " + item);
+                    global_vars.addPart = false;
+                    global_vars.admin_api_error = "Couldn't add new part"
+
             }
     }
 }
@@ -186,11 +220,6 @@ function responseHandler(response, headers, command, command2, item) {
             console.log("Add Stock Executed\n");
             break;
 
-        case "setStock":
-            //Where responses are going to be handled
-            console.log("Set Stock Executed\n");
-            break;
-
         case "removeStock":
             //Where responses are going to be handled
             global_funcs.addGoodOut(item);
@@ -207,6 +236,11 @@ function responseHandler(response, headers, command, command2, item) {
             break;
 
         case "logout":
+            break;
+
+        case "setStock":
+            console.log("Set Stock Executed\n");
+            global_vars.setStock = true;
             break;
 
         default:
@@ -268,6 +302,12 @@ function responseHandler(response, headers, command, command2, item) {
                 case "addUser":
                     global_vars.addUser = true
                     console.log("Add User Executed\n")
+                    break;
+
+                case "addPart":
+                    global_vars.addPart = true
+                    global_vars.addedItem = item
+                    console.log("Add Part Executed\n")
                     break;
             }
     }

@@ -49,5 +49,6 @@
         <file>Components/Clock.qml</file>
         <file>Components/Clock2.qml</file>
         <file>Function/GlobalFuncs.qml</file>
+        <file>Layers/AdminAPI2.qml</file>
     </qresource>
 </RCC>

@@ -31,16 +31,22 @@ Item {
     }
 
     function checkOutMsg() {
+        var i = 0;
         console.log("connected:", clock_checkout.connected)
         if (clock_checkout.connected == false) {
             console.log("inside connected:", clock_checkout.connected)
             clock_checkout.connect(function() {
                 if (global_vars.checkOutError == 0) {
-                    global_vars.endpage_error = "All items checked out successfully"
+                    global_vars.endpage_error = "All items checked out. These are: "
+                    i = 0;
+                    while (i < GlobVars.checkGoodOut.length) {
+                        global_vars.endpage_error += GlobVars.checkGoodOut[i] + ' '
+                        i += 1
+                    }
                 }
                 if (global_vars.checkOutError == 1) {
                     global_vars.endpage_error = "Error checking out these items: "
-                    var i = 0;
+                    i = 0;
                     while (i < GlobVars.checkBadOut.length) {
                         global_vars.endpage_error += GlobVars.checkBadOut[i] + '  '
                         i += 1
