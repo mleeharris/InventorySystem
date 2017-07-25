@@ -91,6 +91,7 @@ Item {
     property int checkInError: 0
     property int checkOutError: 0
     property string lookupString: ''
+    property string stockHistory: ''
 
     property string lookupName: ''
     property string scannedItem: ''

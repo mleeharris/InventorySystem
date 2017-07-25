@@ -1,0 +1,149 @@
+QUERIES FOR PARTKEEPR
+
+
+
+
+Adding a manufacturer 
+  queryHandler("partMaster","warehouseMaster","http://192.168.10.97","manufacturers","","",'{"name":"lockheedmartin","address":"tyu","url":"","email":"tyu@agf.com","comment":"jjrtj","phone":"3477772907","fax":""}',"POST");
+    
+
+DATA format :
+
+ {  
+   "name":"lockheedMartin",
+   "address":"tyu",
+   "url":"",
+   "email":"tyu@agf.com",
+   "comment":"jjrtj",
+   "phone":"3477772907",
+   "fax":""
+}
+
+
+
+
+Adding a project 
+
+ queryHandler("partMaster","warehouseMaster","http://192.168.10.97","projects","","",'{"name":"Missile","description":"tyuu","@context":"/api/contexts/Project","@type":"Project","parts":[{"quantity":5,"remarks":null,"overageType":"","overage":0,"part":"/api/parts/4"}]}',"POST");
+
+DATA format:
+
+{  
+  "name":"TankMissile",
+  "description":"tyuu",
+  "@context":"/api/contexts/Project",
+  "@type":"Project",
+  "parts":[  
+    {  
+      "quantity":5,
+      "remarks":null,
+      "overageType":"",
+      "overage":0,
+      "part":"/api/parts/4"
+    }
+  ]
+}
+
+
+
+Adding a distributor
+
+queryHandler("partMaster","warehouseMaster","http://192.168.10.97","distributors","","",'{"name":"Lockheed","address":"tyutyu","url":"","phone":"","fax":"","email":"","comment":"tyutyytu","skuurl":""}',"POST");
+    
+DATA format:
+
+{  
+  "name":"LockheedMartin",
+  "address":"tyutyu",
+  "url":"",
+  "phone":"",
+  "fax":"",
+  "email":"",
+  "comment":"tyutyytu",
+  "skuurl":""
+}
+
+
+
+
+Adding a storage location category:
+
+ queryHandler("partMaster","warehouseMaster","http://192.168.10.97","storage_location_categories","","",'{"parentId":null,"leaf":false,"root":null,"lft":0,"rgt":0,"lvl":0,"name":"MillitaryWarehouse","description":"AK-47 paradise","categoryPath":null,"parent":"/api/storage_location_categories/1"}',"POST"); }
+
+
+DATA format:
+
+{  
+  "parentId":null,
+  "leaf":false,
+  "root":null,
+  "lft":0,
+  "rgt":0,
+  "lvl":0,
+  "name":"MillitaryWarehouse",
+  "description":"AK-47 paradise",
+  "categoryPath":null,
+  "parent":"/api/storage_location_categories/1"
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Adding a storage location:
+
+queryHandler("partMaster","warehouseMaster","http://192.168.10.97","storage_locations","","",'{"category":{"@id":"/api/storage_location_categories/1","parentId":null,"index":-1,"depth":0,"expanded":true,"expandable":true,"checked":null,"leaf":false,"cls":"","iconCls":"","icon":"","glyph":"","root":null,"isLast":false,"isFirst":false,"allowDrop":true,"allowDrag":true,"loaded":false,"loading":false,"href":"","hrefTarget":"","qtip":"","qtitle":"","qshowDelay":0,"children":[],"visible":true,"text":"","lft":0,"rgt":0,"lvl":0,"name":"Root Category","description":null,"categoryPath":"Root Category","@context":"/api/contexts/StorageLocationCategory","@type":"StorageLocationCategory","parent":null},"name":"Millitary"}',"POST"); }
+
+
+Data format
+
+{  
+  "category":{  
+    "@id":"/api/storage_location_categories/1",
+    "parentId":null,
+    "index":-1,
+    "depth":0,
+    "expanded":true,
+    "expandable":true,
+    "checked":null,
+    "leaf":false,
+    "cls":"",
+    "iconCls":"",
+    "icon":"",
+    "glyph":"",
+    "root":null,
+    "isLast":false,
+    "isFirst":false,
+    "allowDrop":true,
+    "allowDrag":true,
+    "loaded":false,
+    "loading":false,
+    "href":"",
+    "hrefTarget":"",
+    "qtip":"",
+    "qtitle":"",
+    "qshowDelay":0,
+    "children":[],
+    "visible":true,
+    "text":"",
+    "lft":0,
+    "rgt":0,
+    "lvl":0,
+    "name":"Root Category",
+    "description":null,
+    "categoryPath":"Root Category",
+    "@context":"/api/contexts/StorageLocationCategory",
+    "@type":"StorageLocationCategory",
+    "parent":null
+  },
+  "name":"Millitary"
+}

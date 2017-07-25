@@ -91,15 +91,22 @@ function setStock(item, stocknumber) {
     queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.97", "parts", item, "setStock", stockstring, "PUT", "", item);
 }
 
-function getStockHistory() {
-    //ASK AMINE
-    queryHandler("partMaster","warehouseMaster","http://192.168.10.97","stock_entries","","","start=0&order=%5B%7B%22property%22%3A%22dateTime%22%2C%22direction%22%3A%22DESC%22%7D%5D&filter=%5B%7B%22subfilters%22%3A%5B%5D%2C%22property%22%3A%22part%22%2C%22operator%22%3A%22%3D%22%2C%22value%22%3A%22%2Fapi%2Fparts%2F2%22%7D%5D","GET");
+function getStockHistory(item) {
 
+    //queryHandler("partMaster","warehouseMaster","http://192.168.10.97","stock_entries","","","start=0&order=%5B%7B%22property%22%3A%22dateTime%22%2C%22direction%22%3A%22DESC%22%7D%5D&filter=%5B%7B%22subfilters%22%3A%5B%5D%2C%22property%22%3A%22part%22%2C%22operator%22%3A%22%3D%22%2C%22value%22%3A%22%2Fapi%2Fparts%2F0005%22%7D%5D","GET", "lookupHistory", item);
+    //console.log(typeof item)
+    item = item.toString()
+    item = item.slice(0,-1)
+    var stockstring = "start=0&order=%5B%7B%22property%22%3A%22dateTime%22%2C%22direction%22%3A%22DESC%22%7D%5D&filter=%5B%7B%22subfilters%22%3A%5B%5D%2C%22property%22%3A%22part%22%2C%22operator%22%3A%22%3D%22%2C%22value%22%3A%22%2Fapi%2Fparts%2F" + item + "%22%7D%5D"
+    //var stockstring = "start=0&order=%5B%7B%22property%22%2%3A%22%3D%22%2C%22value%22%3A%22%2Fapi%2Fparts%2Fitemzzz%22%7D%5D"
+    //stockstring = stockstring.replace('itemzzz',item)
+    //console.log("stockstring: ", stockstring)
+    queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.97", "stock_entries", "", "", stockstring, "GET", 'lookupHistory', item);
 
 }
 
-function queryHandler(user, password, server, module, partID, command, json, method, command2, item){
-    var restURL=server + "/api/"
+function queryHandler(user, password, server, module, partID, command, json, method, command2, item) {
+    var restURL = server + "/api/"
         if (module != "")
             restURL += module;
 
@@ -180,8 +187,13 @@ function errorHandler(response, headers, command, command2, item) {
                     console.log("Couldn't lookup part");
                     global_vars.lookupName = "???"
                     global_vars.lookupStock = "???"
+                    global_vars.lookupString = "Couldn't find item " + global_vars.scannedItem
                     global_vars.checkinpage_error = "Item " + global_vars.scannedItem + " not found"
                     global_vars.checkoutpage_error = "Item " + global_vars.scannedItem + " not found"
+                    break;
+
+                case "lookupHistory":
+                    console.log("Couldn't lookup stock history");
                     break;
 
                 case "addUser":
@@ -236,6 +248,7 @@ function responseHandler(response, headers, command, command2, item) {
             break;
 
         case "logout":
+            console.log("Logged Out");
             break;
 
         case "setStock":
@@ -265,8 +278,7 @@ function responseHandler(response, headers, command, command2, item) {
                     global_vars.lookupString += ("Storage Location: " + arr["storageLocation"]["name"] + "\n");
                     global_vars.lookupString += ("Type: " + arr["@type"] + "\n");
                     global_vars.lookupString += ("Description: " + arr["description"] + "\n");
-                    global_vars.lookupString += ("Minimum Stock: " + arr["minStockLevel"] + "\n");
-                    global_vars.lookupString += ("Low Stock: " + arr["lowStock"] + "\n");
+                    //global_vars.lookupString += ("Minimum Stock: " + arr["minStockLevel"] + "\n");;
 
                     global_vars.lookupName = arr["name"]
                     global_vars.lookupStock = arr["stockLevel"]
@@ -297,6 +309,30 @@ function responseHandler(response, headers, command, command2, item) {
 
 //                    //Display image encoded in 64:
 //                    encode64(xhr.responseText);
+                    break;
+
+                case "lookupHistory":
+                    console.log("lookupHistory executed")
+                    console.log("length: ", arr["hydra:member"].length)
+                    var i = 0;
+                    var usercheckout = '';
+                    var datetime = '';
+                    var action = '';
+                    var linetoadd = '';
+                    global_vars.stockHistory = '';
+                    while (i < arr["hydra:member"].length) {
+                        usercheckout = arr["hydra:member"][i]["user"]["username"]
+                        datetime = arr["hydra:member"][i]["dateTime"]
+                        if (arr["hydra:member"][i]["stockLevel"] === -1) {
+                            action = "Checkout"
+                        }
+                        if (arr["hydra:member"][i]["stockLevel"] === 1) {
+                            action = "Checkin"
+                        }
+                        linetoadd = "-User: " + usercheckout + ",   Action: " + action + "\nDatetime: " + datetime + "\n\n"
+                        global_vars.stockHistory += linetoadd
+                        i += 1
+                    }
                     break;
 
                 case "addUser":

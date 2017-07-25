@@ -85,7 +85,7 @@ Rectangle {
 //        }
 //    }
 
-    Clock {
+    Clock2 {
         id: clock_loggedin
     }
 
@@ -105,21 +105,24 @@ Rectangle {
             Connect.login(global_vars.username, global_vars.realpass)
             console.log("global_vars.loggedIn: ", global_vars.loggedIn)
             global_vars.login_error = "Logging in..."
-            clock_loggedin.delay(1000, function() {
-                global_vars.login_error = ''
+            if (clock_loggedin.connected === false) {
+                clock_loggedin.connect(function() {
+                    global_vars.login_error = ''
 
-                if (global_vars.username === "admin" && global_vars.realpass === "abc123pass") {
-                    nextLayer(root.objectName, "admin_selection")
-                    root.state = "hidden"
-                }
-                else if (global_vars.loggedIn == 1) {
-                    nextLayer(root.objectName, "check")
-                    root.state = "hidden"
-                }
-                else {
-                    global_vars.login_error = "Error: Username or password not correct. Try removing card and placing again"
-                }
-            })
+                    if (global_vars.username === "admin" && global_vars.realpass === "abc123pass") {
+                        nextLayer(root.objectName, "admin_selection")
+                        root.state = "hidden"
+                    }
+                    else if (global_vars.loggedIn == 1) {
+                        nextLayer(root.objectName, "check")
+                        root.state = "hidden"
+                    }
+                    else {
+                        global_vars.login_error = "Error: Username or password not correct. Try removing card and placing again"
+                    }
+                })
+            }
+            clock_loggedin.delay(1000)
         }
     }
 
@@ -300,10 +303,11 @@ Rectangle {
         onClicked: {
             global_vars.login_error = "Exiting..."
             Connect.logout(global_vars.username, global_vars.realpass)
-            clock_loggedin.delay(1000, function() {
+            clock_loggedin.connect( function() {
                 root.state = "hidden"
                 Qt.quit()
             })
+            clock_loggedin.delay(1000)
         }
     }
 

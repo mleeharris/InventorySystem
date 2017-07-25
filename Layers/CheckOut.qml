@@ -30,6 +30,7 @@ Rectangle {
         //tab operation
         main_window.itemScan.connect(itemScan)
         main_window.tabOperationForCheckOut.connect(tabOperationCheckOut)
+        main_window.deleteList.connect(deleteList)
     }
 
     ScannedItem{id: scanned_item}
@@ -184,10 +185,9 @@ Rectangle {
         onClicked: {
             //send list to API here
             Connect.checkOut(GlobVars.itemList)
-            //console.log( "GlobVars.checkBadOut: ", GlobVars.checkBadOut)
-            //console.log( "GlobVars.checkGoodOut: ", GlobVars.checkGoodOut)
+            global_vars.checkinpage_error = ''
+            global_vars.checkoutpage_error = ''
             global_vars.endpage_error = "Checking out... Please wait... "
-            //console.log("GlobVars.itemList: ", GlobVars.itemList)
 
             deletionAll()
             global_vars.checkOutError = 0;
@@ -212,6 +212,7 @@ Rectangle {
         iconAnchors.verticalCenterOffset: global_vars.clear_offset
 
         onClicked: {
+            global_vars.checkoutpage_error = ''
             deletionAll()
         }
     }
@@ -357,5 +358,9 @@ Rectangle {
                 right_tab.state = "Down"
             }
         }
+    }
+
+    function deleteList() {
+        deletionAll()
     }
 }

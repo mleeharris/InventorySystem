@@ -120,7 +120,7 @@ Rectangle {
         }
     }
 
-    Clock {
+    Clock2 {
         id: clock_endpage
     }
 
@@ -141,10 +141,13 @@ Rectangle {
             itemFromEnd()
             global_vars.endpage_error = "Logging Out..."
             Connect.logout(global_vars.username, global_vars.realpass)
-            clock_endpage.delay(1000, function() {
-                root.state = "hidden"
-                nextLayer(root.objectName, "main")
-            })
+            if (clock_endpage.connected === false) {
+                clock_endpage.connect( function() {
+                    root.state = "hidden"
+                    nextLayer(root.objectName, "main")
+                })
+            }
+            clock_endpage.delay(1000)
         }
     }
 
@@ -164,9 +167,10 @@ Rectangle {
         onClicked: {
             global_vars.endpage_error = "Logging Out..."
             Connect.logout(global_vars.username, global_vars.realpass)
-            clock_endpage.delay(1000, function() {
+            clock_endpage.connect( function() {
                 Qt.quit()
             })
+            clock_endpage.delay(1000)
         }
     }
 

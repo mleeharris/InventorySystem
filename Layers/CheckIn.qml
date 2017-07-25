@@ -30,6 +30,7 @@ Rectangle {
         //tab operation
         main_window.itemScanIn.connect(itemScan)
         main_window.tabOperationForCheckIn.connect(tabOperationCheckIn)
+        main_window.deleteList.connect(deleteList)
     }
 
     ScannedItem{id: scanned_item}
@@ -185,6 +186,8 @@ Rectangle {
         iconAnchors.verticalCenterOffset: global_vars.check_in_offset
 
         onClicked: {
+            global_vars.checkinpage_error = ''
+            global_vars.checkoutpage_error = ''
             global_vars.checkInError = 0;
             GlobVars.checkBadIn = [];
             GlobVars.checkGoodIn = [];
@@ -192,8 +195,7 @@ Rectangle {
             //send list to API here
             Connect.checkIn(GlobVars.itemListIn)
             global_vars.endpage_error = "Checking in... Please wait... "
-            console.log("GlobVars.itemListIn: ", GlobVars.itemListIn)
-            //
+            //console.log("GlobVars.itemListIn: ", GlobVars.itemListIn)
 
             global_funcs.checkInMsg()
 
@@ -217,6 +219,7 @@ Rectangle {
         iconAnchors.verticalCenterOffset: global_vars.clear_offset
 
         onClicked: {
+            global_vars.checkinpage_error = ''
             deletionAll()
         }
     }
@@ -377,5 +380,9 @@ Rectangle {
                 right_tab.state = "Down"
             }
         }
+    }
+
+    function deleteList() {
+        deletionAll()
     }
 }

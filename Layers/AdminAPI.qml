@@ -120,7 +120,7 @@ Rectangle {
 
         onClicked: {
             if (inputText1 === '' || inputText2 === '') {
-                global_vars.admin_api_error = "Please enter both a username and a password"
+                global_vars.admin_api_error = "Error: Please enter both a username and a password"
             }
             else {
                 global_vars.admin_api_error = "Entering new user... Please wait... "
@@ -137,6 +137,9 @@ Rectangle {
                         textChange1 = ''
                         textChange2 = ''
                         adminState = "unchecked"
+                    }
+                    if (global_vars.addUser === false) {
+                        global_vars.admin_api_error = "Error: Couldn't add new user " + inputText1
                     }
                 })
                 clock_adminapi_adduser.delay(1000)
@@ -163,7 +166,7 @@ Rectangle {
 
         onClicked: {
             if (inputText1 === '' || inputText2 === '') {
-                global_vars.admin_api_error = "Please enter both a name and a location"
+                global_vars.admin_api_error = "Error: Please enter both a name and a location"
             }
             else {
                 global_vars.admin_api_error = "Entering new part... Please wait... "
@@ -177,7 +180,7 @@ Rectangle {
                             textChange2 = ''
                         }
                         if (global_vars.addPart === false) {
-                            global_vars.admin_api_error = "Couldn't add new part " + inputText1
+                            global_vars.admin_api_error = "Error: Couldn't add new part " + inputText1
                         }
                     })
                 }
@@ -206,9 +209,9 @@ Rectangle {
 
         onClicked: {
             if (inputText1 === '' || inputText2 === '') {
-                global_vars.admin_api_error = "Please enter both an item and a quantity"
+                global_vars.admin_api_error = "Error: Please enter both an item and a quantity"
             }
-            else {
+            else if (!isNaN(inputText2)) {
                 global_vars.admin_api_error = "Setting stock... Please wait... "
                 Connect.setStock(inputText1, inputText2)
                 if (clock_adminapi_setstock.connected == false) {
@@ -219,11 +222,14 @@ Rectangle {
                             textChange2 = ''
                         }
                         if (global_vars.setStock === false) {
-                            global_vars.admin_api_error = "Couldn't set stock of item " + inputText1
+                            global_vars.admin_api_error = "Error: Couldn't set stock of item " + inputText1
                         }
                     })
                 }
                 clock_adminapi_setstock.delay(1000);
+            }
+            else {
+                global_vars.admin_api_error = "Error: Please make sure your input is a number for stock number"
             }
         }
 

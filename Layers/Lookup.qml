@@ -68,7 +68,7 @@ Rectangle {
         id: lookup_text
     }
 
-    Clock {
+    Clock2 {
         id: clock_lookup
     }
 
@@ -163,21 +163,39 @@ Rectangle {
         anchors.left: temp_background.left
         anchors.topMargin: 180
         anchors.leftMargin: 40
-        width: temp_background.width-(40*2)
-        height: temp_background.height-(40*2)
-        font.pointSize: 24
+        width: temp_background.width/2-40
+        height: temp_background.height
+        font.pointSize: 20
         lineHeight: 1.5
         wrapMode: Text.Wrap
+    }
+
+    Text {
+        id: info_text2
+        anchors.top: info_text.top
+        anchors.left: info_text.right
+        anchors.leftMargin: 40
+        width: temp_background.width - info_text.width
+        height: temp_background.height
+        font.pointSize: 15
+        maximumLineCount: 27
+        lineHeight: 1.05
+        wrapMode: Text.Wrap
+        text: global_vars.stockHistory
     }
 
     function itemScan(item) {
         console.log(item)
         item_display.text = "Item: " + item
         Connect.lookUp(item)
+        Connect.getStockHistory(item)
         info_text.text = "Looking up... Please wait... "
-        clock_lookup.delay(1000, function() {
-            info_text.text = global_vars.lookupString
-        });
+        if (clock_lookup.connected === false) {
+            clock_lookup.connect( function() {
+                info_text.text = global_vars.lookupString
+            });
+        }
+        clock_lookup.delay(500)
         //info_text.text = item + item + item + item + item + item + item + item + item + item + item
     }
 

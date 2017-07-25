@@ -32,16 +32,19 @@ Item {
 
     function checkOutMsg() {
         var i = 0;
-        console.log("connected:", clock_checkout.connected)
         if (clock_checkout.connected == false) {
-            console.log("inside connected:", clock_checkout.connected)
             clock_checkout.connect(function() {
                 if (global_vars.checkOutError == 0) {
-                    global_vars.endpage_error = "All items checked out. These are: "
-                    i = 0;
-                    while (i < GlobVars.checkGoodOut.length) {
-                        global_vars.endpage_error += GlobVars.checkGoodOut[i] + ' '
-                        i += 1
+                    if (GlobVars.checkGoodOut.length > 0) {
+                        global_vars.endpage_error = "All items checked out. These are: "
+                        i = 0;
+                        while (i < GlobVars.checkGoodOut.length) {
+                            global_vars.endpage_error += GlobVars.checkGoodOut[i] + ' '
+                            i += 1
+                        }
+                    }
+                    else {
+                        global_vars.endpage_error = "No items entered, so none were checked out"
                     }
                 }
                 if (global_vars.checkOutError == 1) {
@@ -51,11 +54,14 @@ Item {
                         global_vars.endpage_error += GlobVars.checkBadOut[i] + '  '
                         i += 1
                     }
-                    global_vars.endpage_error += "\n\nBut successfully checked out these items: "
-                    i = 0;
-                    while (i < GlobVars.checkGoodOut.length) {
-                        global_vars.endpage_error += GlobVars.checkGoodOut[i] + ' '
-                        i += 1
+                    global_vars.endpage_error += "\n\n"
+                    if (GlobVars.checkGoodOut.length > 0) {
+                        global_vars.endpage_error += "But successfully checked out these items: "
+                        i = 0;
+                        while (i < GlobVars.checkGoodOut.length) {
+                            global_vars.endpage_error += GlobVars.checkGoodOut[i] + ' '
+                            i += 1
+                        }
                     }
                 }
             });
@@ -75,23 +81,37 @@ Item {
     }
 
     function checkInMsg() {
+        var i = 0;
         if (clock_checkin.connected == false) {
             clock_checkin.connect(function() {
                 if (global_vars.checkInError == 0) {
-                    global_vars.endpage_error = "All items checked in successfully"
+                    if (GlobVars.checkGoodIn.length > 0) {
+                        global_vars.endpage_error = "All items checked in successfully. These are: "
+                        i = 0;
+                        while (i < GlobVars.checkGoodIn.length) {
+                            global_vars.endpage_error += GlobVars.checkGoodIn[i] + ' '
+                            i += 1
+                        }
+                    }
+                    else {
+                        global_vars.endpage_error = "No items entered, so none were checked in"
+                    }
                 }
                 if (global_vars.checkInError == 1) {
-                    global_vars.endpage_error = "Error checking in these items: "
-                    var i = 0;
+                    global_vars.endpage_error = "Error checking in these items:"
+                    i = 0;
                     while (i < GlobVars.checkBadIn.length) {
                         global_vars.endpage_error += GlobVars.checkBadIn[i] + '  '
                         i += 1
                     }
-                    global_vars.endpage_error += "\n\nBut successfully checked in these items: "
-                    i = 0;
-                    while (i < GlobVars.checkGoodIn.length) {
-                        global_vars.endpage_error += GlobVars.checkGoodIn[i] + ' '
-                        i += 1
+                    global_vars.endpage_error += "\n\n"
+                    if (GlobVars.checkGoodIn.length > 0) {
+                        global_vars.endpage_error += "But successfully checked in these items: "
+                        i = 0;
+                        while (i < GlobVars.checkGoodIn.length) {
+                            global_vars.endpage_error += GlobVars.checkGoodIn[i] + ' '
+                            i += 1
+                        }
                     }
                 }
             });

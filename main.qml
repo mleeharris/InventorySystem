@@ -43,9 +43,12 @@ Window {
     signal tabOperationForAdminAPI(string tabnum, string state)
     signal tabOperationForAdminSelection(string tabnum, string state)
     signal tabOperationForAdminAPI2(string tabnum, string state)
+
     signal itemScan(string item)
     signal itemScanIn(string item)
     signal itemLookup(string item)
+
+    signal deleteList()
 
     FontLoader {
         id: opening_font
@@ -526,10 +529,15 @@ Window {
         //GlobVars.userpass = thread.userpassGet()
         //GlobVars.userpass = GlobVars.userpass.split('=')
 
+        if (global_vars.username != '' && global_vars.realpass != '') {
+            global_vars.login_error = "Logged out of previous scan"
+            Connect.logout(global_vars.username, global_vars.realpass)
+        }
+
         GlobVars.username = thread.userGet();
         GlobVars.realpass = thread.passGet();
 
-        console.log("GlobVars.username: ", GlobVars.username)
+        //console.log("GlobVars.username: ", GlobVars.username)
 
         //PASSWORD ERROR FIX PROBABLY HERE
         if (GlobVars.username == "Error" || GlobVars.username == '' || GlobVars.realpass == "Error") {
@@ -553,9 +561,60 @@ Window {
         global_vars.login_error = ''
         }
 
+
+//        Check{id: check; x:0; y:0}
+//        ScanPage{id: scan_page; x:0; y:0}
+//        LoginPage{id: login_page; x:0; y:0}
+//        LoggedIn{id: logged_in; x:0; y:0}
+//        CheckOut{id: check_out; x:0; y: 0}
+//        EndPage{id: end_page; x:0; y: 0}
+//        CheckIn{id: check_in; x:0; y: 0}
+//        Lookup{id: lookup; x:0; y: 0}
+//        AdminAPI{id: admin_api; x:0; y:0}
+//        AdminSelection{id: admin_selection; x:0; y:0}
+//        AdminAPI2{id: admin_api2; x:0; y:0}
+
         if (object_holder.state == "visible") {
             slot_switchLayer("main","logged_in")
             object_holder.state = "hidden"
+        }
+        if (lookup.state == "visible") {
+            slot_switchLayer("end_page","main")
+            object_holder.state = "hidden"
+            slot_switchLayer("main","logged_in")
+            lookup.state = "hidden"
+        }
+        if (check.state == "visible") {
+            slot_switchLayer("end_page","main")
+            object_holder.state = "hidden"
+            slot_switchLayer("main","logged_in")
+            check.state = "hidden"
+        }
+        if (check_in.state == "visible") {
+            slot_switchLayer("end_page","main")
+            object_holder.state = "hidden"
+            slot_switchLayer("main","logged_in")
+            deleteList()
+            check_in.state = "hidden"
+        }
+        if (check_out.state == "visible") {
+            slot_switchLayer("end_page","main")
+            object_holder.state = "hidden"
+            slot_switchLayer("main","logged_in")
+            deleteList()
+            check_out.state = "hidden"
+        }
+        if (end_page.state == "visible") {
+            slot_switchLayer("end_page","main")
+            object_holder.state = "hidden"
+            slot_switchLayer("main","logged_in")
+            end_page.state = "hidden"
+        }
+        if (login_page.state == "visible") {
+            slot_switchLayer("end_page","main")
+            object_holder.state = "hidden"
+            slot_switchLayer("main","logged_in")
+            login_page.state = "hidden"
         }
     }
 }
