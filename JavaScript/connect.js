@@ -23,14 +23,14 @@ function test() {
 
 
 function login(username, password) {
-    console.log(username);
-    console.log(password);
+    //console.log(username);
+    //console.log(password);
     queryHandler(username, password, "http://192.168.10.97", "users", "", "login", "", "POST", "", "");
 }
 
 function logout(username, password) {
-    console.log(username);
-    console.log(password);
+    //console.log(username);
+    //console.log(password);
     queryHandler(username, password, "http://192.168.10.97", "users", "", "logout", "", "GET", "", "");
 }
 
@@ -46,7 +46,7 @@ function checkIn(itemListIn) {
 function checkOut(itemList) {
     var i = 0;
     while (i < itemList.length) {
-        console.log("itemList[i]: ", itemList[i])
+        //console.log("itemList[i]: ", itemList[i])
         //console.log ("=======================NEW QUERY==============================================================================")
         queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.97", "parts", itemList[i], "removeStock", "quantity=1", "PUT", "", itemList[i]);
         i += 1
@@ -85,7 +85,7 @@ function setStock(item, stocknumber) {
     global_vars.setStock = false
     var stockstring = 'quantity=num'
     stockstring = stockstring.replace('num',stocknumber)
-    console.log("stockstring: ", stockstring)
+    //console.log("stockstring: ", stockstring)
 
     //queryHandler("partMaster", "warehouseMaster","http://192.168.10.97","parts","27","setStock","quantity=156","PUT", "", item);
     queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.97", "parts", item, "setStock", stockstring, "PUT", "", item);
@@ -243,7 +243,7 @@ function responseHandler(response, headers, command, command2, item) {
                 console.log("Connected");
                 console.log("Welcome " + arr["username"]);
                 global_vars.loggedIn = 1;
-                console.log("loggedIn: ", global_vars.loggedIn)
+                //console.log("loggedIn: ", global_vars.loggedIn)
             }
             break;
 
@@ -259,6 +259,7 @@ function responseHandler(response, headers, command, command2, item) {
         default:
             switch(command2) {
                 case "lookUp":
+                    console.log("Lookup Completed\n")
                     //console.log("********************* PARTS INFORMATION ************************************\n");
 
                     //for an easier use of JSONS try using https://jsonformatter.curiousconcept.com/
@@ -278,7 +279,7 @@ function responseHandler(response, headers, command, command2, item) {
                     global_vars.lookupString += ("Storage Location: " + arr["storageLocation"]["name"] + "\n");
                     global_vars.lookupString += ("Type: " + arr["@type"] + "\n");
                     global_vars.lookupString += ("Description: " + arr["description"] + "\n");
-                    //global_vars.lookupString += ("Minimum Stock: " + arr["minStockLevel"] + "\n");;
+                    //global_vars.lookupString += ("Minimum Stock: " + arr["minStockLevel"] + "\n");
 
                     global_vars.lookupName = arr["name"]
                     global_vars.lookupStock = arr["stockLevel"]
@@ -312,8 +313,8 @@ function responseHandler(response, headers, command, command2, item) {
                     break;
 
                 case "lookupHistory":
-                    console.log("lookupHistory executed")
-                    console.log("length: ", arr["hydra:member"].length)
+                    //console.log("lookupHistory executed")
+                    //console.log("length: ", arr["hydra:member"].length)
                     var i = 0;
                     var usercheckout = '';
                     var datetime = '';

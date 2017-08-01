@@ -98,9 +98,9 @@ Rectangle {
 
     ListView {
         id: item_listview
-        height: 500
+        height: 650
         anchors.fill: temp_background
-        anchors.leftMargin: 30
+        anchors.leftMargin: 50
         anchors.topMargin: 190
         anchors.bottomMargin: 30
         delegate: item_delegate
@@ -109,11 +109,16 @@ Rectangle {
         z: 4
         clip: true
 
-//        ScrollBar.vertical: ScrollBar {
-//            parent: item_listview
-//            anchors.top: parent.top
-//            anchors.left: parent.right
-//        }
+        ScrollBar.vertical: ScrollBar {
+            active: true
+            interactive: true
+            orientation: Qt.Vertical
+            policy: ScrollBar.AsNeeded
+            parent: item_listview.parent
+            anchors.top: item_listview.top
+            anchors.left: item_listview.right
+            anchors.leftMargin: -65
+        }
     }
 
     Text {
@@ -315,12 +320,6 @@ Rectangle {
         }
         clock_checkin2.delay(200)
     }
-
-//    function itemCreation(item) {
-//        item_model.insert(item_listview.currentIndex + 1, {"itemText": "ID: " + item, "itemName": "Name: " + global_vars.lookupName})
-//        item_listview.currentIndex = item_listview.currentIndex + 1
-//        item_counter.text = "Items: " + GlobVars.itemListIn.length
-//    }
 
     function deletionHandlingCheckOut() {
         item_model.remove(item_listview.currentIndex)

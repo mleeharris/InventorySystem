@@ -30,8 +30,8 @@ int main(int argc, char *argv[]) {
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     QObject *MainWindow = engine.rootObjects().first();
-    //QObject *LoggedIn = MainWindow->findChild<QObject *>("logged_in");
     QObject *ScanPage = MainWindow->findChild<QObject *>("scan_page");
+    //QObject *LoggedIn = MainWindow->findChild<QObject *>("logged_in");
 
     engine.rootContext()->setContextProperty("testing", &Testerino);
     engine.rootContext()->setContextProperty("thread", &Threadz);

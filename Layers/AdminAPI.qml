@@ -272,6 +272,7 @@ Rectangle {
             location = "qrc:/Images/back.png"
         }
         onClicked: {
+            global_vars.admin_api_error = ''
             nextLayer(root.objectName, "admin_selection")
             root.state = "hidden"
         }

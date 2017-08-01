@@ -24,7 +24,7 @@ Item {
     property string admin_api_error: ''
     property string admin_selection_error: ''
     property string endpage_error: ''
-    property string admin_api2_error: ''
+    property string admin_api2_error: 'There seems to be nothing here yet'
 
     /*Background*/
     property string grayColor: "#DCDCDC"
@@ -98,4 +98,8 @@ Item {
     property string lookupStock: ''
 
     property string addedItem: ''
+
+    /*Helpbox*/
+    property string tempInfo: 'yooooooooooooo'
+    property string tempStockHistory: 'ayyyyyyyyyyyyyyyyyyy'
 }

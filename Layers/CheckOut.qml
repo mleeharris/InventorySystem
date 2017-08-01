@@ -2,7 +2,7 @@ import QtQuick 2.6
 import QtQuick.Window 2.2
 import QtQml 2.2
 import QtQuick.Dialogs 1.1
-import QtQuick.Controls 1.1
+import QtQuick.Controls 2.2
 import QtGraphicalEffects 1.0
 import "qrc:/JavaScript"
 import "qrc:/Components"
@@ -102,8 +102,9 @@ Rectangle {
 
     ListView {
         id: item_listview
+        height: 650
         anchors.fill: temp_background
-        anchors.leftMargin: 30
+        anchors.leftMargin: 50
         anchors.topMargin: 190
         anchors.bottomMargin: 30
         delegate: item_delegate
@@ -111,6 +112,17 @@ Rectangle {
         spacing: 12
         z: 4
         clip: true
+
+        ScrollBar.vertical: ScrollBar {
+            active: true
+            interactive: true
+            orientation: Qt.Vertical
+            policy: ScrollBar.AsNeeded
+            parent: item_listview.parent
+            anchors.top: item_listview.top
+            anchors.left: item_listview.right
+            anchors.leftMargin: -65
+        }
     }
 
     Text {

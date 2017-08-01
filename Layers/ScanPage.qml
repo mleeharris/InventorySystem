@@ -74,7 +74,7 @@ Rectangle {
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 80
+        anchors.bottomMargin: 100
     }
 
     Text {
@@ -275,6 +275,7 @@ Rectangle {
             location = "qrc:/Images/back.png"
         }
         onClicked: {
+            global_vars.admin_error = ''
             nextLayer(root.objectName, "admin_selection")
             root.state = "hidden"
         }

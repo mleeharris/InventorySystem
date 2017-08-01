@@ -50,5 +50,8 @@
         <file>Components/Clock2.qml</file>
         <file>Function/GlobalFuncs.qml</file>
         <file>Layers/AdminAPI2.qml</file>
+        <file>Components/HelpBox.qml</file>
+        <file>Images/question_darkgray.png</file>
+        <file>Images/question_gray.png</file>
     </qresource>
 </RCC>

@@ -4,7 +4,7 @@ import "qrc:/Components/"
 
 Rectangle  {
     id: root_top
-    objectName: "button"
+    objectName: "bottomtab"
     property alias label: tab_txt
     property alias location: power.source
     clip: false

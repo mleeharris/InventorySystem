@@ -53,12 +53,12 @@ Rectangle {
     Text {
         id: admin_api_2
         anchors.top: parent.top
-        anchors.topMargin: 70
+        anchors.topMargin: 60
         anchors.horizontalCenter: parent.horizontalCenter
         text: "Admin  API"
         font.family: "Typo Graphica"
         color: "Black"
-        font.pointSize: 100
+        font.pointSize: 90
     }
 
     Error {

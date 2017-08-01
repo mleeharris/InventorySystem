@@ -103,7 +103,7 @@ Rectangle {
         onClicked: {
             //Connect.test()
             Connect.login(global_vars.username, global_vars.realpass)
-            console.log("global_vars.loggedIn: ", global_vars.loggedIn)
+            //console.log("global_vars.loggedIn: ", global_vars.loggedIn)
             global_vars.login_error = "Logging in..."
             if (clock_loggedin.connected === false) {
                 clock_loggedin.connect(function() {

@@ -2,7 +2,7 @@
 //Summer 2017
 //Inventory GUI
 
-//All icons were downloaded from www.flaticon.com
+//All icons make by Freepik from www.flaticon.com
 
 import QtQuick 2.6
 import QtQuick.Window 2.2

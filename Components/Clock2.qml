@@ -4,7 +4,7 @@ import "qrc:/Components/"
 
 Rectangle  {
     id: root
-    objectName: "clock"
+    objectName: "clock2"
 
     color: "#00000000"
     property bool connected: false

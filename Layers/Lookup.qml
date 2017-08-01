@@ -58,6 +58,15 @@ Rectangle {
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
+    HelpBox {
+        id: testerino
+        anchors.top: parent.top
+        anchors.right: parent.right
+        anchors.margins: 30
+        opacity: 1.0
+        z: 4
+    }
+
     Text {
         text: "Lookup"
         anchors.top: temp_background.top

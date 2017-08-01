@@ -5,7 +5,7 @@ import "qrc:/JavaScript/globalVars.js" as GlobVars
 
 Rectangle  {
     id: root
-    objectName: "button"
+    objectName: "scanneditem"
     property alias item_id: item_txt
     property alias item_name: name
     property alias item_stock: stock
@@ -120,8 +120,6 @@ Rectangle  {
                 root.released()
             }
             onClicked: {
-                //deletionHandlingCheckOut(item_txt.text)
-                //root.state = "hidden"
                 root.clicked()
             }
         }
