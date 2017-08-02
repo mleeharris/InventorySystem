@@ -318,7 +318,7 @@ Rectangle {
                 item_counter.text = "Items: " + GlobVars.itemListIn.length
             })
         }
-        clock_checkin2.delay(200)
+        clock_checkin2.delay(500)
     }
 
     function deletionHandlingCheckOut() {

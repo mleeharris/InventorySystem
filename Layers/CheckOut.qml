@@ -307,7 +307,7 @@ Rectangle {
                 item_counter.text = "Items: " + GlobVars.itemList.length
             })
         }
-        clock_checkout2.delay(200)
+        clock_checkout2.delay(500)
     }
 
 
