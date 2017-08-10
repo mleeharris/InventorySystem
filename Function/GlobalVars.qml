@@ -32,7 +32,7 @@ Item {
 
     /*Button Characteristics*/
     property int buttonHeight: display(150)
-    property int buttonWidth: display(buttonHeight*4+50)
+    property int buttonWidth: buttonHeight*4+display(50)
     property int buttonSize: display(70)
 
     /*Tab Characteristics*/
@@ -108,8 +108,8 @@ Item {
     property int fullHeight: 1080
 
 
-    property int tempWidth: 1366
-    property int tempHeight: 768
+    property int tempWidth: 854
+    property int tempHeight: 480
 
 
     property bool changeSize: true
@@ -127,8 +127,8 @@ Item {
         var fullHeight = 1080
 
         if (changeSize == true) {
-            var tempWidth = 1366
-            var tempHeight = 768
+            var tempWidth = 854
+            var tempHeight = 480
             newSize = (tempWidth/fullWidth) * fullSize
             return newSize
         }

@@ -317,7 +317,7 @@ function responseHandler(response, headers, command, command2, item) {
                     break;
 
                 case "lookupHistory":
-                    //console.log("lookupHistory executed")
+                    console.log("lookupHistory executed")
                     //console.log("length: ", arr["hydra:member"].length)
                     var i = 0;
                     var usercheckout = '';
@@ -326,16 +326,19 @@ function responseHandler(response, headers, command, command2, item) {
                     var linetoadd = '';
                     global_vars.stockHistory = '';
                     while (i < arr["hydra:member"].length) {
-                        usercheckout = arr["hydra:member"][i]["user"]["username"]
-                        datetime = arr["hydra:member"][i]["dateTime"]
-                        if (arr["hydra:member"][i]["stockLevel"] === -1) {
-                            action = "Checkout"
+                        //console.log("user", arr["hydra:member"][i]["user"])
+                        if (arr["hydra:member"][i]["user"]) {
+                            usercheckout = arr["hydra:member"][i]["user"]["username"]
+                            datetime = arr["hydra:member"][i]["dateTime"]
+                            if (arr["hydra:member"][i]["stockLevel"] === -1) {
+                                action = "Checkout"
+                            }
+                            if (arr["hydra:member"][i]["stockLevel"] === 1) {
+                                action = "Checkin"
+                            }
+                            linetoadd = "-User: " + usercheckout + ",   Action: " + action + "\nDatetime: " + datetime + "\n\n"
+                            global_vars.stockHistory += linetoadd
                         }
-                        if (arr["hydra:member"][i]["stockLevel"] === 1) {
-                            action = "Checkin"
-                        }
-                        linetoadd = "-User: " + usercheckout + ",   Action: " + action + "\nDatetime: " + datetime + "\n\n"
-                        global_vars.stockHistory += linetoadd
                         i += 1
                     }
                     break;
