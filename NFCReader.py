@@ -2,7 +2,6 @@
 import re, argparse
 from smartcard.System import readers
 import datetime, sys
-import binascii
 
 #ACS ACR122U NFC Reader
 #Suprisingly, to get data from the tag, it is a handshake protocol
@@ -53,15 +52,13 @@ def readBlock(page):
                 if (int(page)%4 == 3):
                     print (dataCurr)
                 else :
-                    #dataCurr = ''.join([chr(int(dataCurr[x:x+2],16)) for x in range(0,len(dataCurr),2)])
-                    dataCurr = binascii.unhexlify(dataCurr)
-                    dataCurr = str(dataCurr,'ascii')
+                    dataCurr = dataCurr.decode("hex")
                     print (dataCurr)
                 #print (dataCurr + " read from page " + str(page))
             else:
                 sys.stdout.write("Error")
                 #print ("Error: Couldnt read page " + str(page) + ". Authentication needed")
-        except (Exception):
+        except Exception,e:
             sys.stdout.write("Error")
             #print ("Error: Couldnt read page " + str(page) + ". Connection problem.")
 
@@ -82,7 +79,7 @@ def authBlock(page, keynum):
             if (resp[1] == 99):
                 sys.stdout.write("Error")
                 #print ("Error: Authentication of block " + str(page) + " unsuccessful")
-        except (Exception):
+        except Exception, e:
             sys.stdout.write("Error")
             #print ("Error: Authentication Error No. 2")
 
@@ -105,7 +102,7 @@ def updateBlock(page, value):
             if resp[1] == 99:
                 sys.stdout.write("Error")
                 #print ("Error: Could not write " + value + " to page " + str(page) + ". Authentication needed")
-        except (Exception):
+        except Exception, e:
             sys.stdout.write("Error")
             #print ("Error: Could not write " + value + " to page " + str(page)  + ". Connection problem.")
 
@@ -123,7 +120,7 @@ def addKey(keynum, key):
         if (resp[1] == 99):
             sys.stdout.write("Error")
             #print ("Error: Unsuccessful addition of key number " + str(keynum))
-    except (Exception):
+    except Exception, e:
         sys.stdout.write("Error")
         #print ("Error: Unsuccessful addition of key number " + str(keynum))
 
@@ -173,24 +170,21 @@ if __name__ == "__main__":
         page = args.update[0]
         data = args.update[1]
 
-        b = bytearray()
-        b.extend(map(ord, data))
-        #data = b'yoooo'
-
-        b = binascii.hexlify(b)
-        b = str(b,'ascii')
+        data = data.encode("hex")
         # print data
         # print type(data)
 
         # print len(data)
-        if (len(b) < 32):
-            left = 32-len(b)
-            i = len(b)
+        if (len(data) < 32):
+            left = 32-len(data)
+            i = len(data)
             while (i < 32):
-                b = b + '0'
+                data = data + '0'
                 i += 1
 
-        updateBlock(int(page), b)
+        data = data.upper()
+
+        updateBlock(int(page), data)
 
     if args.addkey:
         keynum = args.addkey[0]
