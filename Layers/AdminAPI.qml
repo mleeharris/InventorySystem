@@ -11,8 +11,8 @@ import "qrc:/JavaScript/connect.js" as Connect
 Rectangle {
     id: root
     visible: true
-    width: 1920
-    height: 1080
+    width: global_vars.tempWidth
+    height: global_vars.tempHeight
     objectName: "admin_api"
 
     signal nextLayer(string currentLayer, string nextLayer)
@@ -47,40 +47,42 @@ Rectangle {
 
     Image {
         id: background_image
+        height: global_vars.tempHeight
+        width: global_vars.tempWidth
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
     Text {
         id: admin_api
         anchors.top: parent.top
-        anchors.topMargin: 60
+        anchors.topMargin: global_vars.display(60)
         anchors.horizontalCenter: parent.horizontalCenter
         text: "Admin  API"
         font.family: "Typo Graphica"
         color: "Black"
-        font.pointSize: 90
+        font.pointSize: global_vars.display(90)
     }
 
     Error {
         id: api_error
-        errorHeight: 250
-        errorWidth: 700
+        errorHeight: global_vars.display(250)
+        errorWidth: global_vars.display(700)
         errorText: global_vars.admin_api_error
         z: 1
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 100
+        anchors.bottomMargin: global_vars.display(100)
     }
 
     BasicButton {
         id: other_options
         anchors.right: parent.right
         anchors.top: admin_api.top
-        anchors.rightMargin: 140
-        anchors.topMargin: 15
-        height: 100
-        width: 250
+        anchors.rightMargin: global_vars.display(140)
+        anchors.topMargin: global_vars.display(15)
+        height: global_vars.display(100)
+        width: global_vars.display(250)
         label.text: "More"
 
         onClicked: {
@@ -104,9 +106,9 @@ Rectangle {
     DoubleInput {
         id: add_user
         anchors.left: parent.left
-        anchors.leftMargin: 105
+        anchors.leftMargin: global_vars.display(105)
         anchors.top: admin_api.bottom
-        anchors.topMargin: -10
+        anchors.topMargin: global_vars.display(-10)
         height: global_vars.buttonHeightAdmin
         width: global_vars.buttonWidthAdmin
         label.text: "Add  User"
@@ -116,7 +118,7 @@ Rectangle {
         helpText2: "Password"
         maxLength2: 19
         helpText3: "Admin?"
-        boxWidth: global_vars.buttonWidthAdmin + 165
+        boxWidth: global_vars.buttonWidthAdmin + global_vars.display(165)
 
         onClicked: {
             if (inputText1 === '' || inputText2 === '') {
@@ -150,9 +152,9 @@ Rectangle {
     DoubleInput {
         id: add_part
         anchors.left: parent.left
-        anchors.leftMargin: 105
+        anchors.leftMargin: global_vars.display(105)
         anchors.top: add_user.bottom
-        anchors.topMargin: 15
+        anchors.topMargin: global_vars.display(15)
         height: global_vars.buttonHeightAdmin
         width: global_vars.buttonWidthAdmin
         label.text: "Add  Part"
@@ -193,9 +195,9 @@ Rectangle {
     DoubleInput {
         id: set_stock
         anchors.left: parent.left
-        anchors.leftMargin: 105
+        anchors.leftMargin: global_vars.display(105)
         anchors.top: add_part.bottom
-        anchors.topMargin: 15
+        anchors.topMargin: global_vars.display(15)
         height: global_vars.buttonHeightAdmin
         width: global_vars.buttonWidthAdmin
         label.text: "Set  Stock"

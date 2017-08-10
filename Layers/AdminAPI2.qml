@@ -11,8 +11,8 @@ import "qrc:/JavaScript/connect.js" as Connect
 Rectangle {
     id: root
     visible: true
-    width: 1920
-    height: 1080
+    width: global_vars.tempWidth
+    height: global_vars.tempHeight
     objectName: "admin_api2"
 
     signal nextLayer(string currentLayer, string nextLayer)
@@ -47,30 +47,32 @@ Rectangle {
 
     Image {
         id: background_image
+        height: global_vars.tempHeight
+        width: global_vars.tempWidth
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
     Text {
         id: admin_api_2
         anchors.top: parent.top
-        anchors.topMargin: 60
+        anchors.topMargin: global_vars.display(60)
         anchors.horizontalCenter: parent.horizontalCenter
         text: "Admin  API"
         font.family: "Typo Graphica"
         color: "Black"
-        font.pointSize: 90
+        font.pointSize: global_vars.display(90)
     }
 
     Error {
         id: api2_error
-        errorHeight: 250
-        errorWidth: 700
+        errorHeight: global_vars.display(250)
+        errorWidth: global_vars.display(700)
         errorText: global_vars.admin_api2_error
         z: 1
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 100
+        anchors.bottomMargin: global_vars.display(100)
     }
 
     Clock2 {

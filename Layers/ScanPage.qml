@@ -8,8 +8,8 @@ import "qrc:/JavaScript/connect.js" as Connect
 Rectangle {
     id: root
     visible: true
-    width: 1920
-    height: 1080
+    width: global_vars.tempWidth
+    height: global_vars.tempHeight
     objectName: "scan_page"
 
     signal nextLayer(string currentLayer, string nextLayer)
@@ -50,48 +50,50 @@ Rectangle {
 
     Image {
         id: background_image
+        height: global_vars.tempHeight
+        width: global_vars.tempWidth
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
     Text {
         id: admin_console
         anchors.top: parent.top
-        anchors.topMargin: 70
+        anchors.topMargin: global_vars.display(70)
         anchors.horizontalCenter: parent.horizontalCenter
         text: "Admin  RFID"
         font.family: "Typo Graphica"
         color: "Black"
-        font.pointSize: 100
+        font.pointSize: global_vars.display(100)
     }
 
 
     Error {
         id: scanpage_error
-        height: 250
-        width: 700
+        height: global_vars.display(250)
+        width: global_vars.display(700)
         errorText: global_vars.admin_error
         z: 1
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 100
+        anchors.bottomMargin: global_vars.display(100)
     }
 
     Text {
         id: active_check
         anchors.horizontalCenter: scanpage_error.horizontalCenter
         anchors.bottom: scanpage_error.top
-        anchors.bottomMargin: 20
+        anchors.bottomMargin: global_vars.display(20)
         text: "No card actively placed"
         font.family: "Helvetica"
-        font.pixelSize: 36
+        font.pixelSize: global_vars.display(36)
     }
 
     ButtonInput {
         anchors.left: parent.left
-        anchors.leftMargin: 100
+        anchors.leftMargin: global_vars.display(100)
         anchors.top: admin_console.bottom
-        anchors.topMargin: 20
+        anchors.topMargin: global_vars.display(20)
         height: global_vars.buttonHeightAdmin
         width: global_vars.buttonWidthAdmin
         id: addkey_button
@@ -122,7 +124,7 @@ Rectangle {
         anchors.left: addkey_button.left
         anchors.leftMargin: addkey_button.leftMargin
         anchors.top: addkey_button.bottom
-        anchors.topMargin: 20
+        anchors.topMargin: global_vars.display(20)
         height: global_vars.buttonHeightAdmin
         width: global_vars.buttonWidthAdmin
         id: auth_button
@@ -149,9 +151,9 @@ Rectangle {
 
     ButtonInput {
         anchors.left: parent.horizontalCenter
-        anchors.leftMargin: 30
+        anchors.leftMargin: global_vars.display(30)
         anchors.top: admin_console.bottom
-        anchors.topMargin: 20
+        anchors.topMargin: global_vars.display(20)
         height: global_vars.buttonHeightAdmin
         width: global_vars.buttonWidthAdmin
         id: username
@@ -183,7 +185,7 @@ Rectangle {
         anchors.left: username.left
         anchors.leftMargin: username.leftMargin
         anchors.top: username.bottom
-        anchors.topMargin: 20
+        anchors.topMargin: global_vars.display(20)
         height: global_vars.buttonHeightAdmin
         width: global_vars.buttonWidthAdmin
         id: password
@@ -215,10 +217,10 @@ Rectangle {
         id: readall
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.rightMargin: 140
-        anchors.topMargin: 100
-        height: 100
-        width: 250
+        anchors.rightMargin: global_vars.display(140)
+        anchors.topMargin: global_vars.display(100)
+        height: global_vars.display(100)
+        width: global_vars.display(250)
         label.text: "Print"
 
         onClicked: {

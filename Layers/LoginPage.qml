@@ -7,8 +7,8 @@ import "qrc:/JavaScript/globalVars.js" as GlobVars
 Rectangle {
     id: root
     visible: true
-    width: 1920
-    height: 1080
+    width: global_vars.tempWidth
+    height: global_vars.tempHeight
     objectName: "login_page"
 
     signal nextLayer(string currentLayer, string nextLayer)
@@ -43,18 +43,20 @@ Rectangle {
 
     Image {
         id: background_image
+        height: global_vars.tempHeight
+        width: global_vars.tempWidth
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
     Text {
         id: please_scan
         anchors.top: parent.top
-        anchors.topMargin: 150
+        anchors.topMargin: global_vars.display(150)
         anchors.horizontalCenter: parent.horizontalCenter
         text: "How  To???"
         font.family: "Typo Graphica"
         color: "Black"
-        font.pointSize: 200
+        font.pointSize: global_vars.display(200)
     }
 
     BottomTab {
@@ -101,13 +103,13 @@ Rectangle {
 
     Error {
         id: howto_error
-        errorHeight: 300
-        errorWidth: 600
+        errorHeight: global_vars.display(300)
+        errorWidth: global_vars.display(600)
         errorText: global_vars.howto_error
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 130
+        anchors.bottomMargin: global_vars.display(130)
     }
 
     function tabOperationLoginPage(tabnum, state) {

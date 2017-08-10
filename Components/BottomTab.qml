@@ -98,8 +98,8 @@ Rectangle  {
             name: "Down";
             PropertyChanges {
                 target: black_background
-                height: 100
-                radius: 50
+                height: global_vars.display(100)
+                radius: global_vars.display(50)
             }
             PropertyChanges {
                 target: tab_txt
@@ -107,9 +107,9 @@ Rectangle  {
             }
             PropertyChanges {
                 target: root
-                height: 100
-                radius: 50
-                anchors.topMargin: 330
+                height: global_vars.display(100)
+                radius: global_vars.display(50)
+                anchors.topMargin: global_vars.display(330)
             }
             PropertyChanges {
                 target: btn_ma
@@ -139,8 +139,8 @@ Rectangle  {
 
     Rectangle {
         id: blue_cover
-        height: 47
-        width: global_vars.tabWidth + 50
+        height: global_vars.display(47)
+        width: global_vars.tabWidth + global_vars.display(50)
         color: global_vars.tabColorUnpressed
         z: 3
 
@@ -156,9 +156,9 @@ Rectangle  {
         color: "black"
         z: 1
         anchors.top: root.top
-        anchors.topMargin: 10
+        anchors.topMargin: global_vars.display(10)
         anchors.left: root.left
-        anchors.leftMargin: 20
+        anchors.leftMargin: global_vars.display(20)
     }
 
     Text {
@@ -180,20 +180,20 @@ Rectangle  {
     Image {
         id: power
         anchors.left: root.left
-        anchors.leftMargin: 100
+        anchors.leftMargin: global_vars.display(100)
         anchors.top: root.top
         anchors.right: root.right
-        anchors.rightMargin: 100
+        anchors.rightMargin: global_vars.display(100)
         anchors.bottom: root.bottom
-        anchors.bottomMargin: 40
+        anchors.bottomMargin: global_vars.display(40)
 
         smooth: true
         opacity: 1
         horizontalAlignment: Image.AlignHCenter
         verticalAlignment: Image.AlignVCenter
         fillMode: Image.PreserveAspectFit
-        width: 10
-        height: 10
+        width: global_vars.display(10)
+        height: global_vars.display(10)
         source: ''
         z: 4
     }

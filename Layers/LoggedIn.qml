@@ -11,8 +11,8 @@ import "qrc:/JavaScript/connect.js" as Connect
 Rectangle {
     id: root
     visible: true
-    width: 1920
-    height: 1080
+    width: global_vars.tempWidth
+    height: global_vars.tempHeight
     objectName: "logged_in"
 
     signal nextLayer(string currentLayer, string nextLayer)
@@ -47,6 +47,8 @@ Rectangle {
 
     Image {
         id: background_image
+        height: global_vars.tempHeight
+        width: global_vars.tempWidth
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
@@ -92,7 +94,7 @@ Rectangle {
     BasicButton {
         anchors.horizontalCenter: login_error.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 130
+        anchors.bottomMargin: global_vars.display(130)
         width: login_error.width
         id: login_button
         label.text: "Login"
@@ -150,8 +152,8 @@ Rectangle {
 
     Error {
         id: login_error
-        errorHeight: 150
-        errorWidth: 700
+        errorHeight: global_vars.display(150)
+        errorWidth: global_vars.display(700)
         errorText: global_vars.login_error
         z: 3
 
@@ -160,8 +162,8 @@ Rectangle {
         anchors.bottomMargin: 15
     }
 
-    property int wrapperHeight: 800
-    property int wrapperWidth: 1700
+    property int wrapperHeight: global_vars.display(800)
+    property int wrapperWidth: global_vars.display(1700)
 
     property int wrapperSize: wrapperHeight/7
     property int vertSpacing: wrapperHeight/9
@@ -176,8 +178,8 @@ Rectangle {
         height: wrapperWidth
         anchors.top: parent.top
         anchors.left: parent.left
-        anchors.topMargin: 140
-        anchors.leftMargin: 180
+        anchors.topMargin: global_vars.display(140)
+        anchors.leftMargin: global_vars.display(180)
 
         Column {
             id: labels
@@ -273,14 +275,14 @@ Rectangle {
                 id: white_box_1
                 color: "white"
                 height: boxHeight
-                width: 0.5 * userpass_wrapper.width + wrapperSize * 4 + 80
+                width: 0.5 * userpass_wrapper.width + wrapperSize * 4 + global_vars.display(80)
                 radius: height/2
             }
 
             Rectangle {
                 color: "white"
                 height: boxHeight
-                width: 0.5 * userpass_wrapper.width + wrapperSize * 4 + 80
+                width: 0.5 * userpass_wrapper.width + wrapperSize * 4 + global_vars.display(80)
                 radius: height/2
             }
         }

@@ -27,7 +27,7 @@ Rectangle  {
         anchors.top: root.top
         anchors.horizontalCenter: parent.horizontalCenter
         radius: height/4
-        border.width: 4
+        border.width: global_vars.display(4)
         border.color: "black"
         color: "black"
 
@@ -81,7 +81,7 @@ Rectangle  {
             Image {
                 id: icon
                 anchors.right: button_txt.left
-                anchors.rightMargin: 25
+                anchors.rightMargin: global_vars.display(25)
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: 0
                 height: global_vars.defaultIconHeight
@@ -114,7 +114,7 @@ Rectangle  {
         anchors.fill: black_part
         horizontalOffset: global_vars.dropShadowHorizOffset
         verticalOffset: global_vars.dropShadowVertOffset
-        radius: 8
+        radius: global_vars.display(8)
         samples: radius*2+1
         color: "#80000000"
         source: black_part

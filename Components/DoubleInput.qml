@@ -41,7 +41,7 @@ Rectangle  {
         anchors.top: root.top
         anchors.horizontalCenter: parent.horizontalCenter
         radius: height/4
-        border.width: 4
+        border.width: global_vars.display(4)
         border.color: "black"
         color: "black"
 
@@ -95,7 +95,7 @@ Rectangle  {
             Image {
                 id: icon
                 anchors.right: button_txt.left
-                anchors.rightMargin: 25
+                anchors.rightMargin: global_vars.display(25)
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: 0
                 height: global_vars.defaultIconHeight
@@ -128,7 +128,7 @@ Rectangle  {
         anchors.fill: black_part
         horizontalOffset: global_vars.dropShadowHorizOffset
         verticalOffset: global_vars.dropShadowVertOffset
-        radius: 8
+        radius: global_vars.display(8)
         samples: radius*2+1
         color: "#80000000"
         source: black_part
@@ -160,26 +160,26 @@ Rectangle  {
         id: black_background_1
 
         anchors.left: root.right
-        anchors.leftMargin: 25
+        anchors.leftMargin: global_vars.display(25)
         anchors.verticalCenter: root.verticalCenter
-        anchors.verticalCenterOffset: 10
+        anchors.verticalCenterOffset: global_vars.display(10)
 
         color: "white"
         radius: height/2
-        height: root.height - 40
-        width: root.width + 220
+        height: root.height - global_vars.display(40)
+        width: root.width + global_vars.display(220)
 
         TextInput {
             id: text_input_1
             font.family: "Helvetica"
             text: ''
-            font.pointSize: 26
+            font.pointSize: global_vars.display(26)
             height: parent.height
             width: parent.width
             anchors.left: parent.left
-            anchors.leftMargin: 40
+            anchors.leftMargin: global_vars.display(40)
             anchors.verticalCenter: black_background_1.verticalCenter
-            anchors.verticalCenterOffset: 28
+            anchors.verticalCenterOffset: global_vars.display(28)
             maximumLength: 15
         }
     }
@@ -188,9 +188,9 @@ Rectangle  {
         id: black_background_2
 
         anchors.left: black_background_1.right
-        anchors.leftMargin: 25
+        anchors.leftMargin: global_vars.display(25)
         anchors.verticalCenter: root.verticalCenter
-        anchors.verticalCenterOffset: 10
+        anchors.verticalCenterOffset: global_vars.display(10)
 
         color: "white"
         radius: black_background_1.radius
@@ -201,13 +201,13 @@ Rectangle  {
             id: text_input_2
             font.family: "Helvetica"
             text: ''
-            font.pointSize: 26
+            font.pointSize: global_vars.display(26)
             height: parent.height
             width: parent.width
             anchors.left: parent.left
-            anchors.leftMargin: 40
+            anchors.leftMargin: global_vars.display(40)
             anchors.verticalCenter: black_background_2.verticalCenter
-            anchors.verticalCenterOffset: 28
+            anchors.verticalCenterOffset: global_vars.display(28)
             maximumLength: 15
         }
     }
@@ -216,8 +216,8 @@ Rectangle  {
         id: helper_1
         anchors.top: black_background_1.bottom
         anchors.horizontalCenter: black_background_1.horizontalCenter
-        anchors.topMargin: 3
-        font.pointSize: 20
+        anchors.topMargin: global_vars.display(3)
+        font.pointSize: global_vars.display(20)
         text: ''
     }
 
@@ -225,7 +225,7 @@ Rectangle  {
         id: helper_2
         anchors.top: black_background_2.bottom
         anchors.horizontalCenter: black_background_2.horizontalCenter
-        anchors.topMargin: 3
+        anchors.topMargin: global_vars.display(3)
         font.pointSize: helper_1.font.pointSize
         text: ''
     }
@@ -234,9 +234,9 @@ Rectangle  {
         id: admin_check
 
         anchors.left: black_background_2.right
-        anchors.leftMargin: 25
+        anchors.leftMargin: global_vars.display(25)
         anchors.verticalCenter: root.verticalCenter
-        anchors.verticalCenterOffset: 10
+        anchors.verticalCenterOffset: global_vars.display(10)
 
         radius: black_background_1.radius
         height: black_background_1.height
@@ -279,7 +279,7 @@ Rectangle  {
         Rectangle {
             id: mid_circle
             anchors.fill: parent
-            anchors.margins: 30
+            anchors.margins: global_vars.display(30)
             radius: black_background_1.radius
             color: "black"
         }
@@ -302,7 +302,7 @@ Rectangle  {
         id: helper_3
         anchors.top: admin_check.bottom
         anchors.horizontalCenter: admin_check.horizontalCenter
-        anchors.topMargin: 3
+        anchors.topMargin: global_vars.display(3)
         font.pointSize: helper_1.font.pointSize
         text: ''
     }

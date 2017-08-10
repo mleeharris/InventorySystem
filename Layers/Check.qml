@@ -11,8 +11,8 @@ import "qrc:/JavaScript/connect.js" as Connect
 Rectangle {
     id: root
     visible: true
-    width: 1920
-    height: 1080
+    width: global_vars.tempWidth
+    height: global_vars.tempHeight
     objectName: "check"
 
     signal nextLayer(string currentLayer, string nextLayer)
@@ -48,36 +48,38 @@ Rectangle {
 
     Image {
         id: background_image
+        height: global_vars.tempHeight
+        width: global_vars.tempWidth
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
     Text {
         id: title_text
         anchors.top: parent.top
-        anchors.topMargin: 180
+        anchors.topMargin: global_vars.display(180)
         anchors.horizontalCenter: parent.horizontalCenter
         text: "Select An Option"
         font.family: "Bebas Neue"
         color: "Black"
-        font.pointSize: 200
+        font.pointSize: global_vars.display(200)
     }
 
     Text {
         id: username
         anchors.top: parent.top
-        anchors.topMargin: 60
+        anchors.topMargin: global_vars.display(60)
         anchors.left: parent.left
-        anchors.leftMargin: 70
+        anchors.leftMargin: global_vars.display(70)
         text: global_vars.username
         font.family: "Helvetica"
         color: "Black"
-        font.pointSize: 40
+        font.pointSize: global_vars.display(40)
     }
 
     BasicButton {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: check_out_button.top
-        anchors.bottomMargin: 25
+        anchors.bottomMargin: global_vars.display(25)
         height: check_out_button.height
         id: check_in_button
         label.text: "Check In"
@@ -97,8 +99,8 @@ Rectangle {
     BasicButton {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 135
-        height: global_vars.buttonHeight-20
+        anchors.bottomMargin: global_vars.display(135)
+        height: global_vars.buttonHeight-global_vars.display(20)
         id: check_out_button
         label.text: "Check Out"
 
@@ -117,13 +119,13 @@ Rectangle {
     BasicButton {
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: check_in_button.top
-        anchors.bottomMargin: 25
+        anchors.bottomMargin: global_vars.display(25)
         height: check_out_button.height
         id: lookup_button
         label.text: "Lookup"
 
         location: "qrc:/Images/magnifier.png"
-        iconHeight: global_vars.check_out_height-30
+        iconHeight: global_vars.check_out_height-global_vars.display(30)
         iconAnchors.verticalCenterOffset: global_vars.check_out_offset
 
         onClicked: {
@@ -179,14 +181,14 @@ Rectangle {
 
     Error {
         id: check_error
-        errorHeight: 150
+        errorHeight: global_vars.display(150)
         errorWidth: middle_tab.width
         errorText: global_vars.checkpage_error
         z: 1
 
         anchors.left: middle_tab.left
         anchors.bottom: middle_tab.top
-        anchors.bottomMargin: 40
+        anchors.bottomMargin: global_vars.display(40)
     }
 
     function tabOperationCheck(tabnum, state) {

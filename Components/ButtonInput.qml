@@ -84,7 +84,7 @@ Rectangle  {
             Image {
                 id: icon
                 anchors.right: button_txt.left
-                anchors.rightMargin: 25
+                anchors.rightMargin: global_vars.display(25)
                 anchors.verticalCenter: parent.verticalCenter
                 anchors.verticalCenterOffset: 0
                 height: global_vars.defaultIconHeight
@@ -118,7 +118,7 @@ Rectangle  {
         anchors.fill: black_part
         horizontalOffset: global_vars.dropShadowHorizOffset
         verticalOffset: global_vars.dropShadowVertOffset
-        radius: 8
+        radius: global_vars.display(8)
         samples: radius*2+1
         color: "#80000000"
         source: black_part
@@ -150,26 +150,26 @@ Rectangle  {
         id: black_background
 
         anchors.left: root.right
-        anchors.leftMargin: 25
+        anchors.leftMargin: global_vars.display(25)
         anchors.verticalCenter: root.verticalCenter
-        anchors.verticalCenterOffset: 10
+        anchors.verticalCenterOffset: global_vars.display(10)
 
         color: "white"
         radius: height/2
-        height: root.height - 40
+        height: root.height - global_vars.display(40)
         width: root.width
 
         TextInput {
             id: text_input
             font.family: "Helvetica"
             text: ''
-            font.pointSize: 26
+            font.pointSize: global_vars.display(26)
             height: parent.height
             width: parent.width
             anchors.left: parent.left
-            anchors.leftMargin: 40
+            anchors.leftMargin: global_vars.display(40)
             anchors.verticalCenter: black_background.verticalCenter
-            anchors.verticalCenterOffset: 28
+            anchors.verticalCenterOffset: global_vars.display(28)
             maximumLength: 15
 
 //            state: "notyet"
@@ -204,8 +204,8 @@ Rectangle  {
         id: helper
         anchors.top: black_background.bottom
         anchors.horizontalCenter: black_background.horizontalCenter
-        anchors.topMargin: 3
-        font.pointSize: 15
+        anchors.topMargin: global_vars.display(3)
+        font.pointSize: global_vars.display(15)
         text: ''
     }
 }

@@ -48,10 +48,10 @@ Rectangle  {
     Text {
         id: item_txt
         anchors.left: root.left
-        anchors.leftMargin: 30
+        anchors.leftMargin: global_vars.display(30)
         anchors.top: root.top
         anchors.right: root.horizontalCenter
-        anchors.rightMargin: 160
+        anchors.rightMargin: global_vars.display(160)
         anchors.bottom: root.bottom
         font.family: "Helvetica"
         text: ""
@@ -69,7 +69,7 @@ Rectangle  {
         anchors.bottom: root.bottom
         font.family: "Helvetica"
         text: ""
-        font.pointSize: global_vars.itemFontsize - 25
+        font.pointSize: global_vars.itemFontsize - global_vars.display(25)
         smooth: true
         color: global_vars.darkGrayColor
         //horizontalAlignment: Text.AlignHCenter
@@ -79,12 +79,12 @@ Rectangle  {
     Text {
         id: stock
         anchors.left: name.right
-        anchors.leftMargin: 80
+        anchors.leftMargin: global_vars.display(80)
         anchors.top: root.top
         anchors.bottom: root.bottom
         font.family: "Helvetica"
         text: ""
-        font.pointSize: global_vars.itemFontsize - 25
+        font.pointSize: global_vars.itemFontsize - global_vars.display(25)
         smooth: true
         color: global_vars.darkGrayColor
         //horizontalAlignment: Text.AlignHCenter

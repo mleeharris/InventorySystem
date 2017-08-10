@@ -21,9 +21,13 @@ Window {
     id: main_window
     visible: true
 
-
+    /*
     width: 1920
     height: 1080
+    */
+
+    width: global_vars.tempWidth
+    height: global_vars.tempHeight
 
     /*
     width: 1000
@@ -64,6 +68,8 @@ Window {
 
     Image {
         id: background_image
+        height: global_vars.tempHeight
+        width: global_vars.tempWidth
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
@@ -185,12 +191,12 @@ Window {
         Text {
             id: title_text
             anchors.top: parent.top
-            anchors.topMargin: 100
+            anchors.topMargin: global_vars.display(100)
             anchors.horizontalCenter: parent.horizontalCenter
             text: "Inventory"
             font.family: "Typo Graphica"
             color: "Black"
-            font.pointSize: 250
+            font.pointSize: global_vars.display(250)
         }
 
         BottomTab {
@@ -238,13 +244,13 @@ Window {
         BasicButton {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: login_button.top
-            anchors.bottomMargin: 30
+            anchors.bottomMargin: global_vars.display(30)
             id: scan_button
             label.text: "Scan"
 
             location: "qrc:/Images/rfid_chip.png"
-            iconHeight: 92
-            iconAnchors.verticalCenterOffset: -5
+            iconHeight: global_vars.display(92)
+            iconAnchors.verticalCenterOffset: global_vars.display(-5)
 
             onClicked: {
                 slot_switchLayer("main", "logged_in")
@@ -257,13 +263,13 @@ Window {
         BasicButton {
             anchors.horizontalCenter: parent.horizontalCenter
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 200
+            anchors.bottomMargin: global_vars.display(200)
             id: login_button
             label.text: "How To"
 
             location: "qrc:/Images/question.png"
-            iconHeight: 95
-            iconAnchors.verticalCenterOffset: -5
+            iconHeight: global_vars.display(95)
+            iconAnchors.verticalCenterOffset: global_vars.display(-5)
 
             onClicked: {
                 slot_switchLayer("main", "login_page")
@@ -273,15 +279,15 @@ Window {
 
         Error {
             id: main_error
-            errorHeight: 400
-            errorWidth: 440
+            errorHeight: global_vars.display(400)
+            errorWidth: global_vars.display(440)
             errorText: global_vars.main_error
             z: 1
 
             anchors.left: parent.left
-            anchors.leftMargin: 120
+            anchors.leftMargin: global_vars.display(120)
             anchors.bottom: parent.bottom
-            anchors.bottomMargin: 130
+            anchors.bottomMargin: global_vars.display(130)
         }
     }
 
@@ -311,7 +317,7 @@ Window {
 
     function slot_switchLayer(currentLayer, nextLayer) {
         //console.log("currentLayer: ", currentLayer)
-        //console.log("nextLayer: ", nextLayer)
+        console.log("nextLayer: ", nextLayer)
 
         if (currentLayer === "main") {
             if (nextLayer === "login_page") {
@@ -560,19 +566,6 @@ Window {
         global_vars.realpass = GlobVars.realpass
         global_vars.login_error = ''
         }
-
-
-//        Check{id: check; x:0; y:0}
-//        ScanPage{id: scan_page; x:0; y:0}
-//        LoginPage{id: login_page; x:0; y:0}
-//        LoggedIn{id: logged_in; x:0; y:0}
-//        CheckOut{id: check_out; x:0; y: 0}
-//        EndPage{id: end_page; x:0; y: 0}
-//        CheckIn{id: check_in; x:0; y: 0}
-//        Lookup{id: lookup; x:0; y: 0}
-//        AdminAPI{id: admin_api; x:0; y:0}
-//        AdminSelection{id: admin_selection; x:0; y:0}
-//        AdminAPI2{id: admin_api2; x:0; y:0}
 
         if (object_holder.state == "visible") {
             slot_switchLayer("main","logged_in")

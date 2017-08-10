@@ -12,8 +12,8 @@ import "qrc:/JavaScript/connect.js" as Connect
 Rectangle {
     id: root
     visible: true
-    width: 1920
-    height: 1080
+    width: global_vars.tempWidth
+    height: global_vars.tempHeight
     objectName: "check_out"
 
     signal nextLayer(string currentLayer, string nextLayer)
@@ -56,6 +56,8 @@ Rectangle {
 
     Image {
         id: background_image
+        height: global_vars.tempHeight
+        width: global_vars.tempWidth
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
@@ -79,8 +81,8 @@ Rectangle {
         id: item_delegate
         ScannedItem {
             checked: ListView.isCurrentItem
-            width: 1100
-            height: 80
+            width: global_vars.display(1100)
+            height: global_vars.display(80)
             item_id.text: itemText
             item_name.text: itemName
             item_stock.text: itemStock
@@ -88,8 +90,8 @@ Rectangle {
                 id: item_ma
                 anchors.top: parent.top
                 anchors.right: parent.right
-                height: 80
-                width: 80
+                height: global_vars.display(80)
+                width: global_vars.display(80)
                 onPressed: {
                     item_listview.currentIndex = index
                 }
@@ -102,14 +104,14 @@ Rectangle {
 
     ListView {
         id: item_listview
-        height: 650
+        height: global_vars.display(650)
         anchors.fill: temp_background
-        anchors.leftMargin: 50
-        anchors.topMargin: 190
-        anchors.bottomMargin: 30
+        anchors.leftMargin: global_vars.display(50)
+        anchors.topMargin: global_vars.display(190)
+        anchors.bottomMargin: global_vars.display(30)
         delegate: item_delegate
         model: item_model
-        spacing: 12
+        spacing: global_vars.display(12)
         z: 4
         clip: true
 
@@ -121,40 +123,40 @@ Rectangle {
             parent: item_listview.parent
             anchors.top: item_listview.top
             anchors.left: item_listview.right
-            anchors.leftMargin: -65
+            anchors.leftMargin: global_vars.display(-65)
         }
     }
 
     Text {
         text: "Check Out"
         anchors.top: temp_background.top
-        anchors.topMargin: 20
+        anchors.topMargin: global_vars.display(20)
         anchors.horizontalCenter: temp_background.horizontalCenter
         font.family: "Bebas Neue"
-        font.pixelSize: 115
+        font.pixelSize: global_vars.display(115)
         id: check_out
     }
 
     Rectangle {
         id: line
         color: 'black'
-        height: 2
-        width: 1100
+        height: global_vars.display(2)
+        width: global_vars.display(1100)
         anchors.horizontalCenter: check_out.horizontalCenter
         anchors.top: check_out.bottom
-        anchors.topMargin: 5
+        anchors.topMargin: global_vars.display(5)
     }
 
     Text {
         id: username
         anchors.top: parent.top
-        anchors.topMargin: 60
+        anchors.topMargin: global_vars.display(60)
         anchors.left: parent.left
-        anchors.leftMargin: 70
+        anchors.leftMargin: global_vars.display(70)
         text: global_vars.username
         font.family: "Helvetica"
         color: "Black"
-        font.pointSize: 40
+        font.pointSize: global_vars.display(40)
     }
 
     Text {
@@ -163,27 +165,27 @@ Rectangle {
         anchors.bottomMargin: 0
         anchors.horizontalCenter: checkout_error.horizontalCenter
         font.family: "Bebas Neue"
-        font.pixelSize: 74
+        font.pixelSize: global_vars.display(74)
         id: item_counter
     }
 
     Error {
         id: checkout_error
-        errorHeight: 110
+        errorHeight: global_vars.display(110)
         errorWidth: clear_button.width
         errorText: global_vars.checkoutpage_error
         z: 1
 
-        topMargin.topMargin: 20
+        topMargin.topMargin: global_vars.display(20)
 
         anchors.bottom: clear_button.top
-        anchors.bottomMargin: 10
+        anchors.bottomMargin: global_vars.display(10)
         anchors.horizontalCenter: clear_button.horizontalCenter
     }
 
     BasicButton {
         anchors.top: clear_button.bottom
-        anchors.topMargin: 20
+        anchors.topMargin: global_vars.display(20)
         anchors.left: clear_button.left
         height: clear_button.height
         width: clear_button.width
@@ -191,7 +193,7 @@ Rectangle {
         label.text: "Done"
 
         location: "qrc:/Images/logout_sign_flipped.png"
-        iconHeight: global_vars.check_out_height-30
+        iconHeight: global_vars.check_out_height-global_vars.display(30)
         iconAnchors.verticalCenterOffset: global_vars.check_out_offset
 
         onClicked: {
@@ -212,15 +214,15 @@ Rectangle {
 
     BasicButton {
         anchors.top: parent.top
-        anchors.topMargin: 400
+        anchors.topMargin: global_vars.display(400)
         anchors.left: middle_tab.left
-        height: 100
-        width: global_vars.buttonHeight*2+60
+        height: global_vars.display(100)
+        width: global_vars.buttonHeight*2+global_vars.display(60)
         id: clear_button
         label.text: "Clear"
 
         location: "qrc:/Images/recycling_bin.png"
-        iconHeight: global_vars.clear_height-30
+        iconHeight: global_vars.clear_height-global_vars.display(30)
         iconAnchors.verticalCenterOffset: global_vars.clear_offset
 
         onClicked: {
@@ -272,13 +274,13 @@ Rectangle {
     Rectangle {
         color: "black"
         id: temp_background
-        height: 870
+        height: global_vars.display(870)
         width: global_vars.scrollWidth
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.rightMargin: 100
-        anchors.topMargin: 100
-        radius: 40
+        anchors.rightMargin: global_vars.display(100)
+        anchors.topMargin: global_vars.display(100)
+        radius: global_vars.display(40)
         opacity: 0.2
         z: 3
     }
@@ -307,7 +309,7 @@ Rectangle {
                 item_counter.text = "Items: " + GlobVars.itemList.length
             })
         }
-        clock_checkout2.delay(500)
+        clock_checkout2.delay(750)
     }
 
 

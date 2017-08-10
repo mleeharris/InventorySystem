@@ -7,8 +7,8 @@ import "qrc:/JavaScript/connect.js" as Connect
 Rectangle {
     id: root
     visible: true
-    width: 1920
-    height: 1080
+    width: global_vars.tempWidth
+    height: global_vars.tempHeight
     objectName: "admin_selection"
 
     signal nextLayer(string currentLayer, string nextLayer)
@@ -43,18 +43,20 @@ Rectangle {
 
     Image {
         id: background_image
+        height: global_vars.tempHeight
+        width: global_vars.tempWidth
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
     Text {
         id: admin_selection
         anchors.top: parent.top
-        anchors.topMargin: 130
+        anchors.topMargin: global_vars.display(130)
         anchors.horizontalCenter: parent.horizontalCenter
         text: "Admin  Selection"
         font.family: "Typo Graphica"
         color: "Black"
-        font.pointSize: 150
+        font.pointSize: global_vars.display(150)
     }
 
     Clock {
@@ -106,10 +108,10 @@ Rectangle {
         id: rfid
         anchors.right: parent.right
         anchors.top: admin_selection.bottom
-        anchors.rightMargin: 250
-        anchors.topMargin: 20
-        height: 150
-        width: 650
+        anchors.rightMargin: global_vars.display(250)
+        anchors.topMargin: global_vars.display(20)
+        height: global_vars.display(150)
+        width: global_vars.display(650)
         label.text: "RFID"
 
         onClicked: {
@@ -122,7 +124,7 @@ Rectangle {
         id: api
         anchors.left: parent.left
         anchors.top: admin_selection.bottom
-        anchors.leftMargin: 250
+        anchors.leftMargin: global_vars.display(250)
         anchors.topMargin: rfid.anchors.topMargin
         height: rfid.height
         width: rfid.width
@@ -136,14 +138,14 @@ Rectangle {
 
     Error {
         id: admin_selection_error
-        errorHeight: 250
-        errorWidth: 700
+        errorHeight: global_vars.display(250)
+        errorWidth: global_vars.display(700)
         errorText: global_vars.admin_selection_error
         z: 1
 
         anchors.horizontalCenter: parent.horizontalCenter
         anchors.bottom: parent.bottom
-        anchors.bottomMargin: 100
+        anchors.bottomMargin: global_vars.display(100)
     }
 
     function tabOperationAdminSelectionPage(tabnum, state) {

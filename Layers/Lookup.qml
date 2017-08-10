@@ -12,8 +12,8 @@ import "qrc:/JavaScript/connect.js" as Connect
 Rectangle {
     id: root
     visible: true
-    width: 1920
-    height: 1080
+    width: global_vars.tempWidth
+    height: global_vars.tempHeight
     objectName: "lookup"
 
     signal nextLayer(string currentLayer, string nextLayer)
@@ -55,6 +55,8 @@ Rectangle {
 
     Image {
         id: background_image
+        height: global_vars.tempHeight
+        width: global_vars.tempWidth
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
@@ -70,10 +72,10 @@ Rectangle {
     Text {
         text: "Lookup"
         anchors.top: temp_background.top
-        anchors.topMargin: 20
+        anchors.topMargin: global_vars.display(20)
         anchors.horizontalCenter: temp_background.horizontalCenter
         font.family: "Bebas Neue"
-        font.pixelSize: 115
+        font.pixelSize: global_vars.display(115)
         id: lookup_text
     }
 
@@ -84,33 +86,33 @@ Rectangle {
     Rectangle {
         id: line
         color: 'black'
-        height: 2
-        width: 1100
+        height: global_vars.display(2)
+        width: global_vars.display(1100)
         anchors.horizontalCenter: lookup_text.horizontalCenter
         anchors.top: lookup_text.bottom
-        anchors.topMargin: 5
+        anchors.topMargin: global_vars.display(5)
     }
 
     Text {
         id: username
         anchors.top: parent.top
-        anchors.topMargin: 60
+        anchors.topMargin: global_vars.display(60)
         anchors.left: parent.left
-        anchors.leftMargin: 70
+        anchors.leftMargin: global_vars.display(70)
         text: global_vars.username
         font.family: "Helvetica"
         color: "Black"
-        font.pointSize: 40
+        font.pointSize: global_vars.display(40)
     }
 
     Text {
         id: item_display
         text: "Item: Please Scan"
         anchors.bottom: middle_tab.top
-        anchors.bottomMargin: 30
+        anchors.bottomMargin: global_vars.display(30)
         anchors.horizontalCenter: middle_tab.horizontalCenter
         font.family: "Bebas Neue"
-        font.pixelSize: 64
+        font.pixelSize: global_vars.display(64)
     }
 
     BottomTab {
@@ -159,9 +161,9 @@ Rectangle {
         width: global_vars.scrollWidth
         anchors.right: parent.right
         anchors.top: parent.top
-        anchors.rightMargin: 100
-        anchors.topMargin: 100
-        radius: 40
+        anchors.rightMargin: global_vars.display(100)
+        anchors.topMargin: global_vars.display(100)
+        radius: global_vars.display(40)
         opacity: 0.2
         z: 3
     }
@@ -170,11 +172,11 @@ Rectangle {
         id: info_text
         anchors.top: temp_background.top
         anchors.left: temp_background.left
-        anchors.topMargin: 180
-        anchors.leftMargin: 40
-        width: temp_background.width/2-40
+        anchors.topMargin: global_vars.display(180)
+        anchors.leftMargin: global_vars.display(40)
+        width: temp_background.width/2-global_vars.display(40)
         height: temp_background.height
-        font.pointSize: 20
+        font.pointSize: global_vars.display(20)
         lineHeight: 1.5
         wrapMode: Text.Wrap
     }
@@ -183,12 +185,12 @@ Rectangle {
         id: info_text2
         anchors.top: info_text.top
         anchors.left: info_text.right
-        anchors.leftMargin: 40
+        anchors.leftMargin: global_vars.display(40)
         width: temp_background.width - info_text.width
         height: temp_background.height
-        font.pointSize: 15
+        font.pointSize: global_vars.display(15)
         maximumLineCount: 27
-        lineHeight: 1.05
+        lineHeight: global_vars.display(1.05)
         wrapMode: Text.Wrap
         text: global_vars.stockHistory
     }

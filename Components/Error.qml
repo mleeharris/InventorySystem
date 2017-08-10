@@ -17,7 +17,7 @@ Rectangle  {
         color: "black"
         id: temp_background
         anchors.fill: parent
-        radius: 40
+        radius: global_vars.display(40)
         opacity: 0.2
         z: 3
     }
@@ -26,11 +26,11 @@ Rectangle  {
         id: info_text
         anchors.top: temp_background.top
         anchors.left: temp_background.left
-        anchors.topMargin: 40
-        anchors.leftMargin: 40
-        width: temp_background.width-(40*2)
-        height: temp_background.height-(40*2)
-        font.pointSize: 20
+        anchors.topMargin: global_vars.display(40)
+        anchors.leftMargin: global_vars.display(40)
+        width: temp_background.width-(global_vars.display(40)*2)
+        height: temp_background.height-(global_vars.display(40)*2)
+        font.pointSize: global_vars.display(20)
         wrapMode: Text.Wrap
     }
 }
