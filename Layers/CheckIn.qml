@@ -20,6 +20,9 @@ Rectangle {
 
     Component.onCompleted: {
         root.state = "hidden"
+//        root.state = "visible"
+//        items_in.state = "on"
+//        barcode.state = "off"
 
         middle_tab.state = "Up"
         right_tab.state = "Up"
@@ -33,7 +36,7 @@ Rectangle {
         main_window.deleteList.connect(deleteList)
     }
 
-    ScannedItem{id: scanned_item}
+    //ScannedItem{id: scanned_item}
 
     states: [
         State {
@@ -76,23 +79,58 @@ Rectangle {
     Component {
         id: item_delegate
         ScannedItem {
+            id: scanitem
             checked: ListView.isCurrentItem
             width: global_vars.display(1100)
             height: global_vars.display(80)
             item_id.text: itemText
             item_name.text: itemName
             item_stock.text: itemStock
-            MouseArea {
-                id: item_ma
-                anchors.top: parent.top
-                anchors.right: parent.right
-                height: global_vars.display(80)
-                width: global_vars.display(80)
-                onPressed: {
-                    item_listview.currentIndex = index
-                }
-                onReleased: {
-                    deletionHandlingCheckOut()
+            stockHistory: stockHistoryFinal
+            infoText: infoTextFinal
+            property bool isCurrentItem: ListView.isCurrentItem
+            onPressed: {
+                item_listview.currentIndex = index
+            }
+            onReleased: {
+                global_vars.checkinpage_error = itemName + ' deleted from list'
+                deletionHandlingCheckOut()
+                scanitem.stateUpLevel2 = "hidden"
+            }
+            onQuestionClicked: {
+                scanitem.forQ = 400
+                //console.log("yoo", ListElement.objectName)
+            }
+            onXClicked: {
+                scanitem.forQ = 80
+            }
+
+//            MouseArea {
+//                id: item_ma
+//                anchors.top: parent.top
+//                anchors.right: parent.right
+//                height: global_vars.display(80)
+//                width: global_vars.display(80)
+//                onPressed: {
+
+//                }
+//                onReleased: {
+
+//                }
+//            }
+            onIsCurrentItemChanged: {
+                //PLAY AROUND HERE
+//                item_listview.currentItemCount += 3
+//                console.log('listview:', item_listview.currentItemCount)
+                console.log("scanitem.stateUpLevel2: ", scanitem.stateUpLevel2)
+                //console.log("fruitModel.get(0).cost: ", item_model.get(0).testing)
+                scanitem.stateUpLevel2 = "hidden"
+                //item_model.set(0, {"item_id.text": "bbb"})
+                //item_model.setProperty(0, "item_id.text", "bbb")
+                //item_model.clear()
+                console.log("scanitem.state: ", scanitem.state)
+                if(isCurrentItem) {
+                    //console.log("wtf")
                 }
             }
         }
@@ -110,6 +148,8 @@ Rectangle {
         spacing: global_vars.display(12)
         z: 4
         clip: true
+
+        property int currentItemCount: 0
 
         ScrollBar.vertical: ScrollBar {
             active: true
@@ -130,7 +170,7 @@ Rectangle {
         anchors.horizontalCenter: temp_background.horizontalCenter
         font.family: "Bebas Neue"
         font.pixelSize: global_vars.display(115)
-        id: check_in
+        id: check_in_text
     }
 
     Rectangle {
@@ -138,8 +178,8 @@ Rectangle {
         color: 'black'
         height: global_vars.display(2)
         width: global_vars.display(1100)
-        anchors.horizontalCenter: check_in.horizontalCenter
-        anchors.top: check_in.bottom
+        anchors.horizontalCenter: check_in_text.horizontalCenter
+        anchors.top: check_in_text.bottom
         anchors.topMargin: 5
     }
 
@@ -153,6 +193,20 @@ Rectangle {
         font.family: "Helvetica"
         color: "Black"
         font.pointSize: global_vars.display(40)
+    }
+
+    BasicButton {
+        anchors.top: parent.top
+        anchors.left: parent.left
+        anchors.margins: 15
+        height: 100
+        width: 100
+        id: test
+        label.text: "test"
+
+        onClicked: {
+            closeAll();
+        }
     }
 
     Text {
@@ -296,6 +350,23 @@ Rectangle {
 //        }
     }
 
+    function closeAll() {
+        console.log("item_listview.currentIndex: ", item_listview.currentIndex)
+        console.log("count: ", item_listview.count)
+        var i = 0;
+        var loopnum = item_listview.count
+        while (i < loopnum) {
+            console.log("umm", item_model.get(i).outside)
+//            console.log("umm2", item_model.get(i).item_id)
+
+            i += 1
+        }
+
+//        item_model.remove(item_listview.currentIndex)
+//        GlobVars.itemListIn.splice(item_listview.currentIndex, 1)
+//        item_counter.text = "Items: " + GlobVars.itemListIn.length
+    }
+
     function deletionAll() {
         var index = GlobVars.itemListIn.length
         var i = 0
@@ -307,20 +378,42 @@ Rectangle {
         item_counter.text = "Items: 0"
     }
 
-    function itemScan(item) {
-        GlobVars.itemListIn.push(item.slice(0,-1))
-        //console.log("GlobVars: ", GlobVars.itemListIn)
-        global_vars.scannedItem = item
+    function addScan() {
+        GlobVars.itemListIn.push(global_vars.scannedItem)
+        item_model.insert(item_listview.currentIndex + 1, {"itemText": "ID: " + global_vars.scannedItem, "itemName": "Name: " + global_vars.lookupName, "itemStock": "Stock: " + global_vars.lookupStock, "stockHistoryFinal": global_vars.stockHistory, "infoTextFinal": global_vars.lookupString})
+        item_listview.currentIndex = item_listview.currentIndex + 1
+        item_counter.text = "Items: " + GlobVars.itemListIn.length
+        startCheckIn()
+    }
 
-        Connect.lookUp(item)
-        if (clock_checkin2.connected == false) {
-            clock_checkin2.connect( function() {
-                item_model.insert(item_listview.currentIndex + 1, {"itemText": "ID: " + global_vars.scannedItem, "itemName": "Name: " + global_vars.lookupName, "itemStock": "Stock: " + global_vars.lookupStock})
-                item_listview.currentIndex = item_listview.currentIndex + 1
-                item_counter.text = "Items: " + GlobVars.itemListIn.length
-            })
+    function startCheckIn() {
+        var item = ''
+        console.log("checkinQueue: ", GlobVars.checkInQueue)
+        if (GlobVars.checkInQueue.length > 0) {
+            item = GlobVars.checkInQueue.shift();
+            Connect.checkInLookup(item)
         }
-        clock_checkin2.delay(750)
+
+        //Connect.checkInLookup(item)
+    }
+
+    function itemScan(item) {
+        //GlobVars.itemListIn.push(item.slice(0,-1))
+        //console.log("GlobVars: ", GlobVars.itemListIn)
+
+        GlobVars.checkInQueue.push(item.slice(0,-1))
+        startCheckIn()
+
+//        Connect.lookUp(item)
+//        Connect.getStockHistory(item)
+//        if (clock_checkin2.connected == false) {
+//            clock_checkin2.connect( function() {
+//                item_model.insert(item_listview.currentIndex + 1, {"itemText": "ID: " + global_vars.scannedItem, "itemName": "Name: " + global_vars.lookupName, "itemStock": "Stock: " + global_vars.lookupString, "stockHistoryFinal": global_vars.stockHistory, "infoTextFinal": global_vars.lookupStock})
+//                item_listview.currentIndex = item_listview.currentIndex + 1
+//                item_counter.text = "Items: " + GlobVars.itemListIn.length
+//            })
+//        }
+//        clock_checkin2.delay(750)
     }
 
     function deletionHandlingCheckOut() {

@@ -43,6 +43,15 @@ function checkIn(itemListIn) {
     }
 }
 
+function checkInLookup(item) {
+    global_vars.checkInCheck = 0;
+    queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.16:3001", "parts", item, "", "", "GET", "checkInLookup", "");
+    item = item.toString()
+    item = item.slice(0,-1)
+    var stockstring = "start=0&order=%5B%7B%22property%22%3A%22dateTime%22%2C%22direction%22%3A%22DESC%22%7D%5D&filter=%5B%7B%22subfilters%22%3A%5B%5D%2C%22property%22%3A%22part%22%2C%22operator%22%3A%22%3D%22%2C%22value%22%3A%22%2Fapi%2Fparts%2F" + item + "%22%7D%5D"
+    queryHandler(global_vars.username, global_vars.realpass, "http://192.168.10.16:3001", "stock_entries", "", "", stockstring, "GET", 'checkInHistory', item);
+}
+
 function checkOut(itemList) {
     var i = 0;
     while (i < itemList.length) {
@@ -125,7 +134,7 @@ function queryHandler(user, password, server, module, partID, command, json, met
 
 function httpConnect(urlStr, user, password, json, command, method, command2, item) {
 
-    console.log("urlStr: ", urlStr)
+    //console.log("urlStr: ", urlStr)
 
     var encode =  encode64(string2Bin(user + ":" + password));
     var xmlhttp = new XMLHttpRequest();
@@ -208,7 +217,17 @@ function errorHandler(response, headers, command, command2, item) {
                     console.log("Couldn't add part " + item);
                     global_vars.addPart = false;
                     global_vars.admin_api_error = "Couldn't add new part"
+                    break;
 
+                case "checkInLookup":
+                    console.log("Couldn't lookup part for checkin");
+                    global_vars.checkinpage_error = "Couldn't lookup part info";
+                    break;
+
+                case "checkInHistory":
+                    console.log("Couldn't lookup history for part");
+                    global_vars.checkinpage_error = "Couldn't lookup part info";
+                    break;
             }
     }
 }
@@ -226,6 +245,14 @@ function responseHandler(response, headers, command, command2, item) {
 //    console.log("********************* RESPONSE BODY ************************************\n");
 
 //    console.log(response);
+
+    var i = 0;
+    var usercheckout = '';
+    var datetime = '';
+    var action = '';
+    var linetoadd = '';
+
+    var itemstring = '';
 
     switch(command) {
         case "addStock":
@@ -283,10 +310,14 @@ function responseHandler(response, headers, command, command2, item) {
                     global_vars.lookupString += ("Description: " + arr["description"] + "\n");
                     //global_vars.lookupString += ("Minimum Stock: " + arr["minStockLevel"] + "\n");
 
-                    console.log("yoooo")
-
                     global_vars.lookupName = arr["name"]
-                    global_vars.lookupStock = arr["stockLevel"]
+                    console.log("ayy", arr['stockLevel'])
+                    if (arr['stockLevel']) {
+                        global_vars.lookupStock = arr["stockLevel"]
+                    }
+                    else {
+                        global_vars.lookupStock = 0
+                    }
 
                     global_vars.checkinpage_error = "Item " + global_vars.lookupName + " found, added to list"
                     global_vars.checkoutpage_error = "Item " + global_vars.lookupName + " found, added to list"
@@ -319,11 +350,11 @@ function responseHandler(response, headers, command, command2, item) {
                 case "lookupHistory":
                     console.log("lookupHistory executed")
                     //console.log("length: ", arr["hydra:member"].length)
-                    var i = 0;
-                    var usercheckout = '';
-                    var datetime = '';
-                    var action = '';
-                    var linetoadd = '';
+                    i = 0;
+                    usercheckout = '';
+                    datetime = '';
+                    action = '';
+                    linetoadd = '';
                     global_vars.stockHistory = '';
                     while (i < arr["hydra:member"].length) {
                         //console.log("user", arr["hydra:member"][i]["user"])
@@ -352,6 +383,76 @@ function responseHandler(response, headers, command, command2, item) {
                     global_vars.addPart = true
                     global_vars.addedItem = item
                     console.log("Add Part Executed\n")
+                    break;
+
+                case "checkInLookup":
+                    console.log("Checkin lookup Executed\n");
+
+                    global_vars.lookupString = '';
+                    global_vars.lookupString += ("Name: " + arr["name"] + "\n");
+                    global_vars.lookupString += ("ID: " + arr["@id"] + "\n");
+                    global_vars.lookupString += ("Stock Level: " + arr["stockLevel"] + " " + arr["partUnit"]["name"] + "\n");
+                    global_vars.lookupString += ("Storage Location: " + arr["storageLocation"]["name"] + "\n");
+                    global_vars.lookupString += ("Type: " + arr["@type"] + "\n");
+                    global_vars.lookupString += ("Description: " + arr["description"] + "\n");
+                    //global_vars.lookupString += ("Minimum Stock: " + arr["minStockLevel"] + "\n");
+
+                    itemstring = arr["@id"]
+                    itemstring = itemstring.toString()
+                    itemstring = itemstring.slice(11)
+                    global_vars.scannedItem = itemstring
+
+                    global_vars.lookupName = arr["name"]
+                    if (arr['stockLevel']) {
+                        global_vars.lookupStock = arr["stockLevel"]
+                    }
+                    else {
+                        global_vars.lookupStock = 0
+                    }
+
+                    global_vars.checkinpage_error = "Item " + global_vars.lookupName + " found, added to list"
+                    global_vars.checkoutpage_error = "Item " + global_vars.lookupName + " found, added to list"
+
+                    if (global_vars.checkInCheck == 0) {
+                        global_vars.checkInCheck = 1;
+                    }
+                    else if (global_vars.checkInCheck == 1) {
+                        check_in.addScan();
+                    }
+                    break;
+
+                case "checkInHistory":
+                    console.log("Checkin history executed\n");
+
+                    i = 0;
+                    usercheckout = '';
+                    datetime = '';
+                    action = '';
+                    linetoadd = '';
+                    global_vars.stockHistory = '';
+                    while (i < arr["hydra:member"].length) {
+                        //console.log("user", arr["hydra:member"][i]["user"])
+                        if (arr["hydra:member"][i]["user"]) {
+                            usercheckout = arr["hydra:member"][i]["user"]["username"]
+                            datetime = arr["hydra:member"][i]["dateTime"]
+                            if (arr["hydra:member"][i]["stockLevel"] === -1) {
+                                action = "Checkout"
+                            }
+                            if (arr["hydra:member"][i]["stockLevel"] === 1) {
+                                action = "Checkin"
+                            }
+                            linetoadd = "-User: " + usercheckout + ",   Action: " + action + "\nDatetime: " + datetime + "\n\n"
+                            global_vars.stockHistory += linetoadd
+                        }
+                        i += 1
+                    }
+
+                    if (global_vars.checkInCheck == 0) {
+                        global_vars.checkInCheck = 1;
+                    }
+                    else if (global_vars.checkInCheck == 1) {
+                        check_in.addScan();
+                    }
                     break;
             }
     }

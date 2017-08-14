@@ -102,25 +102,30 @@ Item {
     /*Helpbox*/
     property string tempInfo: 'yooooooooooooo'
     property string tempStockHistory: 'ayyyyyyyyyyyyyyyyyyy'
+    property string stockHistoryHelp: 'yoo'
+    property string infoTextHelp: 'ayyy'
 
     /*Display Size*/
     property int fullWidth: 1920
     property int fullHeight: 1080
 
 
-    property int tempWidth: 854
-    property int tempHeight: 480
+    //change these to computer screen size
+    property int tempWidth: 1920
+    property int tempHeight: 1080
 
-
-    property bool changeSize: true
 
     /*
     property int tempWidth: 1920
     property int tempHeight: 1080
     */
 
+    /*Check In Redo*/
+    property int checkInCheck: 0
+
     function display(fullSize) {
-        var changeSize = true;
+        //change this to true to get custom sizes
+        var changeSize = false;
 
         var newSize = 0;
         var fullWidth = 1920

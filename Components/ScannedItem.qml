@@ -9,10 +9,18 @@ Rectangle  {
     property alias item_id: item_txt
     property alias item_name: name
     property alias item_stock: stock
+    property alias forQ: root.height
     property bool checked: false
+    property alias stateUpLevel2: helpbox.stateUpLevel
+    property alias infoText: helpbox.infoText
+    property alias stockHistory: helpbox.stockHistory
+
     signal pressed()
     signal released()
     signal clicked()
+
+    signal questionClicked()
+    signal xClicked()
 
     state: "visible"
     states:[
@@ -30,6 +38,13 @@ Rectangle  {
                 target: root;
                 visible: false;
                 opacity: 0
+            }
+        },
+        State {
+            name: "extra";
+            PropertyChanges {
+                target: root;
+                visible: false;
             }
         }
     ]
@@ -50,8 +65,8 @@ Rectangle  {
         anchors.left: root.left
         anchors.leftMargin: global_vars.display(30)
         anchors.top: root.top
-        anchors.right: root.horizontalCenter
-        anchors.rightMargin: global_vars.display(160)
+//        anchors.right: root.horizontalCenter
+//        anchors.rightMargin: global_vars.display(160)
         anchors.bottom: root.bottom
         font.family: "Helvetica"
         text: ""
@@ -65,6 +80,7 @@ Rectangle  {
     Text {
         id: name
         anchors.left: item_txt.right
+        anchors.leftMargin: global_vars.display(50)
         anchors.top: root.top
         anchors.bottom: root.bottom
         font.family: "Helvetica"
@@ -79,7 +95,7 @@ Rectangle  {
     Text {
         id: stock
         anchors.left: name.right
-        anchors.leftMargin: global_vars.display(80)
+        anchors.leftMargin: global_vars.display(50)
         anchors.top: root.top
         anchors.bottom: root.bottom
         font.family: "Helvetica"
@@ -123,5 +139,26 @@ Rectangle  {
                 root.clicked()
             }
         }
+    }
+
+    HelpBox {
+        state: "closed"
+        id: helpbox
+        z: 100
+        anchors.top: root.top
+        anchors.right: x_holder.left
+        anchors.rightMargin: 10
+        setHeight: root.height
+        setWidth: root.height
+        onXClicked: {
+            root.xClicked()
+        }
+        onQuestionClicked: {
+            root.questionClicked()
+        }
+    }
+
+    function testing() {
+        console.log("ahhhhhhh")
     }
 }
