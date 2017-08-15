@@ -74,10 +74,7 @@ Rectangle {
         }
         onClicked: {
             global_vars.howto_error = "Exiting..."
-            Connect.logout(global_vars.username, global_vars.realpass)
-            clock.delay(1000, function() {
-                Qt.quit()
-            })
+            Connect.logoutQuit(global_vars.username, global_vars.realpass)
         }
     }
 

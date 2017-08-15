@@ -304,12 +304,7 @@ Rectangle {
         }
         onClicked: {
             global_vars.login_error = "Exiting..."
-            Connect.logout(global_vars.username, global_vars.realpass)
-            clock_loggedin.connect( function() {
-                root.state = "hidden"
-                Qt.quit()
-            })
-            clock_loggedin.delay(1000)
+            Connect.logoutQuit(global_vars.username, global_vars.realpass)
         }
     }
 

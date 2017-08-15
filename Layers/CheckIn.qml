@@ -157,20 +157,6 @@ Rectangle {
         font.pointSize: global_vars.display(40)
     }
 
-    BasicButton {
-        anchors.top: parent.top
-        anchors.left: parent.left
-        anchors.margins: 15
-        height: 100
-        width: 100
-        id: test
-        label.text: "test"
-
-        onClicked: {
-            closeAll();
-        }
-    }
-
     Text {
         text: "Items: 0"
         anchors.bottom: checkin_error.top
@@ -216,11 +202,11 @@ Rectangle {
             GlobVars.checkGoodIn = [];
 
             //send list to API here
+            global_vars.totalCheckInOut = GlobVars.itemListIn.length
+            global_vars.currentCheckInOut = 0
             Connect.checkIn(GlobVars.itemListIn)
             global_vars.endpage_error = "Checking in... Please wait... "
             //console.log("GlobVars.itemListIn: ", GlobVars.itemListIn)
-
-            global_funcs.checkInMsg()
 
             deletionAll()
             nextLayer(root.objectName, "end_page")
@@ -361,7 +347,7 @@ Rectangle {
         //GlobVars.itemListIn.push(item.slice(0,-1))
         //console.log("GlobVars: ", GlobVars.itemListIn)
 
-        GlobVars.checkInQueue.push(item.slice(0,-1))
+        GlobVars.checkInQueue.push(item)
         startCheckIn()
 
 //        Connect.lookUp(item)

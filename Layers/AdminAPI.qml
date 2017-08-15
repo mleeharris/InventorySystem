@@ -252,11 +252,7 @@ Rectangle {
         }
         onClicked: {
             global_vars.admin_api_error = "Logging Out..."
-            Connect.logout(global_vars.username, global_vars.realpass)
-            clock_adminapi_adduser.connect(function() {
-                Qt.quit()
-            })
-            clock_adminapi_adduser.delay(1000)
+            Connect.logoutQuit(global_vars.username, global_vars.realpass)
         }
     }
 

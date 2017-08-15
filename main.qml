@@ -26,6 +26,8 @@ Window {
     height: 1080
     */
 
+    property int tempWidth: Screen.desktopAvailableWidth
+    property int tempHeight: Screen.desktopAvailableHeight
     width: global_vars.tempWidth
     height: global_vars.tempHeight
 
@@ -139,10 +141,6 @@ Window {
             }
         ]
 
-        Clock {
-            id: clock_main
-        }
-
         Scanner {
             id: barcode
 //            onTemp: {
@@ -215,10 +213,7 @@ Window {
             }
             onClicked: {
                 global_vars.main_error = "Exiting..."
-                Connect.logout(global_vars.username, global_vars.realpass)
-                clock_main.delay(1000, function() {
-                    Qt.quit()
-                })
+                Connect.logoutQuit(global_vars.username, global_vars.realpass)
             }
         }
 
@@ -254,7 +249,8 @@ Window {
 
             onClicked: {
                 slot_switchLayer("main", "logged_in")
-                GlobVars.userpass = testing.readCard()
+                //GlobVars.userpass = testing.readCard()
+                console.log("ay", global_vars.tempHeight)
                 scanned()
                 object_holder.state = "hidden"
             }
@@ -609,5 +605,9 @@ Window {
             slot_switchLayer("main","logged_in")
             login_page.state = "hidden"
         }
+    }
+
+    function logoutQuit() {
+        Qt.quit()
     }
 }

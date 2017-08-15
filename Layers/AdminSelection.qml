@@ -78,10 +78,7 @@ Rectangle {
         }
         onClicked: {
             global_vars.admin_selection_error = "Logging Out..."
-            Connect.logout(global_vars.username, global_vars.realpass)
-            clock_adminselection.delay(1000, function() {
-                Qt.quit()
-            })
+            Connect.logoutQuit(global_vars.username, global_vars.realpass)
         }
     }
 

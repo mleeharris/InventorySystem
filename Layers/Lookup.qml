@@ -198,16 +198,10 @@ Rectangle {
     function itemScan(item) {
         console.log(item)
         item_display.text = "Item: " + item
+        global_vars.lookupCheck = 0
         Connect.lookUp(item)
         Connect.getStockHistory(item)
         info_text.text = "Looking up... Please wait... "
-        if (clock_lookup.connected === false) {
-            clock_lookup.connect( function() {
-                info_text.text = global_vars.lookupString
-            });
-        }
-        clock_lookup.delay(1000)
-        //info_text.text = item + item + item + item + item + item + item + item + item + item + item
     }
 
     function tabOperationLookup(tabnum, state) {
@@ -227,5 +221,9 @@ Rectangle {
                 right_tab.state = "Down"
             }
         }
+    }
+
+    function lookupString() {
+        info_text.text = global_vars.lookupString
     }
 }

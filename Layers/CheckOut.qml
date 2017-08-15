@@ -199,15 +199,19 @@ Rectangle {
         iconAnchors.verticalCenterOffset: global_vars.check_out_offset
 
         onClicked: {
-            //send list to API here
-            Connect.checkOut(GlobVars.itemList)
+            GlobVars.checkBadOut = [];
+            GlobVars.checkGoodOut = [];
             global_vars.checkinpage_error = ''
             global_vars.checkoutpage_error = ''
+            global_vars.checkOutError = 0;
+
+            //send list to API here
+            global_vars.totalCheckInOut = GlobVars.itemList.length
+            global_vars.currentCheckInOut = 0
+            Connect.checkOut(GlobVars.itemList)
             global_vars.endpage_error = "Checking out... Please wait... "
 
             deletionAll()
-            global_vars.checkOutError = 0;
-            global_funcs.checkOutMsg();
 
             nextLayer(root.objectName, "end_page")
             root.state = "hidden"

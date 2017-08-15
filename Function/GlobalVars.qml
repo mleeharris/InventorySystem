@@ -105,14 +105,16 @@ Item {
     property string stockHistoryHelp: 'yoo'
     property string infoTextHelp: 'ayyy'
 
+
+    //THESE VARIABLES NEED TO BE CHANGED WHEN CHANGING MONITORS,SERVERS,ETC/////
     /*Display Size*/
     property int fullWidth: 1920
     property int fullHeight: 1080
 
 
     //change these to computer screen size
-    property int tempWidth: 1920
-    property int tempHeight: 1080
+    property int tempWidth: main_window.tempWidth
+    property int tempHeight: main_window.tempHeight
 
 
     /*
@@ -120,23 +122,32 @@ Item {
     property int tempHeight: 1080
     */
 
-    /*Check In Redo*/
+    property string currentServer: "http://192.168.10.16:3001"
+
+    ///////////////////////////////////////////////////////////////////////////
+
+    /*Check In/Out Redo*/
     property int checkInCheck: 0
     property int checkOutCheck: 0
     property int checkInItemHeight: display(80)
     property int checkInItemWidth: display(1100)
+    property int currentCheckInOut: 0
+    property int totalCheckInOut: 0
+
+    /*Lookup Redo*/
+    property int lookupCheck: 0
 
     function display(fullSize) {
         //change this to true to get custom sizes
-        var changeSize = false;
+        var changeSize = true;
 
         var newSize = 0;
         var fullWidth = 1920
         var fullHeight = 1080
 
         if (changeSize == true) {
-            var tempWidth = 854
-            var tempHeight = 480
+            var tempWidth = main_window.tempWidth
+            var tempHeight = main_window.tempHeight
             newSize = (tempWidth/fullWidth) * fullSize
             return newSize
         }
