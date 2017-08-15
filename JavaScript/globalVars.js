@@ -15,3 +15,4 @@ var checkGoodIn = [];
 var checkBadIn = [];
 
 var checkInQueue = [];
+var checkOutQueue = [];

@@ -81,57 +81,19 @@ Rectangle {
         ScannedItem {
             id: scanitem
             checked: ListView.isCurrentItem
-            width: global_vars.display(1100)
-            height: global_vars.display(80)
+//            width: global_vars.checkIn
+//            height: global_vars.display(80)
             item_id.text: itemText
             item_name.text: itemName
             item_stock.text: itemStock
             stockHistory: stockHistoryFinal
             infoText: infoTextFinal
-            property bool isCurrentItem: ListView.isCurrentItem
             onPressed: {
                 item_listview.currentIndex = index
             }
             onReleased: {
                 global_vars.checkinpage_error = itemName + ' deleted from list'
                 deletionHandlingCheckOut()
-                scanitem.stateUpLevel2 = "hidden"
-            }
-            onQuestionClicked: {
-                scanitem.forQ = 400
-                //console.log("yoo", ListElement.objectName)
-            }
-            onXClicked: {
-                scanitem.forQ = 80
-            }
-
-//            MouseArea {
-//                id: item_ma
-//                anchors.top: parent.top
-//                anchors.right: parent.right
-//                height: global_vars.display(80)
-//                width: global_vars.display(80)
-//                onPressed: {
-
-//                }
-//                onReleased: {
-
-//                }
-//            }
-            onIsCurrentItemChanged: {
-                //PLAY AROUND HERE
-//                item_listview.currentItemCount += 3
-//                console.log('listview:', item_listview.currentItemCount)
-                console.log("scanitem.stateUpLevel2: ", scanitem.stateUpLevel2)
-                //console.log("fruitModel.get(0).cost: ", item_model.get(0).testing)
-                scanitem.stateUpLevel2 = "hidden"
-                //item_model.set(0, {"item_id.text": "bbb"})
-                //item_model.setProperty(0, "item_id.text", "bbb")
-                //item_model.clear()
-                console.log("scanitem.state: ", scanitem.state)
-                if(isCurrentItem) {
-                    //console.log("wtf")
-                }
             }
         }
     }
@@ -388,13 +350,11 @@ Rectangle {
 
     function startCheckIn() {
         var item = ''
-        console.log("checkinQueue: ", GlobVars.checkInQueue)
+        //console.log("checkinQueue: ", GlobVars.checkInQueue)
         if (GlobVars.checkInQueue.length > 0) {
             item = GlobVars.checkInQueue.shift();
             Connect.checkInLookup(item)
         }
-
-        //Connect.checkInLookup(item)
     }
 
     function itemScan(item) {

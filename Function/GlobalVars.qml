@@ -122,6 +122,9 @@ Item {
 
     /*Check In Redo*/
     property int checkInCheck: 0
+    property int checkOutCheck: 0
+    property int checkInItemHeight: display(80)
+    property int checkInItemWidth: display(1100)
 
     function display(fullSize) {
         //change this to true to get custom sizes

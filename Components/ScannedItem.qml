@@ -11,9 +11,11 @@ Rectangle  {
     property alias item_stock: stock
     property alias forQ: root.height
     property bool checked: false
-    property alias stateUpLevel2: helpbox.stateUpLevel
-    property alias infoText: helpbox.infoText
-    property alias stockHistory: helpbox.stockHistory
+    property alias stockHistory: stock_history.text
+    property alias infoText: info_text.text
+//    property alias stateUpLevel2: helpbox.stateUpLevel
+//    property alias infoText: helpbox.infoText
+//    property alias stockHistory: helpbox.stockHistory
 
     signal pressed()
     signal released()
@@ -31,6 +33,10 @@ Rectangle  {
                 visible: true;
                 opacity: 1
             }
+            PropertyChanges {
+                target: root
+                height: 80
+            }
         },
         State {
             name: "hidden";
@@ -43,21 +49,29 @@ Rectangle  {
         State {
             name: "extra";
             PropertyChanges {
-                target: root;
-                visible: false;
+                target: stock_history;
+                state: "open"
+            }
+            PropertyChanges {
+                target: info_text;
+                state: "open"
+            }
+            PropertyChanges {
+                target: root
+                height: 500
             }
         }
     ]
 
     color: "#00000000"
-    height: global_vars.itemHeight
-    width: global_vars.itemWidth
+    height: global_vars.checkInItemHeight
+    width: global_vars.checkInItemWidth
 
     Rectangle {
         color: "black"
         opacity: 0.5
         anchors.fill: parent
-        radius: global_vars.itemWidth/8
+        radius: global_vars.display(40)
     }
 
     Text {
@@ -65,46 +79,41 @@ Rectangle  {
         anchors.left: root.left
         anchors.leftMargin: global_vars.display(30)
         anchors.top: root.top
-//        anchors.right: root.horizontalCenter
-//        anchors.rightMargin: global_vars.display(160)
+        anchors.topMargin: 0
         anchors.bottom: root.bottom
         font.family: "Helvetica"
         text: ""
         font.pointSize: global_vars.itemFontsize
         smooth: true
         color: global_vars.darkGrayColor
-        //horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
     }
 
     Text {
         id: name
         anchors.left: item_txt.right
         anchors.leftMargin: global_vars.display(50)
-        anchors.top: root.top
+        anchors.verticalCenter: item_txt.verticalCenter
+        anchors.verticalCenterOffset: 9
         anchors.bottom: root.bottom
         font.family: "Helvetica"
         text: ""
         font.pointSize: global_vars.itemFontsize - global_vars.display(25)
         smooth: true
         color: global_vars.darkGrayColor
-        //horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
     }
 
     Text {
         id: stock
         anchors.left: name.right
         anchors.leftMargin: global_vars.display(50)
-        anchors.top: root.top
+        anchors.verticalCenter: item_txt.verticalCenter
+        anchors.verticalCenterOffset: 9
         anchors.bottom: root.bottom
         font.family: "Helvetica"
         text: ""
         font.pointSize: global_vars.itemFontsize - global_vars.display(25)
         smooth: true
         color: global_vars.darkGrayColor
-        //horizontalAlignment: Text.AlignHCenter
-        verticalAlignment: Text.AlignVCenter
     }
 
     Rectangle {
@@ -115,14 +124,13 @@ Rectangle  {
 
         anchors.right: root.right
         anchors.top: root.top
-        height: root.height
-        width: root.height
+        height: global_vars.checkInItemHeight
+        width: global_vars.checkInItemHeight
 
         Image {
             id: x
-            height: root.height - (root.height/4)
-            width: root.height - (root.height/4)
-            anchors.verticalCenter: parent.verticalCenter
+            anchors.fill: parent
+            anchors.margins: 10
             source: "qrc:/Images/x_gray.png"
         }
 
@@ -141,24 +149,135 @@ Rectangle  {
         }
     }
 
-    HelpBox {
-        state: "closed"
-        id: helpbox
-        z: 100
-        anchors.top: root.top
+    Rectangle {
+        id: question_holder
+        color: "#00000000"
+
         anchors.right: x_holder.left
-        anchors.rightMargin: 10
-        setHeight: root.height
-        setWidth: root.height
-        onXClicked: {
-            root.xClicked()
+        anchors.top: root.top
+        height: global_vars.checkInItemHeight
+        width: global_vars.checkInItemHeight
+
+        Image {
+            id: question
+            anchors.fill: parent
+            anchors.margins: 10
+            source: "qrc:/Images/question_darkgray.png"
         }
-        onQuestionClicked: {
-            root.questionClicked()
+
+        MouseArea {
+            id: question_ma
+            anchors.fill: parent
+            onPressed: {
+                //root.pressed()
+            }
+            onReleased: {
+                //root.released()
+            }
+            onClicked: {
+                if (root.state == "visible") {
+                    root.state = "extra";
+                }
+                else if (root.state == "extra") {
+                    root.state = "visible";
+                }
+            }
         }
     }
 
-    function testing() {
-        console.log("ahhhhhhh")
+    Text {
+        id: info_text
+
+        color: global_vars.darkGrayColor
+
+        state: "closed"
+        states:[
+            State {
+                name: "open";
+                PropertyChanges {
+                    target: info_text;
+                    visible: true;
+                    opacity: 1
+                }
+            },
+            State {
+                name: "closed";
+                PropertyChanges {
+                    target: info_text;
+                    visible: false;
+                    opacity: 0
+                }
+            }
+        ]
+
+        anchors.top: root.top
+        anchors.left: root.left
+        anchors.topMargin: 100
+        anchors.leftMargin: 40
+        width: root.width/2-40
+        height: root.height
+        font.pointSize: 20
+        lineHeight: 1.5
+        wrapMode: Text.Wrap
+        text: ''
     }
+
+    Text {
+        id: stock_history
+
+        color: global_vars.darkGrayColor
+
+        state: "closed"
+        states:[
+            State {
+                name: "open";
+                PropertyChanges {
+                    target: stock_history;
+                    visible: true;
+                    opacity: 1
+                }
+            },
+            State {
+                name: "closed";
+                PropertyChanges {
+                    target: stock_history;
+                    visible: false;
+                    opacity: 0
+                }
+            }
+        ]
+
+        anchors.top: info_text.top
+        anchors.left: info_text.right
+        anchors.leftMargin: 50
+        width: root.width - info_text.width
+        height: root.height
+        font.pointSize: 15
+        maximumLineCount: 15
+        lineHeight: 1.05
+        wrapMode: Text.Wrap
+        text: ''
+    }
+
+
+//    HelpBox {
+//        state: "closed"
+//        id: helpbox
+//        z: 100
+//        anchors.top: root.top
+//        anchors.right: x_holder.left
+//        anchors.rightMargin: 10
+//        setHeight: root.height
+//        setWidth: root.height
+//        onXClicked: {
+//            root.xClicked()
+//        }
+//        onQuestionClicked: {
+//            root.questionClicked()
+//        }
+//    }
+
+//    function testing() {
+//        console.log("ahhhhhhh")
+//    }
 }

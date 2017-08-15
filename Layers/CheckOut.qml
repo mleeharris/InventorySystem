@@ -86,6 +86,8 @@ Rectangle {
             item_id.text: itemText
             item_name.text: itemName
             item_stock.text: itemStock
+            stockHistory: stockHistoryFinal
+            infoText: infoTextFinal
             MouseArea {
                 id: item_ma
                 anchors.top: parent.top
@@ -134,7 +136,7 @@ Rectangle {
         anchors.horizontalCenter: temp_background.horizontalCenter
         font.family: "Bebas Neue"
         font.pixelSize: global_vars.display(115)
-        id: check_out
+        id: check_out_text
     }
 
     Rectangle {
@@ -142,8 +144,8 @@ Rectangle {
         color: 'black'
         height: global_vars.display(2)
         width: global_vars.display(1100)
-        anchors.horizontalCenter: check_out.horizontalCenter
-        anchors.top: check_out.bottom
+        anchors.horizontalCenter: check_out_text.horizontalCenter
+        anchors.top: check_out_text.bottom
         anchors.topMargin: global_vars.display(5)
     }
 
@@ -297,21 +299,37 @@ Rectangle {
     }
 
     function itemScan(item) {
-        GlobVars.itemList.push(item.slice(0,-1))
-        //console.log("GlobVars: ", GlobVars.itemList)
-        global_vars.scannedItem = item
+        GlobVars.checkOutQueue.push(item.slice(0,-1))
+        startCheckOut()
 
-        Connect.lookUp(item)
-        if (clock_checkout2.connected == false) {
-            clock_checkout2.connect( function() {
-                item_model.insert(item_listview.currentIndex + 1, {"itemText": "ID: " + global_vars.scannedItem, "itemName": "Name: " + global_vars.lookupName, "itemStock": "Stock: " + global_vars.lookupStock})
-                item_listview.currentIndex = item_listview.currentIndex + 1
-                item_counter.text = "Items: " + GlobVars.itemList.length
-            })
-        }
-        clock_checkout2.delay(750)
+//        Connect.lookUp(item)
+//        if (clock_checkout2.connected == false) {
+//            clock_checkout2.connect( function() {
+//                item_model.insert(item_listview.currentIndex + 1, {"itemText": "ID: " + global_vars.scannedItem, "itemName": "Name: " + global_vars.lookupName, "itemStock": "Stock: " + global_vars.lookupStock})
+//                item_listview.currentIndex = item_listview.currentIndex + 1
+//                item_counter.text = "Items: " + GlobVars.itemList.length
+//            })
+//        }
+//        clock_checkout2.delay(750)
     }
 
+    function addScan() {
+        console.log("yoooooooooooooooooooooooooooooooooooooo")
+        GlobVars.itemList.push(global_vars.scannedItem)
+        item_model.insert(item_listview.currentIndex + 1, {"itemText": "ID: " + global_vars.scannedItem, "itemName": "Name: " + global_vars.lookupName, "itemStock": "Stock: " + global_vars.lookupStock, "stockHistoryFinal": global_vars.stockHistory, "infoTextFinal": global_vars.lookupString})
+        item_listview.currentIndex = item_listview.currentIndex + 1
+        item_counter.text = "Items: " + GlobVars.itemList.length
+        startCheckOut()
+    }
+
+    function startCheckOut() {
+        var item = ''
+        //console.log("checkinQueue: ", GlobVars.checkInQueue)
+        if (GlobVars.checkOutQueue.length > 0) {
+            item = GlobVars.checkOutQueue.shift();
+            Connect.checkOutLookup(item)
+        }
+    }
 
     function deletionHandlingCheckOut() {
         item_model.remove(item_listview.currentIndex)
