@@ -169,7 +169,7 @@ Rectangle {
 
     Error {
         id: checkin_error
-        errorHeight: global_vars.display(110)
+        errorHeight: global_vars.display(120)
         errorWidth: clear_button.width
         errorText: global_vars.checkinpage_error
         z: 1

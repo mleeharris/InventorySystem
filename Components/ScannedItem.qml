@@ -35,7 +35,19 @@ Rectangle  {
             }
             PropertyChanges {
                 target: root
-                height: 80
+                height: global_vars.display(80)
+            }
+            PropertyChanges {
+                target: stock_history;
+                state: "closed"
+            }
+            PropertyChanges {
+                target: info_text;
+                state: "closed"
+            }
+            PropertyChanges {
+                target: image
+                state: "closed"
             }
         },
         State {
@@ -57,8 +69,31 @@ Rectangle  {
                 state: "open"
             }
             PropertyChanges {
+                target: image
+                state: "open"
+            }
+            PropertyChanges {
                 target: root
-                height: 500
+                height: global_vars.display(530)
+            }
+        }
+    ]
+
+    transitions:[
+        Transition {
+            from: "visible"; to: "extra";
+            NumberAnimation {
+                target: root
+                property: "height"
+                duration: 200
+            }
+        },
+        Transition {
+            from: "extra"; to: "visible";
+            NumberAnimation {
+                target: root
+                property: "height"
+                duration: 200
             }
         }
     ]
@@ -79,7 +114,7 @@ Rectangle  {
         anchors.left: root.left
         anchors.leftMargin: global_vars.display(30)
         anchors.top: root.top
-        anchors.topMargin: 0
+        anchors.topMargin: global_vars.display(0)
         anchors.bottom: root.bottom
         font.family: "Helvetica"
         text: ""
@@ -93,7 +128,7 @@ Rectangle  {
         anchors.left: item_txt.right
         anchors.leftMargin: global_vars.display(50)
         anchors.verticalCenter: item_txt.verticalCenter
-        anchors.verticalCenterOffset: 9
+        anchors.verticalCenterOffset: global_vars.display(9)
         anchors.bottom: root.bottom
         font.family: "Helvetica"
         text: ""
@@ -107,7 +142,7 @@ Rectangle  {
         anchors.left: name.right
         anchors.leftMargin: global_vars.display(50)
         anchors.verticalCenter: item_txt.verticalCenter
-        anchors.verticalCenterOffset: 9
+        anchors.verticalCenterOffset: global_vars.display(9)
         anchors.bottom: root.bottom
         font.family: "Helvetica"
         text: ""
@@ -130,7 +165,7 @@ Rectangle  {
         Image {
             id: x
             anchors.fill: parent
-            anchors.margins: 10
+            anchors.margins: global_vars.display(10)
             source: "qrc:/Images/x_gray.png"
         }
 
@@ -161,7 +196,7 @@ Rectangle  {
         Image {
             id: question
             anchors.fill: parent
-            anchors.margins: 10
+            anchors.margins: global_vars.display(10)
             source: "qrc:/Images/question_darkgray.png"
         }
 
@@ -188,8 +223,6 @@ Rectangle  {
     Text {
         id: info_text
 
-        color: global_vars.darkGrayColor
-
         state: "closed"
         states:[
             State {
@@ -199,6 +232,10 @@ Rectangle  {
                     visible: true;
                     opacity: 1
                 }
+                PropertyChanges {
+                    target: info_text
+                    color: global_vars.darkGrayColor
+                }
             },
             State {
                 name: "closed";
@@ -207,17 +244,40 @@ Rectangle  {
                     visible: false;
                     opacity: 0
                 }
+                PropertyChanges {
+                    target: info_text
+                    color: "#CCCCCC"
+                }
+            }
+        ]
+
+        transitions:[
+            Transition {
+                from: "open"; to: "closed";
+                PropertyAnimation {
+                    target: info_text
+                    property: color
+                    duration: 200
+                }
+            },
+            Transition {
+                from: "closed"; to: "open";
+                PropertyAnimation {
+                    target: info_text
+                    property: color
+                    duration: 200
+                }
             }
         ]
 
         anchors.top: root.top
         anchors.left: root.left
-        anchors.topMargin: 100
-        anchors.leftMargin: 40
-        width: root.width/2-40
+        anchors.topMargin: global_vars.display(100)
+        anchors.leftMargin: global_vars.display(40)
+        width: root.width/2-global_vars.display(40)
         height: root.height
-        font.pointSize: 20
-        lineHeight: 1.5
+        font.pointSize: global_vars.display(20)
+        lineHeight: global_vars.display(1.5)
         wrapMode: Text.Wrap
         text: ''
     }
@@ -247,16 +307,65 @@ Rectangle  {
             }
         ]
 
+        transitions:[
+            Transition {
+                from: "open"; to: "closed";
+                PropertyAnimation {
+                    target: stock_history
+                    property: visible
+                    duration: 500
+                }
+            },
+            Transition {
+                from: "closed"; to: "open";
+                PropertyAnimation {
+                    target: stock_history
+                    property: visible
+                    duration: 500
+                }
+            }
+        ]
+
         anchors.top: info_text.top
         anchors.left: info_text.right
-        anchors.leftMargin: 50
+        anchors.leftMargin: global_vars.display(50)
         width: root.width - info_text.width
         height: root.height
-        font.pointSize: 15
-        maximumLineCount: 15
-        lineHeight: 1.05
+        font.pointSize: global_vars.display(15)
+        maximumLineCount: global_vars.display(15)
+        lineHeight: global_vars.display(1.05)
         wrapMode: Text.Wrap
         text: ''
+    }
+
+    Image {
+        id: image
+        anchors.top: info_text.top
+        anchors.right: info_text.right
+        width: 150
+        height: 100
+        //source: "http://www.pngmart.com/?p=11285"
+        source: "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png"
+
+        state: "closed"
+        states:[
+            State {
+                name: "open";
+                PropertyChanges {
+                    target: image;
+                    visible: true;
+                    opacity: 1
+                }
+            },
+            State {
+                name: "closed";
+                PropertyChanges {
+                    target: image;
+                    visible: false;
+                    opacity: 0
+                }
+            }
+        ]
     }
 
 

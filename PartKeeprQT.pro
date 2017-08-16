@@ -1,11 +1,13 @@
 TEMPLATE = app
 
 QT += qml quick serialport
+QT += network
 CONFIG += c++11
 
 SOURCES += main.cpp \
     terminal.cpp \
-    threadcall.cpp
+    threadcall.cpp \
+    filedownloader.cpp
 
 RESOURCES += qml.qrc
 
@@ -33,8 +35,11 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     NFCReader.py \
-    README.txt
+    README.txt \
+    Extra Files/Queries.txt \
+    Extra Files/Queries.txt
 
 HEADERS += \
     terminal.h \
-    threadcall.h
+    threadcall.h \
+    filedownloader.h

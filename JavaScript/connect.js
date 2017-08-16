@@ -97,7 +97,7 @@ function addUserAdmin(newusername, newpassword) {
 
 function addPart(newItem, newLocation) {
     global_vars.addPart = false
-    var itemstring = '{"name":"' + newItem + '","description":"","comment":"","minStockLevel":0,"status":"","needsReview":false,"partCondition":"","productionRemarks":"","internalPartNumber":"","metaPart":false,"category":{"@context":"/api/contexts/PartCategory","@id":"/api/part_categories/1","@type":"PartCategory","categoryPath":"Root Category","expanded":true,"name":"Root Category","description":null,"parentId":"@local-tree-root","index":0},"partUnit":{"@id":"/api/part_measurement_units/1","@type":"PartMeasurementUnit","name":"Pieces","shortName":"pcs","default":true},"footprint":null,"storageLocation":{"@id":"/api/storage_locations/6","@type":"StorageLocation","name":"' + newLocation + '","image":null,"categoryPath":"Root Category"},"stockLevels":[{"stockLevel":288,"price":0,"dateTime":null,"correction":false,"comment":null,"user":null}]}'
+    var itemstring = '{"name":"' + newItem + '","description":"","comment":"","minStockLevel":0,"status":"","needsReview":false,"partCondition":"","productionRemarks":"","internalPartNumber":"","metaPart":false,"category":{"@context":"/api/contexts/PartCategory","@id":"/api/part_categories/1","@type":"PartCategory","categoryPath":"Root Category","expanded":true,"name":"Root Category","description":null,"parentId":"@local-tree-root","index":0},"partUnit":{"@id":"/api/part_measurement_units/1","@type":"PartMeasurementUnit","name":"Pieces","shortName":"pcs","default":true},"footprint":null,"storageLocation":{"@id":"/api/storage_locations/4","@type":"StorageLocation","name":"' + newLocation + '","image":null,"categoryPath":"Root Category"},"stockLevels":[{"stockLevel":288,"price":0,"dateTime":null,"correction":false,"comment":null,"user":null}]}'
     //var itemstring = '{"name":"' + newItem + '","description":"","comment":"","minStockLevel":0,"status":"","needsReview":false,"partCondition":"","productionRemarks":"","internalPartNumber":"","metaPart":false,"category":{"@context":"/api/contexts/PartCategory","@id":"/api/part_categories/1","@type":"PartCategory","categoryPath":"Root Category","expanded":true,"name":"Root Category","description":null,"parentId":"@local-tree-root","index":0},"partUnit":{"@id":"/api/part_measurement_units/1","@type":"PartMeasurementUnit","name":"Pieces","shortName":"pcs","default":true},"footprint":null,"storageLocation":{"@id":"/api/storage_locations/6","@type":"StorageLocation","name":"Column1_Bin3","image":null,"categoryPath":"Root Category"},"stockLevels":[{"stockLevel":288,"price":0,"dateTime":null,"correction":false,"comment":null,"user":null}]}'
     //console.log("itemstring: ", itemstring)
     //console.log('{"name":"LastInsertzzz","description":"","comment":"","minStockLevel":0,"status":"","needsReview":false,"partCondition":"","productionRemarks":"","internalPartNumber":"","metaPart":false,"category":{"@context":"/api/contexts/PartCategory","@id":"/api/part_categories/1","@type":"PartCategory","categoryPath":"Root Category","expanded":true,"name":"Root Category","description":null,"parentId":"@local-tree-root","index":0},"partUnit":{"@id":"/api/part_measurement_units/1","@type":"PartMeasurementUnit","name":"Pieces","shortName":"pcs","default":true},"footprint":null,"storageLocation":{"@id":"/api/storage_locations/6","@type":"StorageLocation","name":"Column1_Bin3","image":null,"categoryPath":"Root Category"},"stockLevels":[{"stockLevel":288,"price":0,"dateTime":null,"correction":false,"comment":null,"user":null}]}');
@@ -216,6 +216,7 @@ function errorHandler(response, headers, command, command2, item) {
         case "setStock":
             console.log("Couldn't set stock");
             global_vars.setStock = false;
+            admin_api.setStock()
             break;
 
         default:
@@ -236,13 +237,14 @@ function errorHandler(response, headers, command, command2, item) {
                 case "addUser":
                     console.log("Couldn't add user");
                     global_vars.addUser = false;
-                    global_vars.admin_api_error = "Couldn't add new user"
+                    global_vars.admin_api_error = "Couldn't add new user. Name could already be taken"
+                    admin_api.addUser()
                     break;
 
                 case "addPart":
                     console.log("Couldn't add part " + item);
                     global_vars.addPart = false;
-                    global_vars.admin_api_error = "Couldn't add new part"
+                    admin_api.addPart()
                     break;
 
                 case "checkInLookup":
@@ -330,6 +332,7 @@ function responseHandler(response, headers, command, command2, item) {
         case "setStock":
             console.log("Set Stock Executed\n");
             global_vars.setStock = true;
+            admin_api.setStock()
             break;
 
         default:
@@ -355,6 +358,11 @@ function responseHandler(response, headers, command, command2, item) {
                     global_vars.lookupString += ("Storage Location: " + arr["storageLocation"]["name"] + "\n");
                     global_vars.lookupString += ("Type: " + arr["@type"] + "\n");
                     global_vars.lookupString += ("Description: " + arr["description"] + "\n");
+                    if (arr["footprint"]) {
+                        global_vars.lookupString += ("Footprint: " + arr["footprint"]["name"] + "\n");
+                        global_vars.lookupString += ("\t       " + arr["footprint"]["description"] + "\n");
+                    }
+                    global_vars.lookupString += ("Comment: " + arr["comment"] + "\n");
                     //global_vars.lookupString += ("Minimum Stock: " + arr["minStockLevel"] + "\n");
 
                     global_vars.lookupName = arr["name"]
@@ -437,13 +445,15 @@ function responseHandler(response, headers, command, command2, item) {
 
                 case "addUser":
                     global_vars.addUser = true
+                    global_vars.admin_api_error = "Added new user"
+                    admin_api.addUser()
                     console.log("Add User Executed\n")
                     break;
 
                 case "addPart":
                     global_vars.addPart = true
                     global_vars.addedItem = item
-                    console.log("Add Part Executed\n")
+                    admin_api.addPart()
                     break;
 
                 case "checkInLookup":
@@ -456,6 +466,11 @@ function responseHandler(response, headers, command, command2, item) {
                     global_vars.lookupString += ("Storage Location: " + arr["storageLocation"]["name"] + "\n");
                     global_vars.lookupString += ("Type: " + arr["@type"] + "\n");
                     global_vars.lookupString += ("Description: " + arr["description"] + "\n");
+                    if (arr["footprint"]) {
+                        global_vars.lookupString += ("Footprint: " + arr["footprint"]["name"] + "\n");
+                        global_vars.lookupString += ("\t       " + arr["footprint"]["description"] + "\n");
+                    }
+                    global_vars.lookupString += ("Comment: " + arr["comment"] + "\n");
                     //global_vars.lookupString += ("Minimum Stock: " + arr["minStockLevel"] + "\n");
 
                     itemstring = arr["@id"]
@@ -526,6 +541,11 @@ function responseHandler(response, headers, command, command2, item) {
                     global_vars.lookupString += ("Storage Location: " + arr["storageLocation"]["name"] + "\n");
                     global_vars.lookupString += ("Type: " + arr["@type"] + "\n");
                     global_vars.lookupString += ("Description: " + arr["description"] + "\n");
+                    if (arr["footprint"]) {
+                        global_vars.lookupString += ("Footprint: " + arr["footprint"]["name"] + "\n");
+                        global_vars.lookupString += ("\t       " + arr["footprint"]["description"] + "\n");
+                    }
+                    global_vars.lookupString += ("Comment: " + arr["comment"] + "\n");
                     //global_vars.lookupString += ("Minimum Stock: " + arr["minStockLevel"] + "\n");
 
                     itemstring = arr["@id"]

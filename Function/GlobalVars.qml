@@ -105,17 +105,16 @@ Item {
     property string stockHistoryHelp: 'yoo'
     property string infoTextHelp: 'ayyy'
 
-
-    //THESE VARIABLES NEED TO BE CHANGED WHEN CHANGING MONITORS,SERVERS,ETC/////
+    //////////////////////////////////////////////////////////////////////////////////
+    //THESE VARIABLES COULD NEED TO BE CHANGED WHEN CHANGING MONITORS,SERVERS,ETC/////
+    //////////////////////////////////////////////////////////////////////////////////
     /*Display Size*/
     property int fullWidth: 1920
     property int fullHeight: 1080
 
-
     //change these to computer screen size
     property int tempWidth: main_window.tempWidth
     property int tempHeight: main_window.tempHeight
-
 
     /*
     property int tempWidth: 1920
@@ -123,7 +122,6 @@ Item {
     */
 
     property string currentServer: "http://192.168.10.16:3001"
-
     ///////////////////////////////////////////////////////////////////////////
 
     /*Check In/Out Redo*/

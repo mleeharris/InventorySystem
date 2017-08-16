@@ -190,7 +190,7 @@ Rectangle {
         height: temp_background.height
         font.pointSize: global_vars.display(15)
         maximumLineCount: 27
-        lineHeight: 1.05
+        lineHeight: global_vars.display(1.05)
         wrapMode: Text.Wrap
         text: global_vars.stockHistory
     }

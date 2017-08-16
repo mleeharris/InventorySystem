@@ -53,7 +53,7 @@ Rectangle {
     }
 
     Text {
-        id: admin_api
+        id: admin_api_text
         anchors.top: parent.top
         anchors.topMargin: global_vars.display(60)
         anchors.horizontalCenter: parent.horizontalCenter
@@ -78,7 +78,7 @@ Rectangle {
     BasicButton {
         id: other_options
         anchors.right: parent.right
-        anchors.top: admin_api.top
+        anchors.top: admin_api_text.top
         anchors.rightMargin: global_vars.display(140)
         anchors.topMargin: global_vars.display(15)
         height: global_vars.display(100)
@@ -86,7 +86,7 @@ Rectangle {
         label.text: "More"
 
         onClicked: {
-            nextLayer(root.objectName, "admin_api2")
+            nextLayer(root.objectName, "admin_api_2")
             root.state = "hidden"
         }
     }
@@ -107,7 +107,7 @@ Rectangle {
         id: add_user
         anchors.left: parent.left
         anchors.leftMargin: global_vars.display(105)
-        anchors.top: admin_api.bottom
+        anchors.top: admin_api_text.bottom
         anchors.topMargin: global_vars.display(-10)
         height: global_vars.buttonHeightAdmin
         width: global_vars.buttonWidthAdmin
@@ -132,19 +132,6 @@ Rectangle {
                 if (adminClicked === false) {
                     Connect.addUser(inputText1, inputText2)
                 }
-                //console.log("admin?: ", adminClicked)
-                clock_adminapi_adduser.connect(function() {
-                    if (global_vars.addUser === true) {
-                        global_vars.admin_api_error = "Added new user"
-                        textChange1 = ''
-                        textChange2 = ''
-                        adminState = "unchecked"
-                    }
-                    if (global_vars.addUser === false) {
-                        global_vars.admin_api_error = "Error: Couldn't add new user " + inputText1
-                    }
-                })
-                clock_adminapi_adduser.delay(1000)
             }
         }
     }
@@ -173,20 +160,6 @@ Rectangle {
             else {
                 global_vars.admin_api_error = "Entering new part... Please wait... "
                 Connect.addPart(inputText1, inputText2)
-                if (clock_adminapi_addpart.connected == false) {
-                    clock_adminapi_addpart.connect(function() {
-                        console.log("global_vars.addPart: ", global_vars.addPart)
-                        if (global_vars.addPart === true) {
-                            global_vars.admin_api_error = "Added new part " + inputText1
-                            textChange1 = ''
-                            textChange2 = ''
-                        }
-                        if (global_vars.addPart === false) {
-                            global_vars.admin_api_error = "Error: Couldn't add new part " + inputText1
-                        }
-                    })
-                }
-                clock_adminapi_addpart.delay(1000);
             }
         }
 
@@ -213,26 +186,33 @@ Rectangle {
             if (inputText1 === '' || inputText2 === '') {
                 global_vars.admin_api_error = "Error: Please enter both an item and a quantity"
             }
-            else if (!isNaN(inputText2)) {
-                global_vars.admin_api_error = "Setting stock... Please wait... "
-                Connect.setStock(inputText1, inputText2)
-                if (clock_adminapi_setstock.connected == false) {
-                    clock_adminapi_setstock.connect(function() {
-                        if (global_vars.setStock === true) {
-                            global_vars.admin_api_error = "Set stock of item " + inputText1 + " as quantity " + inputText2
-                            textChange1 = ''
-                            textChange2 = ''
-                        }
-                        if (global_vars.setStock === false) {
-                            global_vars.admin_api_error = "Error: Couldn't set stock of item " + inputText1
-                        }
-                    })
-                }
-                clock_adminapi_setstock.delay(1000);
-            }
-            else {
+            else if (isNaN(inputText2)) {
                 global_vars.admin_api_error = "Error: Please make sure your input is a number for stock number"
             }
+            else {
+                Connect.setStock(inputText1, inputText2)
+            }
+
+//            else if (!isNaN(inputText2)) {
+//                global_vars.admin_api_error = "Setting stock... Please wait... "
+//                Connect.setStock(inputText1, inputText2)
+//                if (clock_adminapi_setstock.connected == false) {
+//                    clock_adminapi_setstock.connect(function() {
+//                        if (global_vars.setStock === true) {
+//                            global_vars.admin_api_error = "Set stock of item " + inputText1 + " as quantity " + inputText2
+//                            textChange1 = ''
+//                            textChange2 = ''
+//                        }
+//                        if (global_vars.setStock === false) {
+//                            global_vars.admin_api_error = "Error: Couldn't set stock of item " + inputText1
+//                        }
+//                    })
+//                }
+//                clock_adminapi_setstock.delay(1000);
+//            }
+//            else {
+//                global_vars.admin_api_error = "Error: Please make sure your input is a number for stock number"
+//            }
         }
 
     }
@@ -292,6 +272,36 @@ Rectangle {
             if (state === "Down") {
                 right_tab.state = "Down"
             }
+        }
+    }
+
+    function addUser() {
+        if (global_vars.addUser === true) {
+            add_user.textChange1 = ''
+            add_user.textChange2 = ''
+            add_user.adminState = "unchecked"
+        }
+    }
+
+    function addPart() {
+        if (global_vars.addPart === true) {
+            global_vars.admin_api_error = "Added new part " + add_part.inputText1
+            add_part.textChange1 = ''
+            add_part.textChange2 = ''
+        }
+        if (global_vars.addPart === false) {
+            global_vars.admin_api_error = "Error: Couldn't add new part " + add_part.inputText1
+        }
+    }
+
+    function setStock() {
+        if (global_vars.setStock === true) {
+            global_vars.admin_api_error = "Set stock of item " + set_stock.inputText1 + " as quantity " + set_stock.inputText2
+            set_stock.textChange1 = ''
+            set_stock.textChange2 = ''
+        }
+        if (global_vars.setStock === false) {
+            global_vars.admin_api_error = "Error: Couldn't set stock of item " + set_stock.inputText1
         }
     }
 }

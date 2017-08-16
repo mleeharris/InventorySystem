@@ -1,0 +1,29 @@
+QUERY TO GET STORAGE LOCATIONS WITHIN THEIR RESPECTIVE CATEGORIES => queryHandler("partMaster","warehouseMaster","http://192.168.10.97","storage_locations","","","","GET");
+
+
+
+
+
+
+QUERY TO SEARCH AN ITEM BY MULTIPLE PROPRETIES =>  queryHandler("partMaster","warehouseMaster","http://192.168.10.97","parts","","",'filter=[{"subfilters":[{"subfilters":[{"subfilters":[],"property":"name","value":"%bbb%","operator":"like"},{"subfilters":[],"property":"description","value":"%bbb%","operator":"like"},{"subfilters":[],"property":"comment","value":"%bbb%","operator":"like"},{"subfilters":[],"property":"internalPartNumber","value":"%bbb%","operator":"like"}],"type":"OR"}],"type":"AND"}]',"GET");
+Here I am for example searching by the keyword 'bbb' on fields name, description etc
+
+Construct your Json based on this one :
+
+[{"subfilters":[{"subfilters":[{"subfilters":[],"property":"name","value":"%bbb%","operator":"like"},{"subfilters":[],"property":"description","value":"%bbb%","operator":"like"},{"subfilters":[],"property":"comment","value":"%bbb%","operator":"like"},{"subfilters":[],"property":"internalPartNumber","value":"%bbb%","operator":"like"}],"type":"OR"}],"type":"AND"}]
+
+
+
+
+
+To lookup the history of a specific part change the query to this (easier) :  queryHandler("partMaster","warehouseMaster","http://192.168.10.97","stock_entries","","",'order=[{"property":"user","direction":"DESC"}]&filter=[{"subfilters":[],"property":"part","operator":"=","value":"/api/parts/23"}]',"GET");
+
+Specify the parameters you want in the Json sent
+
+
+
+
+
+	
+
+To have the history for a specific user just modify the filter json : [{"subfilters":[],"property":"user","operator":"=","value":"/api/users/2"}]

@@ -4,7 +4,7 @@
 
 //All icons make by Freepik from www.flaticon.com
 
-import QtQuick 2.6
+import QtQuick 2.7
 import QtQuick.Window 2.2
 import QtQml 2.2
 import QtQuick.Dialogs 1.1
@@ -285,6 +285,15 @@ Window {
             anchors.bottom: parent.bottom
             anchors.bottomMargin: global_vars.display(130)
         }
+
+//        Image {
+//            id: test
+//            x: 10
+//            y: 10
+//            width: 100
+//            height: 100
+//            source: "https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png"
+//        }
     }
 
     function userpass(userpass) {
@@ -609,5 +618,10 @@ Window {
 
     function logoutQuit() {
         Qt.quit()
+    }
+
+    function loadImage() {
+        console.log("wut is going on")
+        //console.log("yo", image.d)
     }
 }
