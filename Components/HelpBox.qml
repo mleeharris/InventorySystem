@@ -1,9 +1,11 @@
-//UNUSED CODE//
-
 import QtQuick 2.2
 import QtGraphicalEffects 1.0
 import "qrc:/Components/"
 import "qrc:/JavaScript/globalVars.js" as GlobVars
+
+/***********************************************************************/
+// Was going to be the extra info tab, but now not used
+/***********************************************************************/
 
 Rectangle  {
     id: root

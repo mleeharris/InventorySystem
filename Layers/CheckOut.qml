@@ -291,6 +291,9 @@ Rectangle {
         z: 3
     }
 
+    /***********************************************************************/
+    // Deletes all items currently in list. Called from clear button
+    /***********************************************************************/
     function deletionAll() {
         var index = GlobVars.itemList.length
         var i = 0
@@ -302,6 +305,10 @@ Rectangle {
         item_counter.text = "Items: 0"
     }
 
+    /***********************************************************************/
+    // Called everytime an item is scanned in from barcode. Accepts the
+    // ID a the sole parameter
+    /***********************************************************************/
     function itemScan(item) {
         GlobVars.checkOutQueue.push(item.slice(0,-1))
         startCheckOut()
@@ -317,6 +324,9 @@ Rectangle {
 //        clock_checkout2.delay(750)
     }
 
+    /***********************************************************************/
+    // Adds a new object for every scan.
+    /***********************************************************************/
     function addScan() {
         console.log("yoooooooooooooooooooooooooooooooooooooo")
         GlobVars.itemList.push(global_vars.scannedItem)
@@ -326,6 +336,9 @@ Rectangle {
         startCheckOut()
     }
 
+    /***********************************************************************/
+    // Handles the 'queue'. Makes sure that all items are handled once scanned in
+    /***********************************************************************/
     function startCheckOut() {
         var item = ''
         //console.log("checkinQueue: ", GlobVars.checkInQueue)
@@ -335,6 +348,9 @@ Rectangle {
         }
     }
 
+    /***********************************************************************/
+    // Handles when the "done" button is pressed
+    /***********************************************************************/
     function deletionHandlingCheckOut() {
         item_model.remove(item_listview.currentIndex)
         GlobVars.itemList.splice(item_listview.currentIndex, 1)
@@ -377,6 +393,9 @@ Rectangle {
 //        }
 //    }
 
+    /***********************************************************************/
+    // Controls tab operation on Check Out. Called from main.qml
+    /***********************************************************************/
     function tabOperationCheckOut(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {

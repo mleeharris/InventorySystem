@@ -2,6 +2,12 @@ import QtQuick 2.2
 import QtGraphicalEffects 1.0
 import "qrc:/Components/"
 
+/***********************************************************************/
+// Very similar to button input, except has two fields for input.
+// This means it has two text fields for input, and a button with an
+// image and text
+/***********************************************************************/
+
 Rectangle  {
     id: root
     objectName: "double_input"

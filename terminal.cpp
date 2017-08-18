@@ -15,6 +15,10 @@ terminal::~terminal(){
     return;
 }
 
+
+/***********************************************************************/
+// Loads 12 digit hex key into NFC reader
+/***********************************************************************/
 void terminal::addKey(QString keycode, QString keynum) {
     QString use = "python NFCReader.py --addkey ";
     use.append(QString("%1 ").arg(keynum));
@@ -40,6 +44,9 @@ void terminal::addKey(QString keycode, QString keynum) {
     }
 }
 
+/***********************************************************************/
+// Authorizes each block of memory to the key on the NFC reader
+/***********************************************************************/
 void terminal::auth(QString blocktoauth) {
     QString use = QString("python NFCReader.py --auth %1 00").arg(blocktoauth);
 
@@ -61,6 +68,9 @@ void terminal::auth(QString blocktoauth) {
     }
 }
 
+/***********************************************************************/
+// Reads an authorized block from the card
+/***********************************************************************/
 QString terminal::readBlock(QString blocktoread) {
     QString use = "python NFCReader.py --read ";
     use.append(QString("%1").arg(blocktoread));
@@ -94,6 +104,9 @@ QString terminal::readBlock(QString blocktoread) {
     return stdout1;
 }
 
+/***********************************************************************/
+// Updates and authorized block on the card
+/***********************************************************************/
 QString terminal::updateBlock(QString blocktowrite, QString info) {
     QString use = "python NFCReader.py --update ";
     use.append(QString("%1 ").arg(blocktowrite));
@@ -120,14 +133,24 @@ QString terminal::updateBlock(QString blocktowrite, QString info) {
     return stdout1;
 }
 
+/***********************************************************************/
+// Returns a potential err msg
+/***********************************************************************/
 QString terminal::getMsg() {
     return msg;
 }
 
+/***********************************************************************/
+// Err msg setter
+/***********************************************************************/
 void terminal::updateMsg(QString newmsg) {
     msg = newmsg;
 }
 
+
+/***********************************************************************/
+// Returns a username and possword together. Not used anymore
+/***********************************************************************/
 QString terminal::readCard() {
     QProcess *process2 = new QProcess;
     process2->setWorkingDirectory("/home/drmoo/Documents/PartKeepr/partkeeprgui");

@@ -10,6 +10,11 @@ import "qrc:/Function"
 import "qrc:/Images"
 import "qrc:/JavaScript/globalVars.js" as GlobVars
 
+
+/***********************************************************************/
+// Unused
+/***********************************************************************/
+
 Item {
 
 //    Clock2 {

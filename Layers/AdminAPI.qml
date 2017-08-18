@@ -256,6 +256,9 @@ Rectangle {
         }
     }
 
+    /***********************************************************************/
+    // Controls tab operation on Admin API Page
+    /***********************************************************************/
     function tabOperationAdminAPIPage(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {
@@ -275,6 +278,9 @@ Rectangle {
         }
     }
 
+    /***********************************************************************/
+    // Called from connect.js after addUser is completed
+    /***********************************************************************/
     function addUser() {
         if (global_vars.addUser === true) {
             add_user.textChange1 = ''
@@ -283,6 +289,9 @@ Rectangle {
         }
     }
 
+    /***********************************************************************/
+    // Called from connect.js after addPart is completed
+    /***********************************************************************/
     function addPart() {
         if (global_vars.addPart === true) {
             global_vars.admin_api_error = "Added new part " + add_part.inputText1
@@ -294,6 +303,9 @@ Rectangle {
         }
     }
 
+    /***********************************************************************/
+    // Called from connect.js after setSock is completed
+    /***********************************************************************/
     function setStock() {
         if (global_vars.setStock === true) {
             global_vars.admin_api_error = "Set stock of item " + set_stock.inputText1 + " as quantity " + set_stock.inputText2

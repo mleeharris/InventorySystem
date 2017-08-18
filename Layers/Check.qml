@@ -188,6 +188,9 @@ Rectangle {
         anchors.bottomMargin: global_vars.display(40)
     }
 
+    /***********************************************************************/
+    // Controls tab operation from check page. Called from main.qml
+    /***********************************************************************/
     function tabOperationCheck(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {
@@ -206,28 +209,6 @@ Rectangle {
             }
         }
     }
-
-//    function deletionAllIn() {
-//        var index = GlobVars.itemListIn.length
-//        console.log("index: ", index)
-//        var i = 0
-//        while (i < index) {
-//            item_model.remove(0)
-//            i += 1
-//        }
-//        GlobVars.itemListIn = []
-//    }
-
-//    function deletionAllOut() {
-//        var index = GlobVars.itemList.length
-//        console.log("index: ", index)
-//        var i = 0
-//        while (i < index) {
-//            item_model.remove(0)
-//            i += 1
-//        }
-//        GlobVars.itemList = []
-//    }
 }
 
 

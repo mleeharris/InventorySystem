@@ -2,6 +2,10 @@ import QtQuick 2.2
 import QtGraphicalEffects 1.0
 import "qrc:/Components/"
 
+/***********************************************************************/
+// The object that is the 'error' msgs on each screen.
+/***********************************************************************/
+
 Rectangle  {
     id: root
     objectName: "error"

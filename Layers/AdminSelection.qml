@@ -145,6 +145,9 @@ Rectangle {
         anchors.bottomMargin: global_vars.display(100)
     }
 
+    /***********************************************************************/
+    // Controls tabs on admin selection page. Called from main.qml
+    /***********************************************************************/
     function tabOperationAdminSelectionPage(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {

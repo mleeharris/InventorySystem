@@ -205,6 +205,9 @@ Rectangle {
         anchors.bottomMargin: global_vars.display(130)
     }
 
+    /***********************************************************************/
+    // Controls tab operation on End Page. Called from main.qml
+    /***********************************************************************/
     function tabOperationEndPage(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {
@@ -224,14 +227,24 @@ Rectangle {
         }
     }
 
+    /***********************************************************************/
+    // These 'add' functions control the end page messages
+    /***********************************************************************/
     function addGoodOut(item) {
         GlobVars.checkGoodOut.push(item)
     }
 
+    /***********************************************************************/
+    // These 'add' functions control the end page messages
+    /***********************************************************************/
     function addBadOut(item) {
         GlobVars.checkBadOut.push(item)
     }
 
+    /***********************************************************************/
+    // The actual function that uses the 'add' functions to display the correct
+    // error message on end page
+    /***********************************************************************/
     function checkOutMsg() {
         var i = 0;
         if (global_vars.checkOutError == 0) {
@@ -268,14 +281,24 @@ Rectangle {
         GlobVars.checkGoodOut.splice(0,GlobVars.checkGoodOut.length)
     }
 
+    /***********************************************************************/
+    // These 'add' functions control the end page messages
+    /***********************************************************************/
     function addGoodIn(item) {
         GlobVars.checkGoodIn.push(item)
     }
 
+    /***********************************************************************/
+    // These 'add' functions control the end page messages
+    /***********************************************************************/
     function addBadIn(item) {
         GlobVars.checkBadIn.push(item)
     }
 
+    /***********************************************************************/
+    // The actual function that uses the 'add' functions to display the correct
+    // error message on end page
+    /***********************************************************************/
     function checkInMsg() {
         var i = 0;
         if (global_vars.checkInError == 0) {

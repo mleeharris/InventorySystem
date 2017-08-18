@@ -2,6 +2,10 @@ import QtQuick 2.2
 import QtGraphicalEffects 1.0
 import "qrc:/Components/"
 
+/***********************************************************************/
+// The object that is the bottom tab on all the pages
+/***********************************************************************/
+
 Rectangle  {
     id: root_top
     objectName: "bottomtab"

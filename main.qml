@@ -39,6 +39,10 @@ Window {
 
     objectName: "MainWindow"
 
+    /***********************************************************************/
+    // Delcaring signals to be sent out to control the bottom tabs and
+    // item scanning on all the layers
+    /***********************************************************************/
     signal tabOperationForScanPage(string tabnum, string state)
     signal tabOperationForLoggedIn(string tabnum, string state)
     signal tabOperationForLoginPage(string tabnum, string state)
@@ -76,6 +80,9 @@ Window {
         source: "qrc:/Images/background_opening_3.jpg"
     }
 
+    /***********************************************************************/
+    // Establishes how the UI will initially appear
+    /***********************************************************************/
     Component.onCompleted: {
         right_tab.state = "Up"
         middle_tab.state = "Down"
@@ -101,7 +108,9 @@ Window {
         admin_api2.nextLayer.connect(slot_switchLayer)
     }
 
-    /*LAYER DECL*/
+    /***********************************************************************/
+    // Declaring all the layers
+    /***********************************************************************/
     Check{id: check; x:0; y:0}
     ScanPage{id: scan_page; x:0; y:0}
     LoginPage{id: login_page; x:0; y:0}
@@ -114,10 +123,15 @@ Window {
     AdminSelection{id: admin_selection; x:0; y:0}
     AdminAPI2{id: admin_api2; x:0; y:0}
 
-    /*COMPONENT DECL*/
+    /***********************************************************************/
+    // Declaring the components
+    /***********************************************************************/
     GlobalVars{id: global_vars}
     GlobalFuncs{id: global_funcs}
 
+    /***********************************************************************/
+    // All things seen on the opening page are within here.
+    /***********************************************************************/
     Rectangle {
         anchors.fill: parent
         color: "#00000000"
@@ -142,6 +156,10 @@ Window {
             }
         ]
 
+        /***********************************************************************/
+        // The 'behind the scenes' scanners. They are turned on or off
+        // depending on what layer we are on
+        /***********************************************************************/
         Scanner {
             id: barcode
 //            onTemp: {
@@ -297,6 +315,10 @@ Window {
 //        }
     }
 
+    /***********************************************************************/
+    // Unused function, but is able to read in username and pass from a
+    // barcode. Currently is not called
+    /***********************************************************************/
     function userpass(userpass) {
         userpass = userpass.split(':')
         global_vars.username = userpass[0]
@@ -321,6 +343,11 @@ Window {
         slot_switchLayer("main", "logged_in")
     }
 
+    /***********************************************************************/
+    // Very important function. Called from every layer whenever there is a
+    // layer change. Takes in the currentLayer and the destination layer as input
+    // and determines what needs to be changed to go to the next layer
+    /***********************************************************************/
     function slot_switchLayer(currentLayer, nextLayer) {
         //console.log("currentLayer: ", currentLayer)
         console.log("nextLayer: ", nextLayer)
@@ -514,6 +541,9 @@ Window {
         }
     }
 
+    /***********************************************************************/
+    // Controls tab operation on main.qml
+    /***********************************************************************/
     function tabOperationMain(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {
@@ -533,10 +563,17 @@ Window {
         }
     }
 
+    /***********************************************************************/
+    // Test function, unused
+    /***********************************************************************/
     function returntwo() {
         console.log("ayyy")
     }
 
+    /***********************************************************************/
+    // The slot for the signal from main.cpp. Whenever a new username and pass
+    // is read in from the NFC reader, the signal is sent to this function.
+    /***********************************************************************/
     function scanned() {
         //GlobVars.userpass = thread.userpassGet()
         //GlobVars.userpass = GlobVars.userpass.split('=')
@@ -573,6 +610,10 @@ Window {
         global_vars.login_error = ''
         }
 
+        /***********************************************************************/
+        // Ensures that when a new card is read in, the UI returns
+        // to the log in page
+        /***********************************************************************/
         if (object_holder.state == "visible") {
             slot_switchLayer("main","logged_in")
             object_holder.state = "hidden"
@@ -621,6 +662,9 @@ Window {
         Qt.quit()
     }
 
+    /***********************************************************************/
+    // Unfinished function that is triggered when the .png image is loaded in
+    /***********************************************************************/
     function loadImage() {
         console.log("wut is going on")
         //console.log("yo", image.d)

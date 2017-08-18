@@ -3,6 +3,10 @@ import QtGraphicalEffects 1.0
 import "qrc:/Components/"
 import "qrc:/JavaScript/globalVars.js" as GlobVars
 
+/***********************************************************************/
+// This component is dynamically created at each item scan in.
+/***********************************************************************/
+
 Rectangle  {
     id: root
     objectName: "scanneditem"

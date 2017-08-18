@@ -2,6 +2,11 @@ import QtQuick 2.2
 import QtGraphicalEffects 1.0
 import "qrc:/Components/"
 
+/***********************************************************************/
+// This object is used whenever a simple button is needed that can display
+// an image and text
+/***********************************************************************/
+
 Rectangle  {
     id: root
     objectName: "button"

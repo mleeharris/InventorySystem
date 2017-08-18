@@ -49,6 +49,11 @@ void threadcall::activeChange(int newnum) {
     active = newnum;
 }
 
+/***********************************************************************/
+// Actively polls for new username and password. It overcrowds empty NFC with
+// requests. Once a name is in the system, it slows down and only looks
+// for a new name every second or two.
+/***********************************************************************/
 void threadcall::run() {
     qDebug() << "Hello from worker thread " << thread()->currentThreadId();
 

@@ -171,6 +171,9 @@ Rectangle {
     property int boxHeight: wrapperHeight/5
     property int boxLength: wrapperWidth/2
 
+    /***********************************************************************/
+    // the username and password display
+    /***********************************************************************/
     Rectangle {
         id: userpass_wrapper
         color: "#00000000"
@@ -327,6 +330,9 @@ Rectangle {
         }
     }
 
+    /***********************************************************************/
+    // Controls tab operation on the 'logged in' page. Called from main.qml
+    /***********************************************************************/
     function tabOperationLoggedIn(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {

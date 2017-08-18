@@ -109,6 +109,9 @@ Rectangle {
         anchors.bottomMargin: global_vars.display(130)
     }
 
+    /***********************************************************************/
+    // Controls tab operation on 'login page'. Called from main.qml
+    /***********************************************************************/
     function tabOperationLoginPage(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {

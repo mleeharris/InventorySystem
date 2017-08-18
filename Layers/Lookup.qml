@@ -195,6 +195,10 @@ Rectangle {
         text: global_vars.stockHistory
     }
 
+    /***********************************************************************/
+    // Calls and controls lookup functions. Called from main.qml
+    // This function is the one that puts lookup into action
+    /***********************************************************************/
     function itemScan(item) {
         console.log(item)
         item_display.text = "Item: " + item
@@ -204,6 +208,9 @@ Rectangle {
         info_text.text = "Looking up... Please wait... "
     }
 
+    /***********************************************************************/
+    // Controls the tab operation on 'lookup'. Called from main.qml
+    /***********************************************************************/
     function tabOperationLookup(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {
@@ -223,7 +230,11 @@ Rectangle {
         }
     }
 
+    /***********************************************************************/
+    // Updates the lookup information. Called from connect.js
+    /***********************************************************************/
     function lookupString() {
         info_text.text = global_vars.lookupString
+        info_text2.text = global_vars.stockHistory
     }
 }

@@ -2,6 +2,11 @@ import QtQuick 2.2
 import QtGraphicalEffects 1.0
 import "qrc:/Components/"
 
+/***********************************************************************/
+// Hopefully unused soon. On the way out. Just has a function to link
+// code to and an initiate Function
+/***********************************************************************/
+
 Rectangle  {
     id: root
     objectName: "clock2"

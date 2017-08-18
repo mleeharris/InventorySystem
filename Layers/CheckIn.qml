@@ -298,6 +298,9 @@ Rectangle {
 //        }
     }
 
+    /***********************************************************************/
+    // Unused function
+    /***********************************************************************/
     function closeAll() {
         console.log("item_listview.currentIndex: ", item_listview.currentIndex)
         console.log("count: ", item_listview.count)
@@ -309,12 +312,11 @@ Rectangle {
 
             i += 1
         }
-
-//        item_model.remove(item_listview.currentIndex)
-//        GlobVars.itemListIn.splice(item_listview.currentIndex, 1)
-//        item_counter.text = "Items: " + GlobVars.itemListIn.length
     }
 
+    /***********************************************************************/
+    // Deletes all items currently in list. Called from clear button
+    /***********************************************************************/
     function deletionAll() {
         var index = GlobVars.itemListIn.length
         var i = 0
@@ -326,6 +328,9 @@ Rectangle {
         item_counter.text = "Items: 0"
     }
 
+    /***********************************************************************/
+    // Adds a new object for every scan.
+    /***********************************************************************/
     function addScan() {
         GlobVars.itemListIn.push(global_vars.scannedItem)
         item_model.insert(item_listview.currentIndex + 1, {"itemText": "ID: " + global_vars.scannedItem, "itemName": "Name: " + global_vars.lookupName, "itemStock": "Stock: " + global_vars.lookupStock, "stockHistoryFinal": global_vars.stockHistory, "infoTextFinal": global_vars.lookupString})
@@ -334,6 +339,9 @@ Rectangle {
         startCheckIn()
     }
 
+    /***********************************************************************/
+    // Handles the 'queue'. Makes sure that all items are handled once scanned in
+    /***********************************************************************/
     function startCheckIn() {
         var item = ''
         //console.log("checkinQueue: ", GlobVars.checkInQueue)
@@ -343,6 +351,10 @@ Rectangle {
         }
     }
 
+    /***********************************************************************/
+    // Called everytime an item is scanned in from barcode. Accepts the
+    // ID a the sole parameter
+    /***********************************************************************/
     function itemScan(item) {
         //GlobVars.itemListIn.push(item.slice(0,-1))
         //console.log("GlobVars: ", GlobVars.itemListIn)
@@ -362,6 +374,9 @@ Rectangle {
 //        clock_checkin2.delay(750)
     }
 
+    /***********************************************************************/
+    // Handles when the "done" button is pressed
+    /***********************************************************************/
     function deletionHandlingCheckOut() {
         item_model.remove(item_listview.currentIndex)
         GlobVars.itemListIn.splice(item_listview.currentIndex, 1)
@@ -403,6 +418,9 @@ Rectangle {
 //        }
 //    }
 
+    /***********************************************************************/
+    // Controls tab operation on Check In. Called from main.qml
+    /***********************************************************************/
     function tabOperationCheckIn(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {

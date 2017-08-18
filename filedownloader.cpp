@@ -6,6 +6,10 @@
 #include <QProcess>
 #include "filedownloader.h"
 
+
+/***********************************************************************/
+// Currently unused potentially useful image downloader
+/***********************************************************************/
 filedownloader::filedownloader(QUrl imageUrl, QObject *parent) : QObject(parent) {
     connect(&m_WebCtrl, SIGNAL (finished(QNetworkReply*)), this, SLOT (fileDownloaded(QNetworkReply*)));
 

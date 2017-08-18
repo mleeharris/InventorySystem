@@ -2,6 +2,11 @@ import QtQuick 2.2
 import QtGraphicalEffects 1.0
 import "qrc:/Components/"
 
+/***********************************************************************/
+// Utilizes much of the Basic Button class, but also enables some input
+// in a text box
+/***********************************************************************/
+
 Rectangle  {
     id: root
     objectName: "button_input"

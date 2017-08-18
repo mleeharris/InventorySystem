@@ -3,6 +3,11 @@ import QtGraphicalEffects 1.0
 import "qrc:/Components/"
 import "qrc:/Function/"
 
+/***********************************************************************/
+// This component is created in main.qml to handle all cases of
+// barcode scan in
+/***********************************************************************/
+
 Item  {
     id: root
     objectName: "scanner"

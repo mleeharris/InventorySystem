@@ -8,6 +8,10 @@ import "qrc:/Components"
 import "qrc:/JavaScript/globalVars.js" as GlobVars
 import "qrc:/JavaScript/connect.js" as Connect
 
+/***********************************************************************/
+// Currently serves no function
+/***********************************************************************/
+
 Rectangle {
     id: root
     visible: true

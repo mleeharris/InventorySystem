@@ -283,6 +283,9 @@ Rectangle {
         }
     }
 
+    /***********************************************************************/
+    // Controls tab operation on 'scan page'. Called from main.qml
+    /***********************************************************************/
     function tabOperationScanPage(tabnum, state) {
         if (tabnum === "middle") {
             if (state === "Up") {
@@ -302,6 +305,10 @@ Rectangle {
         }
     }
 
+    /***********************************************************************/
+    // Reads thread (cpp object) and updates the text to display
+    // if a card is currently ready to be updated
+    /***********************************************************************/
     function updateActive() {
         if (thread.activeGet() === 0) {
             if (global_vars.admin_error != "Logging Out...")

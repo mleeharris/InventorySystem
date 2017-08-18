@@ -20,6 +20,10 @@ int main(int argc, char *argv[]) {
 
     //QUrl imageUrl("https://upload.wikimedia.org/wikipedia/commons/4/47/PNG_transparency_demonstration_1.png");
     //Backend backend;
+
+    /***************************************************/
+    // Initiializing the cpp objects to be used in QML
+    /***************************************************/
     terminal Testerino;
     threadcall Threadz;
     Threadz.start();
@@ -29,6 +33,10 @@ int main(int argc, char *argv[]) {
 
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
+    /***********************************************************************/
+    // Assigning names to the windows and layers in QML
+    // so that they can be referenced from the outside
+    /***********************************************************************/
     QObject *MainWindow = engine.rootObjects().first();
     QObject *ScanPage = MainWindow->findChild<QObject *>("scan_page");
     //QObject *LoggedIn = MainWindow->findChild<QObject *>("logged_in");
@@ -44,6 +52,10 @@ int main(int argc, char *argv[]) {
     //QPixmap buttonImage;
     //buttonImage.loadFromData(imgtest->downloadedData());
 
+
+    /***********************************************************************/
+    // Connecting the signals from the cpp objects to certain functions in QML
+    /***********************************************************************/
     //threadcall::connect(&Threadz,SIGNAL(sig_loginInfo()),LoggedIn,SLOT(loginInfo()));
     //filedownloader::connect(&imgtest, SIGNAL(downloaded()), MainWindow, SLOT(loadImage()));
     threadcall::connect(&Threadz,SIGNAL(sig_loginInfo()),MainWindow,SLOT(scanned()));
