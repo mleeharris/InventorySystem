@@ -122,9 +122,9 @@ Item {
     */
 
     property string currentServer: "http://192.168.10.16:3001"
-    ///////////////////////////////////////////////////////////////////////////
+    //////////////////////////////////////////////////////////////////////////////////
 
-    /*Check In/Out Redo*/
+    /*Check In & Out Redo*/
     property int checkInCheck: 0
     property int checkOutCheck: 0
     property int checkInItemHeight: display(80)

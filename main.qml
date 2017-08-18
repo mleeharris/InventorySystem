@@ -28,6 +28,7 @@ Window {
 
     property int tempWidth: Screen.desktopAvailableWidth
     property int tempHeight: Screen.desktopAvailableHeight
+
     width: global_vars.tempWidth
     height: global_vars.tempHeight
 

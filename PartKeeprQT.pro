@@ -37,7 +37,8 @@ DISTFILES += \
     NFCReader.py \
     README.txt \
     Extra Files/Queries.txt \
-    Extra Files/Queries.txt
+    Extra Files/Queries.txt \
+    NFCReader3.py
 
 HEADERS += \
     terminal.h \
